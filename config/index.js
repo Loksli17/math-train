@@ -1,7 +1,7 @@
 const settings = {
     db: {
         mongoose:{
-            name: 'somebodyShop',
+            name: 'math_train',
             url : 'mongodb://localhost:27017/',
         },
         mysql:{
@@ -9,11 +9,11 @@ const settings = {
             database: 'math_train',
             user    : 'root',
             password: '1234',
-        },     
+        },
     },
     app: {
         port: 3000,
-        name: 'somebody',
+        name: 'math_train',
     },
     cookie: {
         secret: '34Jmf7*8kL;>G',

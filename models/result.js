@@ -18,3 +18,6 @@ const resultSchema  = new mongoose.Schema({
        required: true,
    }
 });
+
+let result = mongoose.model('result', resultSchema);
+module.exports = result
