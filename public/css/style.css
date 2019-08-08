@@ -3,7 +3,10 @@
     padding: 0px;
 }
 
-
 body{
     background-color: #fff;
+}
+
+div{
+    margin: 20px;
 }
