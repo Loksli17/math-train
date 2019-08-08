@@ -92,9 +92,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="740" />
-    <option name="y" value="50" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="202" />
+    <option name="y" value="33" />
     <option name="width" value="1000" />
     <option name="height" value="935" />
   </component>
@@ -146,7 +146,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Web/NodeSiteTwo" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
@@ -174,18 +174,17 @@
       <updated>1565243998897</updated>
       <workItem from="1565244000096" duration="222000" />
       <workItem from="1565244329359" duration="2137000" />
-      <workItem from="1565268906244" duration="1884000" />
+      <workItem from="1565268906244" duration="1899000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4243000" />
+    <option name="totallyTimeSpent" value="4258000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
-    <editor active="true" />
+    <frame x="162" y="27" width="800" height="748" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24983476" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.31454784" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
