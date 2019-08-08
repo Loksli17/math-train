@@ -1,0 +1,99 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+.wrapper{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    max-width: 100%;
+    height: calc(100vh - 40px);
+    background: linear-gradient(180deg, rgba(0, 6, 43, 1), rgba(0, 76, 144));
+    color: #fff;
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: 0.3;
+}
+
+.login{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    width: max-content;
+    height: max-content;
+}
+
+.login a{
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.label{
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    padding: 10px;
+}
+
+.label:last-child{
+    padding: 4px;
+}
+
+.label:nth-child(4){
+    padding: 10px 10px 2px 10px;
+}
+
+.label div{
+    width: 250px;
+    height: 3px;
+    background: #fff;
+}
+
+.label input{
+    border: 0px;
+    color: #fff;
+    text-align: center;
+    background: rgba(0, 0, 0, 0);
+    padding: 5px 0;
+}
+
+input:focus{
+    outline: 0;
+}
+
+#login-form{
+    display: flex;
+    flex-flow: column;
+}
+
+#checkbox-cont{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+#checkbox-cont > span{
+    margin-left: 5px;
+}
+
+#login-but{
+    border: 0;
+    padding: 5px 20px;
+    border-radius: 15px;
+    background: rgba(146, 128, 255, 1);
+    font-size: 17px;
+    color: #fff;
+}
+
+
+.icon{
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    left: 20px;
+    top: 20px;
+}
