@@ -7,7 +7,8 @@ const expressHbs = require('express-handlebars');
 
 
 //own libs
-const config = require('./config/config');
+const config          = require('./config/config');
+//const mysqlConnection = require('./lib/database/mysql');
 
 let app = express();
 

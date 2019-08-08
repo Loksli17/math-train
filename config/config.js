@@ -5,8 +5,10 @@ const settings = {
             url : 'mongodb://localhost:27017/',
         },
         mysql:{
-            name: '',
-            url : '',
+            host    : 'localhost',
+            database: 'math_train',
+            user    : 'root',
+            password: '1234',
         },     
     },
     app: {
