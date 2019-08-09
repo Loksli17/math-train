@@ -77,5 +77,4 @@ let query = async () => {
         }
     )
 };
-
 query();

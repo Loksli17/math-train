@@ -19,7 +19,8 @@ let groups = [
 let queryStr = 'INSERT INTO `catalog_group` SET ?';
 
 let query = async () => {
-    let remove = await mysql.promise().query('DELETE FROM `catalog_group` WHERE 1');
+    let removeСatalog = await mysql.promise().query('DELETE FROM `catalog` WHERE 1');
+    let removeСatalogGroup = await mysql.promise().query('DELETE FROM `catalog_group` WHERE 1');
 
     let create = await async.parallel([
             function(callback){
