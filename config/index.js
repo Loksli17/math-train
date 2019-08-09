@@ -24,6 +24,6 @@ const settings = {
     user: {
         passSecret: '6Jhn-Nm<',
     }
-}
+};
 
 module.exports = settings;
