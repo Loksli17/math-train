@@ -1,6 +1,7 @@
 const mysql = require('../lib/database/mysql');
 const async = require('async');
 
+let mysqlQuery = 'INSERT INTO `catalog_group` SET ?';
 let groups = [
     {
         id   : '1',
@@ -16,7 +17,6 @@ let groups = [
     }
 ];
 
-let queryStr = 'INSERT INTO `catalog_group` SET ?';
 
 let query = async () => {
     let removeСatalog = await mysql.promise().query('DELETE FROM `catalog` WHERE 1');
@@ -24,7 +24,7 @@ let query = async () => {
 
     let create = await async.parallel([
             function(callback){
-                mysql.promise().query(queryStr, groups[0], function(err, result){
+                mysql.promise().query(mysqlQuery, groups[0], function(err, result){
                     if(err){
                         console.log(err);
                         throw err;
@@ -33,7 +33,7 @@ let query = async () => {
                 });
             },
             function(callback){
-                mysql.promise().query(queryStr, groups[1], function(err, result){
+                mysql.promise().query(mysqlQuery, groups[1], function(err, result){
                     if(err){
                         console.log(err);
                         throw err;
@@ -42,7 +42,7 @@ let query = async () => {
                 });
             },
             function(callback){
-                mysql.promise().query(queryStr, groups[2], function(err, result){
+                mysql.promise().query(mysqlQuery, groups[2], function(err, result){
                     if(err){
                         console.log(err);
                         throw err;

@@ -59,7 +59,7 @@ let query = async () => {
                 });
             },
             function(callback){
-                mysql.promise().query(mysqlQuary, catalogs[4], function(err, result){
+                mysql.promise().query(mysqlQuary, catalogs[3], function(err, result){
                     if(err){
                         console.log(err);
                         throw err;
@@ -73,7 +73,7 @@ let query = async () => {
                 console.log(err);
                 throw err;
             }
-            console.log(result);
+            console.log('Creating was success');
         }
     )
 };
