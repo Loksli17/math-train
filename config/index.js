@@ -8,7 +8,7 @@ const settings = {
             host    : 'localhost',
             database: 'math_train',
             user    : 'root',
-            password: '',
+            password: '1234',
         },
     },
     app: {
