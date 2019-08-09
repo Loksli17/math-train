@@ -1,5 +1,5 @@
 const config   = require('../config');
-const mysql = require('../lib/database/mysql');
+const mongoose = require('../lib/database/mongoose');
 const async      = require('async');
 const News = require('../models/newsModel');
 console.log('fuck');
