@@ -5,7 +5,7 @@ let userSchema = mongoose.Schema({
         type    : String,
         required: true,
         validate: (value) => {
-            return value != undefind,
+            return value != undefind
         },
     },
     email: {
@@ -13,14 +13,14 @@ let userSchema = mongoose.Schema({
         required: true,
         unique  : true,
         validate: (value) => {
-            return value != undefind,
+            return value != undefind
         },
     },
     pass: {
         type    : String,
         required: true,
         validate: (value) => {
-            return value != undefind,
+            return value != undefind
         },
     },
 });

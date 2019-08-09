@@ -2,29 +2,28 @@ const config   = require('../config');
 const mysql = require('../lib/database/mysql');
 const async      = require('async');
 
-let mysqlQuary = "Insert into `catalog` SET ?";
+let mysqlQuary = "INSERT INTO `catalog` SET ?";
 let catalogs = [
     {
-        id              : 1,
+        id              : '1',
         title           : 'Легко',
-        catalog_group_id: 1 ,
+        catalog_group_id: '1' ,
     },
     {
-        id              : 2,
+        id              : '2',
         title           : 'Средне',
-        catalog_group_id: 2 ,
+        catalog_group_id: '1' ,
     },
     {
-        id              : 3,
+        id              : '3',
         title           : 'Сложно',
-        catalog_group_id: 3 ,
+        catalog_group_id: '1',
     },
     {
-        id              : 4,
+        id              : '4',
         title           : 'Очень сложно',
-        catalog_group_id: 3,
+        catalog_group_id: '1',
     },
-
 ];
 
 let query = async () => {
@@ -59,7 +58,7 @@ let query = async () => {
                 });
             },
             function(callback){
-                mysql.promise().query(mysqlQuary, catalogs[4], function(err, result){
+                mysql.promise().query(mysqlQuary, catalogs[3], function(err, result){
                     if(err){
                         console.log(err);
                         throw err;
