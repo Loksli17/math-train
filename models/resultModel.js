@@ -5,7 +5,7 @@ const resultSchema  = new mongoose.Schema({
        type    : Array,
        required: true,
    },
-   data : {
+   data :{
        type    : Array,
        required: true,
    },
@@ -20,4 +20,4 @@ const resultSchema  = new mongoose.Schema({
 });
 
 let result = mongoose.model('result', resultSchema);
-module.exports = result
+module.exports = result;
