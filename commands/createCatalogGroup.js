@@ -3,15 +3,15 @@ const async = require('async');
 
 let groups = [
     {
-        id: '1',
+        id   : '1',
         title: 'Сложности',
     },
     {
-        id: '2',
+        id   : '2',
         title: 'Название',
     },
     {
-        id: '3',
+        id   : '3',
         title: 'Название',
     }
 ];

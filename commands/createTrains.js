@@ -1,4 +1,11 @@
 const mysql = require('../lib/database/mysql');
+const async = require('async');
+
+let task = [
+    {
+        
+    }
+];
 
 let query = async () => {
     let delete = await mysql.query('delete from task where id > 0');
