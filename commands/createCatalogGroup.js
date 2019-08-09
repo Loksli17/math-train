@@ -55,7 +55,7 @@ let query = async () => {
                 console.log(err);
                 throw err;
             }
-            console.log(result);
+            console.log('Creating was success');
         }
     )
 }
