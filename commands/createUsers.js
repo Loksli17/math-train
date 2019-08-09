@@ -1,12 +1,13 @@
-const User     = require('../models/user');
-const config   = require('../config/config');
-const mongoose = require("../lib/db/mongoose");
+const User     = require('../models/userModel');
+const config   = require('../config');
+//const mongoose = require("../lib/db/mongoose");
 const async    = require('async');
 const crypto   = require('crypto');
 
 
 let query = async () => {
     let remove = await User.remove({});
+    Console.log('users create');
 
     let create = await async.parallel([
             function(callback){
@@ -115,6 +116,6 @@ let query = async () => {
         function(err, result){
             console.log(result);
         });
-}
+};
 
 query();

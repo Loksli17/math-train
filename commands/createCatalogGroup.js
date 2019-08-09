@@ -1,7 +1,11 @@
 const mysql = require('../lib/database/mysql');
 const async = require('async');
 
+<<<<<<< HEAD
 let mysqlQuery = 'INSERT INTO `catalog_group` SET ?';
+=======
+let queryStr = 'INSERT INTO `catalog_group` SET ?';
+>>>>>>> 0e14533a780a3265049702cce3b02466aa248e46
 let groups = [
     {
         id   : '1',
@@ -17,7 +21,10 @@ let groups = [
     }
 ];
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0e14533a780a3265049702cce3b02466aa248e46
 let query = async () => {
     let removeСatalog = await mysql.promise().query('DELETE FROM `catalog` WHERE 1');
     let removeСatalogGroup = await mysql.promise().query('DELETE FROM `catalog_group` WHERE 1');
