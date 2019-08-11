@@ -14,19 +14,19 @@
             <div class="login">
                 <div><h2>Вход в систему</h2></div>
                 <div>
-                    <form action="" name="" method="POST" id="login-form">
+                    <form action="/auth/loginaction" name="" method="POST" id="login-form">
                         <label class="label">
                             <span>Логин</span>
-                            <input type="text" autocomplete="off">
+                            <input name = "login"type="text" autocomplete="off">
                             <div></div>
                         </label>
                         <label class="label">
                             <span>Пароль</span>
-                            <input type="password">
+                            <input name = "password" type="password">
                             <div></div>
                         </label>
                         <label class="label" id="checkbox-cont">
-                            <input type='checkbox'>
+                            <input name = "rememberME" type='checkbox'>
                             <span>Запомнить меня</span>
                         </label>
                         <label class="label">

@@ -1,14 +1,15 @@
-const express    = require('express');
-const hbs        = require('hbs');
-const bodyParser = require('body-parser');
-const cookie     = require('cookie-parser');
-const async      = require('async');
-const expressHbs = require('express-handlebars');
+const express       = require('express');
+const hbs           = require('hbs');
+const bodyParser    = require('body-parser');
+const cookie        = require('cookie-parser');
+const async         = require('async');
+const expressHbs    = require('express-handlebars');
+const cookieParser  = require('cookie-parser');
 
 
 //own libs
 const config          = require('./config');
-//const mysqlConnection = require('./lib/database/mysql');
+
 
 let app = express();
 
@@ -17,6 +18,7 @@ let app = express();
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookie(config.cookie.secret));
+app.use(cookieParser());
 
 
 //handlebars
