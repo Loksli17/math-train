@@ -5,7 +5,7 @@ let userSchema = mongoose.Schema({
         type    : String,
         required: true,
         validate: (value) => {
-            return value != undefind
+            return value != undefined
         },
     },
     email: {
@@ -13,16 +13,20 @@ let userSchema = mongoose.Schema({
         required: true,
         unique  : true,
         validate: (value) => {
-            return value != undefind
+            return value != undefined
         },
     },
     pass: {
         type    : String,
         required: true,
         validate: (value) => {
-            return value != undefind
+            return value != undefined
         },
     },
+    isAdmin: {
+        type   : Boolean,
+        default: '0',
+    }
 });
 
 
