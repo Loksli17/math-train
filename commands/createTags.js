@@ -4,18 +4,18 @@ const async = require('async');
 let mysqlQuery = 'INSERT INTO `tag` SET ?';
 let tags = [
     {
-        id              : '1',
-        title           : 'Дискрентая математика',
+        id       : '1',
+        title    : 'Дискрентая математика',
     },
     {
-        id              : '2',
-        title           : 'Графы',
-        id_parent       : '1' ,
+        id       : '2',
+        title    : 'Графы',
+        id_parent: '1' ,
     },
     {
-        id              : '3',
-        title           : 'Множества',
-        id_parent       : '1',
+        id       : '3',
+        title    : 'Множества',
+        id_parent: '1',
     },
 ];
 

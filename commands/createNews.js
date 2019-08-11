@@ -130,7 +130,11 @@ let query = async () => {
 
         ],
         function(err, result){
-            console.log(result);
+            if(err){
+                console.log(err);
+                throw err;
+            }
+            console.log('Creating was success')
         });
 };
 
