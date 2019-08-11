@@ -9,7 +9,7 @@ let tasks = [
         text        : 'Даны два случайно созданных множества. Определить их объединение, пересечение, разность, и симметрическую разность. Заглавные и прописные буквы являются разными элементами.<br> P.S. Ответы вводить без пробелов и других символов',
         code_file   : 'simpleSets',
         isReady     : '1',
-        desciption  : 'выполнить 4 простых операции над двумя множествами',
+        description  : 'выполнить 4 простых операции над двумя множествами',
         count_result: '0',
         catalog_id  : '1'
     },
@@ -19,7 +19,7 @@ let tasks = [
         text        : 'Текст',
         code_file   : 'simpleSets',
         isReady     : '0',
-        desciption  : 'Описание',
+        description  : 'Описание',
         count_result: '0',
         catalog_id  : '1'
     },
@@ -29,7 +29,7 @@ let tasks = [
         text        : 'Текст',
         code_file   : 'simpleSets',
         isReady     : '0',
-        desciption  : 'Описание',
+        description  : 'Описание',
         count_result: '0',
         catalog_id  : '1'
     },

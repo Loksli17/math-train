@@ -2,10 +2,9 @@ const config   = require('../config');
 const mongoose = require('../lib/database/mongoose');
 const async      = require('async');
 const News = require('../models/newsModel');
-console.log('fuck');
+
 let query = async () => {
     let remove = await News.remove({});
-    console.log('fuck');
 
     let create = await async.parallel([
             function(callback){
