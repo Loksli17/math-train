@@ -1,4 +1,8 @@
 const settings = {
+    email:{
+        user: 'math.project@yandex.ru',
+        pass: 'jSXq7RJ;LMx_%nH',
+    },
     db: {
         mongoose:{
             name: 'math_train',
@@ -22,7 +26,8 @@ const settings = {
         secret: 'GiU9%$3#kLz>',
     },
     user: {
-        passSecret: '6Jhn-Nm<',
+        passSecret        : '6Jhn-Nm<',
+        passwordTryCounter: 5,
     }
 };
 

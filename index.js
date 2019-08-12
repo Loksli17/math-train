@@ -5,6 +5,7 @@ const cookie        = require('cookie-parser');
 const async         = require('async');
 const expressHbs    = require('express-handlebars');
 const cookieParser  = require('cookie-parser');
+const session = require('express-session');
 
 
 //own libs
@@ -18,6 +19,7 @@ let app = express();
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookie(config.cookie.secret));
+app.use(session({secret: config.session.secret}));
 app.use(cookieParser());
 
 

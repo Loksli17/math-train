@@ -1,4 +1,3 @@
-const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
 const crypto       = require('crypto');
 const nodemailer   = require('nodemailer');
@@ -15,27 +14,75 @@ exports.sendEmail = function(req,res){
     }
 
 };
+exports.setNewPassword = function(req,res){
+    let errors           = [];
+    let password         = req.body.newPassword+'';
+    let repeatedPassword = req.body.repeatNewPassword+'';
+
+
+    if (password==repeatedPassword){
+        User.findOne({email : req.session.userEmail},function (err,user) {
+            user.pass = crypto.createHash('sha256', config.user.passSecret).update(password).digest('hex');
+            user.login = user.login;
+            user.save();
+        });
+
+        res.redirect('/');
+    }else{
+        errors.push('Пароли не совпадают');
+        res.render('auth/setPassword',{
+            errors : errors,
+        })
+    }
+};
+
+exports.checkHash = function(req,res){
+    console.log('Computer"s hash: '+req.session.userHash);
+    userHash = req.body.random;
+
+
+    if(userHash==req.session.userHash){
+        res.render('auth/setPassword');
+    }else{
+        req.session.passwordTryCounter +=1;
+        if (req.session.passwordTryCounter==config.user.passwordTryCounter){
+            req.session.destroy(function() {
+                res.redirect('/auth/login');
+            });
+        }else{
+
+            res.render('auth/restorePassword');
+        }
+    }
+};
 
 exports.pageRestore=async function (req,res) {
 
     if (req.cookies.userUdentity==undefined){
         let email  = req.body.Email+'';
+        email = email.toLowerCase();
+
         let errors = [];
 
-        console.log(email);
 
 
-        let user = User.findOne({email: email});
+        let user =await User.findOne({email: email});
+
+
         if (user != null){
             let random = Math.random()+'';
 
             let hash = crypto.createHash('sha256', config.user.passSecret).update(random).digest('hex');
 
+            req.session.userHash            = hash;
+            req.session.userEmail           = user.email;
+            req.session.passwordTryCounter = 0;
+
             let smtpTransport  = await nodemailer.createTransport({
                 service: "Yandex",
                 auth: {
-                    user: 'math.project@yandex.ru',
-                    pass: 'jSXq7RJ;LMx_%nH',
+                    user: config.email.user,
+                    pass: config.email.pass,
                 }
             });
 
@@ -50,18 +97,25 @@ exports.pageRestore=async function (req,res) {
             smtpTransport.sendMail(mail, function(error, response){
                 if(error){
                     console.log(error);
+                    errors.push("Произошла ошибка, попробуйте еще раз");
+                    res.render('auth/indicateEmail', {
+                        errors: errors,
+                        layout: null
+                    });
                 }else{
-                    console.log("Message sent: " + mail);
+                    
+                    res.render('auth/restorePassword');
                 }
                 smtpTransport.close();
             });
-            res.redirect('/');
+
         }else{
-            errors.push('Пользователь с такой почтой не найден')ж
-            
+            errors.push('Пользователь с такой почтой не найден');
+            res.render('auth/login', {
+                layout: null,
+                errors: errors,
+            })
         }
-
-
 
     }else{
         res.redirect('/');
@@ -128,4 +182,3 @@ exports.logout = function (req,res) {
       res.clearCookie('userUdentity');
   }
 };
-
