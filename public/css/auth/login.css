@@ -28,7 +28,7 @@
 
 .login a{
     color: #fff;
-    font-size: 14px;
+    font-size: 13.5px;
     text-decoration: none;
 }
 
@@ -37,6 +37,10 @@
     flex-flow: column wrap;
     align-items: center;
     padding: 10px;
+}
+
+h2{
+    margin-bottom: 10px;
 }
 
 .label:last-child{
@@ -53,16 +57,34 @@
     background: #fff;
 }
 
+.label span{
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
 .label input{
     border: 0px;
     color: #fff;
     text-align: center;
     background: rgba(0, 0, 0, 0);
     padding: 5px 0;
+    font-size: 14px;
 }
 
 input:focus{
     outline: 0;
+}
+
+@-webkit-keyframes autofill {
+  to {
+    color: inherit;
+    background: transparent;
+  }
+}
+
+input:-webkit-autofill {
+  -webkit-animation-name: autofill;
+  -webkit-animation-fill-mode: both;
 }
 
 #login-form{
@@ -74,21 +96,37 @@ input:focus{
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
+    align-items: center;
+}
+
+#checkbox-cont > input, #checkbox-cont > span{
+    display: block;
 }
 
 #checkbox-cont > span{
-    margin-left: 5px;
+    margin-left: 8px;
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+
+#checkbox-cont > input{
+    margin-top: 2px;
+    height: 17px;
+    width: 17px;
 }
 
 #login-but{
     border: 0;
-    padding: 5px 20px;
+    padding: 8px 20px;
     border-radius: 15px;
     background: rgba(146, 128, 255, 1);
     font-size: 17px;
     color: #fff;
 }
 
+#login-but:hover{
+    cursor: pointer;
+}
 
 .icon{
     position: fixed;
