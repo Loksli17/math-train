@@ -1,10 +1,8 @@
 const config   = require('../config');
-<<<<<<< HEAD
+
 const mongoose = require("../lib/database/mongoose");
 const User     = require('../models/userModel');
-=======
-const mongoose = require('../lib/database/mongoose');
->>>>>>> 9a2f3193bdb804399f08ff7e29aae35abd535456
+
 const async    = require('async');
 const crypto   = require('crypto');
 

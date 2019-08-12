@@ -14,46 +14,56 @@ exports.sendEmail = function(req,res){
     }
 
 };
+
 exports.setNewPassword = function(req,res){
-    let errors           = [];
-    let password         = req.body.newPassword+'';
-    let repeatedPassword = req.body.repeatNewPassword+'';
 
+    if (req.cookies.userUdentity==undefined){
+        let errors           = [];
+        let password         = req.body.newPassword+'';
+        let repeatedPassword = req.body.repeatNewPassword+'';
 
-    if (password==repeatedPassword){
-        User.findOne({email : req.session.userEmail},function (err,user) {
-            user.pass = crypto.createHash('sha256', config.user.passSecret).update(password).digest('hex');
-            user.login = user.login;
-            user.save();
-        });
+        if (password==repeatedPassword){
+            User.findOne({email : req.session.userEmail},function (err,user) {
+                user.pass = crypto.createHash('sha256', config.user.passSecret).update(password).digest('hex');
+                user.login = user.login;
+                user.save();
+            });
 
-        res.redirect('/');
+            res.redirect('/');
+        }else{
+            errors.push('Пароли не совпадают');
+            res.render('auth/setPassword',{
+                errors : errors,
+            })
+        }
     }else{
-        errors.push('Пароли не совпадают');
-        res.render('auth/setPassword',{
-            errors : errors,
-        })
+        res.redirect('/');
     }
 };
 
 exports.checkHash = function(req,res){
-    console.log('Computer"s hash: '+req.session.userHash);
-    userHash = req.body.random;
 
+    if (req.cookies.userUdentity==undefined){
+       
+        userHash = req.body.random;
 
-    if(userHash==req.session.userHash){
-        res.render('auth/setPassword');
-    }else{
-        req.session.passwordTryCounter +=1;
-        if (req.session.passwordTryCounter==config.user.passwordTryCounter){
-            req.session.destroy(function() {
-                res.redirect('/auth/login');
-            });
+        if(userHash==req.session.userHash){
+            res.render('auth/setPassword');
         }else{
+            req.session.passwordTryCounter +=1;
+            if (req.session.passwordTryCounter==config.user.passwordTryCounter){
+                req.session.destroy(function() {
+                    res.redirect('/auth/login');
+                });
+            }else{
 
-            res.render('auth/restorePassword');
+                res.render('auth/restorePassword');
+            }
         }
+    }else{
+        res.redirect('/');
     }
+
 };
 
 exports.pageRestore=async function (req,res) {
@@ -63,9 +73,6 @@ exports.pageRestore=async function (req,res) {
         email = email.toLowerCase();
 
         let errors = [];
-
-
-
         let user =await User.findOne({email: email});
 
 
@@ -76,7 +83,7 @@ exports.pageRestore=async function (req,res) {
 
             req.session.userHash            = hash;
             req.session.userEmail           = user.email;
-            req.session.passwordTryCounter = 0;
+            req.session.passwordTryCounter  = 0;
 
             let smtpTransport  = await nodemailer.createTransport({
                 service: "Yandex",
@@ -111,14 +118,11 @@ exports.pageRestore=async function (req,res) {
 
         }else{
             errors.push('Пользователь с такой почтой не найден');
-<<<<<<< HEAD
+
             res.render('auth/login', {
                 layout: null,
                 errors: errors,
             })
-=======
-
->>>>>>> 70570bf9bc6b5ad3b7f9737f37b0dad526dc955a
         }
 
     }else{
@@ -184,15 +188,7 @@ exports.actionLogout = function (req,res){
   }else{
       res.redirect('/');
   }
-<<<<<<< HEAD
 };
-=======
-};
-
-
-
-
-
 
 exports.actionSignup = function(req, res){
     if(req.cookies.userUdentity == undefined){
@@ -202,7 +198,7 @@ exports.actionSignup = function(req, res){
     }else{
         res.redirect('/');
     }
-}
+};
 
 exports.actionSignupPost = async function(req, res){
     let post = req.body;
@@ -246,7 +242,7 @@ exports.actionSignupPost = async function(req, res){
                     login  : login,
                     email  : email,
                     isAdmin: 0,
-                }
+                };
                 res.cookie('userUdentity', user, {
                     expires :  new Date(Date.now() + 1000 * 60 * 60 * 7),
                 });
@@ -257,4 +253,3 @@ exports.actionSignupPost = async function(req, res){
 
 
 };
->>>>>>> 70570bf9bc6b5ad3b7f9737f37b0dad526dc955a
