@@ -59,6 +59,10 @@ exports.actionLogin = async function(req,res){
     }
 };
 
-exports.actionSignup = function(req, res){
-    res.render('auth/singup', {layout: null});
-};
+exports.pageSignup = function(res, req){
+    if(res.cookies.userUdentity != undefined){
+        res.render('auth/singup', {
+            layout: null,
+        })
+    }
+}
