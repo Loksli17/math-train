@@ -1,14 +1,74 @@
 const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
 const crypto       = require('crypto');
+const nodemailer   = require('nodemailer');
 
 const mongoose     = require('./../lib/database/mongoose');
 const User         = require('./../models/userModel');
 const config       = require('./../config');
 
+exports.sendEmail = function(req,res){
+    if (req.cookies.userUdentity==undefined){
+        res.render('auth/indicateEmail', {layout: null});
+    }else{
+        res.redirect('/');
+    }
+
+};
+
+exports.pageRestore=async function (req,res) {
+
+    if (req.cookies.userUdentity==undefined){
+        let email  = req.body.Email+'';
+        let errors = [];
+
+        console.log(email);
+
+
+        let user = User.findOne({email: email});
+        if (user != null){
+            let random = Math.random()+'';
+
+            let hash = crypto.createHash('sha256', config.user.passSecret).update(random).digest('hex');
+
+            let smtpTransport  = await nodemailer.createTransport({
+                service: "Yandex",
+                auth: {
+                    user: 'math.project@yandex.ru',
+                    pass: 'jSXq7RJ;LMx_%nH',
+                }
+            });
+
+            var mail = {
+                from: "math.project@yandex.ru",
+                to: email,
+                subject: "Restore password",
+                text: "Your hash",
+                html: hash,
+            };
+
+            smtpTransport.sendMail(mail, function(error, response){
+                if(error){
+                    console.log(error);
+                }else{
+                    console.log("Message sent: " + mail);
+                }
+                smtpTransport.close();
+            });
+            res.redirect('/');
+        }else{
+            errors.push('Пользователь с такой почтой не найден')ж
+            
+        }
+
+
+
+    }else{
+        res.redirect('/');
+    }
+};
 
 exports.pageLogin = function(req, res){
-
    if (req.cookies.userUdentity==undefined){
 
        res.render('auth/login', {layout: null});
@@ -62,3 +122,10 @@ exports.actionLogin = async function(req,res){
 exports.actionSignup = function(req, res){
     res.render('auth/singup', {layout: null});
 };
+
+exports.logout = function (req,res) {
+  if (req.cookies.userUdentity!=undefined){
+      res.clearCookie('userUdentity');
+  }
+};
+
