@@ -57,8 +57,8 @@ exports.pageRestore=async function (req,res) {
             });
             res.redirect('/');
         }else{
-            errors.push('Пользователь с такой почтой не найден')ж
-            
+            errors.push('Пользователь с такой почтой не найден');
+
         }
 
 
@@ -119,23 +119,80 @@ exports.actionLogin = async function(req,res){
     }
 };
 
-<<<<<<< HEAD
-exports.pageSignup = function(res, req){
-    if(res.cookies.userUdentity != undefined){
-        res.render('auth/singup', {
-            layout: null,
-        })
-    }
-}
-=======
-exports.actionSignup = function(req, res){
-    res.render('auth/singup', {layout: null});
-};
-
-exports.logout = function (req,res) {
-  if (req.cookies.userUdentity!=undefined){
+exports.actionLogout = function (req,res){
+  if (req.cookies.userUdentity != undefined){
       res.clearCookie('userUdentity');
+      res.redirect('/auth/login');
+  }else{
+      res.redirect('/');
   }
 };
 
->>>>>>> 543dbe1f2e93b90b16d37bba6bc10e3c72af1c20
+
+
+
+
+
+exports.actionSignup = function(req, res){
+    if(req.cookies.userUdentity == undefined){
+        res.render('auth/singup', {
+            layout: null,
+        })
+    }else{
+        res.redirect('/');
+    }
+}
+
+exports.actionSignupPost = async function(req, res){
+    let post = req.body;
+
+    let error = '',
+        pass  = post.password,
+        pass2 = post.passwordSecond,
+        email = post.email,
+        login = post.login;
+
+    if(login == "" || pass  == "" || pass2 == "" || email == ""){
+        error = "Есть незаполненные поля";
+        res.render('auth/singup', {
+            error: error,
+        });
+    }else{
+        if(pass != pass2){
+            error = "Введенные пароли не совпадают";
+            res.render('auth/singup', {
+                error: error,
+            });
+        }else{
+            var user = await User.findOne({email: email});
+
+            if(user != null){
+                error = "Ввыеденный E-mail уже используется";
+                res.render('auth/singup', {
+                    error: error,
+                });
+            }else{
+                //сохранение пользователя
+                let hash = crypto.createHash('sha256', config.user.passSecret).update(pass).digest('hex');
+                User({
+                    login  : login,
+                    email  : email.toLowerCase(),
+                    pass   : hash,
+                    isAdmin: 0,
+                }).save();
+
+                var user = {
+                    login  : login,
+                    email  : email,
+                    isAdmin: 0,
+                }
+                res.cookie('userUdentity', user, {
+                    expires :  new Date(Date.now() + 1000 * 60 * 60 * 7),
+                });
+                res.redirect('/');
+            }
+        }
+    }
+
+
+};
