@@ -44,7 +44,7 @@ exports.setNewPassword = function(req,res){
 exports.checkHash = function(req,res){
 
     if (req.cookies.userUdentity==undefined){
-       
+
         userHash = req.body.random;
 
         if(userHash==req.session.userHash){
