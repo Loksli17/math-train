@@ -7,7 +7,7 @@ const User         = require('./../models/userModel');
 const config       = require('./../config');
 
 exports.sendEmail = function(req,res){
-    if (req.cookies.userUdentity==undefined){
+    if (req.cookies.userUdentity == undefined){
         res.render('auth/indicateEmail', {layout: null});
     }else{
         res.redirect('/');
@@ -17,12 +17,12 @@ exports.sendEmail = function(req,res){
 
 exports.setNewPassword = function(req,res){
 
-    if (req.cookies.userUdentity==undefined){
-        let errors           = [];
+    if (req.cookies.userUdentity == undefined){
+        let errors           = '';
         let password         = req.body.newPassword+'';
         let repeatedPassword = req.body.repeatNewPassword+'';
 
-        if (password==repeatedPassword){
+        if (password == repeatedPassword){
             User.findOne({email : req.session.userEmail},function (err,user) {
                 user.pass = crypto.createHash('sha256', config.user.passSecret).update(password).digest('hex');
                 user.login = user.login;
@@ -31,7 +31,7 @@ exports.setNewPassword = function(req,res){
 
             res.redirect('/');
         }else{
-            errors.push('Пароли не совпадают');
+            errors  = 'Пароли не совпадают';
             res.render('auth/setPassword',{
                 errors : errors,
             })
@@ -43,15 +43,15 @@ exports.setNewPassword = function(req,res){
 
 exports.checkHash = function(req,res){
 
-    if (req.cookies.userUdentity==undefined){
+    if (req.cookies.userUdentity == undefined){
 
         userHash = req.body.random;
 
-        if(userHash==req.session.userHash){
+        if(userHash == req.session.userHash){
             res.render('auth/setPassword');
         }else{
             req.session.passwordTryCounter +=1;
-            if (req.session.passwordTryCounter==config.user.passwordTryCounter){
+            if (req.session.passwordTryCounter == config.user.passwordTryCounter){
                 req.session.destroy(function() {
                     res.redirect('/auth/login');
                 });
@@ -68,11 +68,11 @@ exports.checkHash = function(req,res){
 
 exports.pageRestore=async function (req,res) {
 
-    if (req.cookies.userUdentity==undefined){
+    if (req.cookies.userUdentity == undefined){
         let email  = req.body.Email+'';
         email = email.toLowerCase();
 
-        let errors = [];
+        let errors = '';
         let user =await User.findOne({email: email});
 
 
@@ -131,7 +131,7 @@ exports.pageRestore=async function (req,res) {
 };
 
 exports.pageLogin = function(req, res){
-   if (req.cookies.userUdentity==undefined){
+   if (req.cookies.userUdentity == undefined){
 
        res.render('auth/login', {layout: null});
    }else{

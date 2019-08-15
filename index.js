@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookie(config.cookie.secret));
 app.use(session({secret: config.session.secret}));
 app.use(cookieParser());
+app.use(require('csurf')());
 
 
 //handlebars
@@ -43,6 +44,7 @@ app.set('port', process.env.PORT || config.app.port);
 //routes require
 const indexRouter = require('./routes/indexRouter');
 const authRouter = require('./routes/authRouter');
+
 
 
 //routes init

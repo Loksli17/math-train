@@ -4,6 +4,7 @@ const authController = require('../controllers/authController');
 
 const authRouter = express.Router();
 
+
 authRouter.post('/loginaction',authController.actionLogin);
 
 authRouter.all('/savepassword',authController.setNewPassword);

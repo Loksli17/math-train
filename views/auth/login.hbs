@@ -14,7 +14,8 @@
             <div class="login">
                 <div><h2>Вход в систему</h2></div>
                 <div>
-                    <form action="/auth/loginaction" name="" method="POST" id="login-form">
+                    <form action="/auth/loginaction" name="" method="POST" id="login-form" >
+                        <input type="hidden" name="_csrf" value="{{_csrfToken}}">
                         <label class="label">
                             <span><b>Логин или Email</b></span>
                             <input name = "login"type="text" autocomplete="false">
