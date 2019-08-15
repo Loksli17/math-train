@@ -44,7 +44,7 @@ exports.setNewPassword = function(req,res){
 exports.checkHash = function(req,res){
 
     if (req.cookies.userUdentity==undefined){
-       
+
         userHash = req.body.random;
 
         if(userHash==req.session.userHash){
@@ -110,7 +110,7 @@ exports.pageRestore=async function (req,res) {
                         layout: null
                     });
                 }else{
-                    
+
                     res.render('auth/restorePassword');
                 }
                 smtpTransport.close();
