@@ -5,7 +5,7 @@ const cookie        = require('cookie-parser');
 const async         = require('async');
 const expressHbs    = require('express-handlebars');
 const cookieParser  = require('cookie-parser');
-const session = require('express-session');
+const session       = require('express-session');
 
 
 //own libs

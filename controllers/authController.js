@@ -110,7 +110,7 @@ exports.pageRestore=async function (req,res) {
                         layout: null
                     });
                 }else{
-                    
+
                     res.render('auth/restorePassword');
                 }
                 smtpTransport.close();
