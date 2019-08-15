@@ -10,7 +10,6 @@ const session       = require('express-session');
 
 //own libs
 const config            = require('./config');
-const handlebarsHelpers = require('./lib/helpers/handlebars');
 
 let app = express();
 
@@ -29,7 +28,6 @@ app.engine('hbs', expressHbs({
     layoutsDir   : 'views/layouts',
     defaultLayout: 'main',
     extname      : 'hbs',
-    helpers      : handlebarsHelpers,
 }));
 app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/partials');
@@ -45,6 +43,9 @@ const authRouter = require('./routes/authRouter');
 
 //locals
 app.use(function(req, res, next){
+    if(req.cookies.userUdentity != undefined){
+        res.locals.user = req.cookies.userUdentity;
+    }
     res.locals._csrfToken = req.csrfToken();
     next();
 });
