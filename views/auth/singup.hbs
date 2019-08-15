@@ -1,4 +1,7 @@
 <form action="/auth/singup-post" name="" method="POST" id="login-form">
+    <label>
+        <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+    </label>
     <label class="label">
         <span>Логин</span>
         <input name="login" type="text" autocomplete="false">

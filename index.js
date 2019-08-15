@@ -9,8 +9,8 @@ const session       = require('express-session');
 
 
 //own libs
-const config          = require('./config');
-
+const config            = require('./config');
+const handlebarsHelpers = require('./lib/helpers/handlebars');
 
 let app = express();
 
@@ -21,19 +21,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookie(config.cookie.secret));
 app.use(session({secret: config.session.secret}));
 app.use(cookieParser());
-
+app.use(require('csurf')());
 
 //handlebars
 app.engine('hbs', expressHbs({
     layoutsDir   : 'views/layouts',
     defaultLayout: 'main',
     extname      : 'hbs',
+    helpers      : handlebarsHelpers,
 }));
 app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/partials');
-hbs.registerHelper('getLogin', function(){
-    return "Логин";
-});
 
 
 //settings
@@ -44,6 +42,11 @@ app.set('port', process.env.PORT || config.app.port);
 const indexRouter = require('./routes/indexRouter');
 const authRouter = require('./routes/authRouter');
 
+//locals
+app.use(function(req, res, next){
+    res.locals._csrfToken = req.csrfToken();
+    next();
+});
 
 //routes init
 app.use('/', indexRouter);
