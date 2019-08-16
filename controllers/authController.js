@@ -18,22 +18,26 @@ exports.sendEmail = function(req,res){
 exports.setNewPassword = function(req,res){
 
     if (req.cookies.userUdentity == undefined){
-        let errors           = '';
+        let error           = '';
         let password         = req.body.newPassword+'';
         let repeatedPassword = req.body.repeatNewPassword+'';
 
         if (password == repeatedPassword){
             User.findOne({email : req.session.userEmail},function (err,user) {
-                user.pass = crypto.createHash('sha256', config.user.passSecret).update(password).digest('hex');
+
+                user.pass = crypto.createHash('sha256', config.user.passSecret)
+                    .update(password)
+                    .digest('hex');
+
                 user.login = user.login;
                 user.save();
             });
 
             res.redirect('/');
         }else{
-            errors  = 'Пароли не совпадают';
+            error  = 'Пароли не совпадают';
             res.render('auth/setPassword',{
-                errors : errors,
+                error : error,
             })
         }
     }else{
@@ -69,10 +73,10 @@ exports.checkHash = function(req,res){
 exports.pageRestore=async function (req,res) {
 
     if (req.cookies.userUdentity == undefined){
-        let email  = req.body.Email+'';
+        let email  = req.body.email+'';
         email = email.toLowerCase();
 
-        let errors = '';
+        let error = '';
         let user =await User.findOne({email: email});
 
 
@@ -94,7 +98,7 @@ exports.pageRestore=async function (req,res) {
             });
 
             var mail = {
-                from: "math.project@yandex.ru",
+                from: config.email.mail,
                 to: email,
                 subject: "Restore password",
                 text: "Your hash",
@@ -104,9 +108,9 @@ exports.pageRestore=async function (req,res) {
             smtpTransport.sendMail(mail, function(error, response){
                 if(error){
                     console.log(error);
-                    errors.push("Произошла ошибка, попробуйте еще раз");
+                    error = "Произошла ошибка, попробуйте еще раз";
                     res.render('auth/indicateEmail', {
-                        errors: errors,
+                        error: error,
                         layout: null
                     });
                 }else{
@@ -117,11 +121,10 @@ exports.pageRestore=async function (req,res) {
             });
 
         }else{
-            errors.push('Пользователь с такой почтой не найден');
-
+            error = 'Пользователь с такой почтой не найден';
             res.render('auth/login', {
                 layout: null,
-                errors: errors,
+                error: error,
             })
         }
 
@@ -142,7 +145,7 @@ exports.pageLogin = function(req, res){
 
 exports.actionLogin = async function(req,res){
 
-    let errors = [];//ошибки заполения
+    let error = '';//ошибки заполения
 
     let login       = req.body.login;
     let password    = req.body.password;
@@ -165,18 +168,18 @@ exports.actionLogin = async function(req,res){
             }
             res.redirect('/');
         }else{
-            errors.push("Неправильный логин или пароль");
+            error = "Неправильный логин или пароль";
 
             res.render('auth/login', {
                 layout: null,
-                errors: errors,
+                errors: error,
             })
         }
     }else{
-        errors.push('Все поля должны быть заполены');
+        error = 'Все поля должны быть заполены';
         res.render('auth/login', {
             layout: null,
-            errors: errors,
+            error: error,
         })
     }
 };

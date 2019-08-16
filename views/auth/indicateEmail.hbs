@@ -15,6 +15,7 @@
                 <div><h2>Укажите вашу электронную почту</h2></div>
                 <div>
                     <form action="/auth/pagerestore" name="" method="POST" id="login-form">
+                        <input type="hidden" name="_csrf" value="{{_csrfToken}}">
                         <label class="label">
                             <span>E-mail</span>
                             <input name="email" type="text" autocomplete="false">

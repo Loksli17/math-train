@@ -7,6 +7,7 @@ const authRouter = express.Router();
 
 authRouter.post('/loginaction',authController.actionLogin);
 
+authRouter.all('/setnewpassword',authController.checkHash);
 authRouter.all('/savepassword',authController.setNewPassword);
 authRouter.all('/pagerestore',authController.pageRestore);
 authRouter.all('/sendemail', authController.sendEmail);

@@ -2,6 +2,7 @@ const settings = {
     email:{
         user: 'math.project@yandex.ru',
         pass: 'jSXq7RJ;LMx_%nH',
+        mail: "math.project@yandex.ru",
     },
     db: {
         mongoose:{
