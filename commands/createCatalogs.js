@@ -1,6 +1,6 @@
-const config   = require('../config');
-const mysql = require('../lib/database/mysql');
-const async      = require('async');
+const config = require('../config');
+const mysql  = require('../lib/database/mysql');
+const async  = require('async');
 
 let mysqlQuary = "INSERT INTO `catalog` SET ?";
 let catalogs = [

@@ -4,19 +4,23 @@ const authController = require('../controllers/authController');
 
 const authRouter = express.Router();
 
+//login
+authRouter.all('/login', authController.actionLogin);
+authRouter.post('/loginaction', authController.actionLoginPost);
 
-authRouter.post('/loginaction',authController.actionLogin);
+//logout
+authRouter.all('/logout', authController.actionLogout);
 
-authRouter.all('/setnewpassword',authController.checkHash);
-authRouter.all('/savepassword',authController.setNewPassword);
-authRouter.all('/pagerestore',authController.pageRestore);
+//setPassword
+authRouter.all('/setnewpassword', authController.checkHash);
+authRouter.all('/savepassword', authController.setNewPassword);
+authRouter.all('/pagerestore', authController.pageRestore);
 authRouter.all('/sendemail', authController.sendEmail);
 
-authRouter.all('/login', authController.pageLogin);
-
+//signup
 authRouter.get('/signup', authController.actionSignup);
 authRouter.post('/singup-post', authController.actionSignupPost);
 
-authRouter.all('/logout', authController.actionLogout);
+
 
 module.exports = authRouter;

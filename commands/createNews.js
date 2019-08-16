@@ -1,7 +1,7 @@
 const config   = require('../config');
 const mongoose = require('../lib/database/mongoose');
 const async      = require('async');
-const News = require('../models/newsModel');
+const News = require('../models/mongoose/newsModel');
 
 let query = async () => {
     let remove = await News.remove({});

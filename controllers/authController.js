@@ -3,8 +3,9 @@ const crypto       = require('crypto');
 const nodemailer   = require('nodemailer');
 
 const mongoose     = require('./../lib/database/mongoose');
-const User         = require('./../models/userModel');
+const User         = require('./../models/mongoose/userModel');
 const config       = require('./../config');
+
 
 exports.sendEmail = function(req,res){
     if (req.cookies.userUdentity == undefined){
@@ -12,19 +13,18 @@ exports.sendEmail = function(req,res){
     }else{
         res.redirect('/');
     }
-
 };
 
-exports.setNewPassword = function(req,res){
+
+exports.setNewPassword = function(req, res){
 
     if (req.cookies.userUdentity == undefined){
-        let error           = '';
+        let error            = '';
         let password         = req.body.newPassword+'';
         let repeatedPassword = req.body.repeatNewPassword+'';
 
         if (password == repeatedPassword){
             User.findOne({email : req.session.userEmail},function (err,user) {
-
                 user.pass = crypto.createHash('sha256', config.user.passSecret)
                     .update(password)
                     .digest('hex');
@@ -32,23 +32,21 @@ exports.setNewPassword = function(req,res){
                 user.login = user.login;
                 user.save();
             });
-
-            res.redirect('/');
+            res.redirect('/auth/login');
         }else{
-            error  = 'Пароли не совпадают';
+            error = 'Пароли не совпадают';
             res.render('auth/setPassword',{
                 error : error,
-            })
+            });
         }
     }else{
         res.redirect('/');
     }
 };
 
-exports.checkHash = function(req,res){
 
+exports.checkHash = function(req, res){
     if (req.cookies.userUdentity == undefined){
-
         userHash = req.body.random;
 
         if(userHash == req.session.userHash){
@@ -60,25 +58,22 @@ exports.checkHash = function(req,res){
                     res.redirect('/auth/login');
                 });
             }else{
-
                 res.render('auth/restorePassword');
             }
         }
     }else{
         res.redirect('/');
     }
-
 };
 
-exports.pageRestore=async function (req,res) {
+
+exports.pageRestore = async function (req, res) {
 
     if (req.cookies.userUdentity == undefined){
-        let email  = req.body.email+'';
+        let email = req.body.email + '';
         email = email.toLowerCase();
-
         let error = '';
-        let user =await User.findOne({email: email});
-
+        let user  = await User.findOne({email: email});
 
         if (user != null){
             let random = Math.random()+'';
@@ -98,11 +93,11 @@ exports.pageRestore=async function (req,res) {
             });
 
             var mail = {
-                from: config.email.mail,
-                to: email,
+                from   : config.email.mail,
+                to     : email,
                 subject: "Restore password",
-                text: "Your hash",
-                html: hash,
+                text   : "Your hash",
+                html   : hash,
             };
 
             smtpTransport.sendMail(mail, function(error, response){
@@ -114,12 +109,10 @@ exports.pageRestore=async function (req,res) {
                         layout: null
                     });
                 }else{
-
                     res.render('auth/restorePassword');
                 }
                 smtpTransport.close();
             });
-
         }else{
             error = 'Пользователь с такой почтой не найден';
             res.render('auth/login', {
@@ -127,26 +120,23 @@ exports.pageRestore=async function (req,res) {
                 error: error,
             })
         }
-
     }else{
         res.redirect('/');
     }
 };
 
-exports.pageLogin = function(req, res){
-   if (req.cookies.userUdentity == undefined){
 
+exports.actionLogin = function(req, res){
+   if (req.cookies.userUdentity == undefined){
        res.render('auth/login', {layout: null});
    }else{
        res.redirect('/');
-
    }
 };
 
-exports.actionLogin = async function(req,res){
+exports.actionLoginPost = async function(req, res){
 
-    let error = '';//ошибки заполения
-
+    let error       = ''; //ошибки заполения
     let login       = req.body.login;
     let password    = req.body.password;
     let rememberMe  = req.body.rememberME;
@@ -156,35 +146,40 @@ exports.actionLogin = async function(req,res){
     if (login != '' && password !=''){
         user = await User.findOne({email : login});
 
-        if(user!=null&&user.pass==hash){
+        if(user!=null && user.pass==hash){
 
-            if (rememberMe=='on'){
-                res.cookie("userUdentity",user.email,
+            var user = {
+                login  : user.login,
+                email  : user.email,
+                isAdmin: 0,
+            };
+
+            if (rememberMe == 'on'){
+                res.cookie("userUdentity", user,
                     {expires:  new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),});
-
             }else{
-                res.cookie("userUdentity",user.email,
+                res.cookie("userUdentity", user,
                     {expires :  new Date(Date.now() + 1000 * 60 * 60 * 24),});
             }
             res.redirect('/');
         }else{
             error = "Неправильный логин или пароль";
-
             res.render('auth/login', {
                 layout: null,
                 errors: error,
-            })
+            });
         }
     }else{
         error = 'Все поля должны быть заполены';
         res.render('auth/login', {
             layout: null,
             error: error,
-        })
+        });
     }
 };
 
-exports.actionLogout = function (req,res){
+
+exports.actionLogout = function (req, res){
   if (req.cookies.userUdentity != undefined){
       res.clearCookie('userUdentity');
       res.redirect('/auth/login');
@@ -192,6 +187,7 @@ exports.actionLogout = function (req,res){
       res.redirect('/');
   }
 };
+
 
 exports.actionSignup = function(req, res){
     if(req.cookies.userUdentity == undefined){
@@ -202,6 +198,7 @@ exports.actionSignup = function(req, res){
         res.redirect('/');
     }
 };
+
 
 exports.actionSignupPost = async function(req, res){
     let post = req.body;

@@ -43,7 +43,7 @@ h2{
     margin-bottom: 10px;
 }
 
-.label:last-child{
+.label:nth-child(5){
     padding: 4px;
 }
 
@@ -134,4 +134,22 @@ input:-webkit-autofill {
     height: 50px;
     left: 20px;
     top: 20px;
+}
+
+.singup-a{
+    display: flex;
+    flex-flow: row;
+    margin-top: 15px;
+    position: fixed;
+    bottom: 15px;
+}
+
+.singup-a > span{
+    margin-right: 10px;
+}
+
+.singup-a > a{
+    font-weight: bold;
+    letter-spacing: 0.6px;
+    color: rgba(146, 128, 255, 1);
 }
