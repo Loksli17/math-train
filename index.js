@@ -45,7 +45,6 @@ const authRouter = require('./routes/authRouter');
 app.use(function(req, res, next){
     if(req.cookies.userUdentity != undefined){
         res.locals.user = req.cookies.userUdentity;
-        console.log(res.locals.user);
     }
     res.locals._csrfToken = req.csrfToken();
     next();
