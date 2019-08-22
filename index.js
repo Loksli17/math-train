@@ -9,13 +9,14 @@ const session       = require('express-session');
 
 
 //own libs
-const config            = require('./config');
+const config        = require('./config');
 
 let app = express();
 
 
 //use
 app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/resources'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookie(config.cookie.secret));
 app.use(session({secret: config.session.secret}));
