@@ -8,6 +8,9 @@ function modelMysql(_tableName, object){
     this.tableName = _tableName;
 };
 
+modelMysql.prototype.rules = {
+    required: ['title', 'text', 'description', 'catalog_id'],
+}
 
 modelMysql.prototype.create = function(newTask, func){
     mysql.query('insert into  ' + this.tableName + ' set ?', newTask, func);
@@ -173,18 +176,43 @@ modelMysql.prototype.query = async function(query){
     return result;
 }
 
-modelMysql.prototype.update = async function(id, object){
-    id = Number(id);
-    if(isNaN(id)){
-        throw 'Error: param id must be a number';
-        return false;
-    }
-    let query = 'UPDATE ' + this.tableName + 'SET ';
+
+modelMysql.prototype.validate = async function(object){
+    console.log(this.rules);
 }
+
+//@return true or false of updating
+modelMysql.prototype.save = async function(object, id){
+
+    let query = "";
+
+    this.validate(object);
+
+    if(id == undefined){
+        //insert
+        query = 'INSERT ' + this.tableName + ' SET ?';
+        let result = await mysql.promise().query(query, [object]);
+    }else{
+        //update
+        id = Number(id);
+        if(isNaN(id)){
+            throw 'Error: param id must be a number';
+            return false;
+        }
+        query = 'UPDATE ' + this.tableName + ' SET ? WHERE id = ?';
+        let result = await mysql.promise().query(query, [object, id]);
+    }
+
+    return (!result[0].warningStatus) ? true : false;
+}
+
+
+
 
 
 exports.actionIndex = async function(req, res){
     let Task = new modelMysql('task');
+    let update = Task.save({title: 'test', text: 'test', description: 'описание', catalog_id: '1'});
     let tasks = await Task.find('all', {
         join: [
             ['inner', 'catalog', 'catalog_id = catalog.id'],
@@ -194,8 +222,8 @@ exports.actionIndex = async function(req, res){
         select: ['task.id', 'task.title', 'catalog.title', 'task_has_tag.tag_id']
     });
     let task = await Task.find('one', {where: 'id = 1'});
-    let update = Task.update('фвфывывф', {title: 'Тест'});
-    res.send(task);
+
+    res.send({task, update});
 
     // res.render('index', {
     //     date: tasks,
