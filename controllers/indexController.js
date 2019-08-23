@@ -218,7 +218,7 @@ exports.actionIndex = async function(req, res){
         sql: true,
         select: ['task.id', 'task.title', 'catalog.title', 'task_has_tag.tag_id']
     });
-    let task = await Task.find('one', {where: 'id = 1'});
+    let task = await Task.find('one', {where: 'id > 1'});
 
     let Catalog = new modelMysql('catalog');
 
