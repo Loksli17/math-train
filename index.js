@@ -39,8 +39,9 @@ app.set('port', process.env.PORT || config.app.port);
 
 
 //routes require
-const indexRouter = require('./routes/indexRouter');
+const indexRouter= require('./routes/indexRouter');
 const authRouter = require('./routes/authRouter');
+const taskRouter = require('./routes/taskRouter');
 
 //locals
 app.use(function(req, res, next){
@@ -53,9 +54,9 @@ app.use(function(req, res, next){
 
 
 //routes init
-app.use('/', indexRouter);
+app.use('/',     indexRouter);
 app.use('/auth', authRouter);
-
+app.use('/tasks',taskRouter);
 
 //soft
 app.use(function(req, res){
