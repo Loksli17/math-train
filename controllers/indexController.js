@@ -100,6 +100,7 @@ modelMysql.prototype.find = async function(method, conditions){
     }
 
     var result = await mysql.promise().query(query);
+    console.log(result);
 
     switch(method){
         case 'all':
@@ -151,7 +152,6 @@ modelMysql.prototype.remove = async function(options, conditions){
     return (!result[0].warningStatus) ? true : false;
 }
 
-
 //@return TRUE if deleting was success or FALSE else
 modelMysql.prototype.removeById = async function(id){
     if(id == undefined){
@@ -185,13 +185,14 @@ modelMysql.prototype.validate = async function(object){
 modelMysql.prototype.save = async function(object, id){
 
     let query = "";
+    let result;
 
     this.validate(object);
 
     if(id == undefined){
         //insert
         query = 'INSERT ' + this.tableName + ' SET ?';
-        let result = await mysql.promise().query(query, [object]);
+        result = await mysql.promise().query(query, [object]);
     }else{
         //update
         id = Number(id);
@@ -200,15 +201,11 @@ modelMysql.prototype.save = async function(object, id){
             return false;
         }
         query = 'UPDATE ' + this.tableName + ' SET ? WHERE id = ?';
-        let result = await mysql.promise().query(query, [object, id]);
+        result = await mysql.promise().query(query, [object, id]);
     }
 
     return (!result[0].warningStatus) ? true : false;
 }
-
-
-
-
 
 exports.actionIndex = async function(req, res){
     let Task = new modelMysql('task');
@@ -223,9 +220,14 @@ exports.actionIndex = async function(req, res){
     });
     let task = await Task.find('one', {where: 'id = 1'});
 
+    let Catalog = new modelMysql('catalog');
+
+        
     res.send({task, update});
 
     // res.render('index', {
     //     date: tasks,
     // });
 };
+
+
