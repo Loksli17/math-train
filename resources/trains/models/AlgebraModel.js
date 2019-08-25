@@ -4,8 +4,6 @@ Algebra.prototype.do = function(set1, set2, oper) {
     if (typeof oper == 'string') {
         if (oper == 'equal') {
             return this.equal(set1, set2);
-        } else if (oper == 'comp') {
-            arr = this.cartСomp(set1, set2).slice();
         }
     }
     let numOper = oper.int();
@@ -22,6 +20,9 @@ Algebra.prototype.do = function(set1, set2, oper) {
             break;
         case 4:
             arr = this.simDiff(set1, set2).slice();
+            break;
+        case 5:
+            arr = this.cartСomp(set1, set2).slice();
             break;
     }
 
