@@ -6,10 +6,21 @@
 </head>
 <body>
 
-<form action = "">
+<form action = "/tasks/filter" method="post">
+    <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+    <p>Дисциплины</p>
+    {{#each disciplines}}
+        <!--<p><input type="radio" name = ""></p>-->
+        <p>{{this.name}}</p>
+
+            {{#each this.tags}}
+                <p><input type="radio" value="{{this.id}}" name = "tag[{{this.id}}]">{{this.name}}</p>
+            {{/each}}
+    {{/each}}
+
     <p>Сложность</p>
-    {{#each rows}}
-    <p> <input type="radio" name="{{rows.id}}" value="a1">{{this.title}}<Br>
+    {{#each catalogs}}
+        <p> <input type="radio" name="catalog[{{this.id}}]" value="{{this.id}}">{{this.title}}<Br>
     {{/each}}
     <p> <input type="submit"></p>
 </form>

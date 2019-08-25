@@ -12,6 +12,6 @@ TaskModel.prototype.constructor = TaskModel;
 
 TaskModel.prototype.rules = {
     required: ['title', 'text', 'description', 'catalog_id'],
-}
+};
 
 module.exports = TaskModel;
