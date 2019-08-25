@@ -2,18 +2,74 @@
 <script src="models/OperationModel.js" charset="utf-8"></script>
 <script src="models/AlgebraModel.js" charset="utf-8"></script>
 
-
+<body>
+    <form action="/models/train2" method="post" id="train2">
+        <label class="label">
+            <span><b>Даны множества:</b></span>
+            <p id="A"></p>
+            <p id="B"></p>
+            <p id="C"></p>
+        </label>
+        <label class="label">
+            <span><b>Доказать, верно ли следующее равенство: </b></span>
+            <p id="equasion"></p>
+        </label>
+        <label class="label">
+            <span>Поля траляля</span>
+            <div></div>
+        </label>
+        <label class="label">
+            <span><b>Ответ:</b></span><br>
+            <input type="checkbox" name="Да" value="false">
+            <span>Да </span>
+            <input type="checkbox" name="Нет" value="false">
+            <span>Нет </span><br>
+            <input type="submit" name="submbutton" value="Ответить">
+        </label>
+    </form>
+</body>
 
 <script type="text/javascript">
     window.onload
     //скрипт тренажера
-    let U = new Set(12),
-        A = new Set(7, U.elems),
-        B = new Set(7, U.elems);
-    //C = new Set(2, U.elems);
+    let U = new Set(8),
+        A = new Set(3, U.elems),
+        B = new Set(3, U.elems),
+        C = new Set(3, U.elems);
 
-    let oper = new Operation(1, 1, 1, 1);
-    let alg = new Algebra();
+    document.getElementById("A").innerHTML = "A: {" + A.getStr(";") + "}";
+    document.getElementById("B").innerHTML = "B: {" + B.getStr(";") + "}";
+    document.getElementById("C").innerHTML = "C: {" + C.getStr(";") + "}";
 
-    console.log(A, B, oper, alg.do(A, B, oper));
+    let equasion = {
+        "left": {
+            "set1": A,
+            "oper": new Operation(1, 1, 1, 1),
+            "set2": C
+        },
+        "right": {
+            "bracket": {
+                "set1": A,
+                "oper1": new Operation(0, 1, 0, 0),
+                "bracket": {
+                    "set2": C,
+                    "oper2": new Operation(0, 0, 1, 0),
+                    "set3": B
+                }
+            },
+            "oper3": new Operation(0, 1, 0, 0),
+            "bracket": {
+                "set1": A,
+                "oper1": new Operation(0, 1, 0, 0),
+                "bracket": {
+                    "set2": C,
+                    "oper2": new Operation(1, 0, 0, 0),
+                    "set3": B
+                }
+            }
+        }
+
+    }
+
+    document.getElementById("equasion").innerHTML = "A" + oper.code + "C" + " = " + "TBA";
 </script>
