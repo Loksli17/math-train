@@ -1,4 +1,4 @@
-function Operation(inter, union, minus, setDiffer) {
+function Operation(inter, union, minus, setDiffer, decart) {
     let param = new Array();
     let flagExep = 0;
     //проверка пришедших параметров
@@ -6,6 +6,7 @@ function Operation(inter, union, minus, setDiffer) {
     (union) ? param.push(2): flagExep++;
     (minus) ? param.push(3): flagExep++;
     (setDiffer) ? param.push(4): flagExep++;
+    (decart) ? param.push(5): flagExep++;
     //добавить обработку
     //отправка массива для получения операции
     this.num = this.randomIntegerExeption(param);
@@ -30,6 +31,9 @@ Operation.prototype.initOperation = function() {
             break;
         case 4:
             return "&oplus;"
+            break;
+        case 5:
+            return "&times;"
             break;
     }
 }
