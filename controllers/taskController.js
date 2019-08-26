@@ -11,19 +11,41 @@ exports.index  = async function (req,res) {
     let Tag     = new TagModel();
     let Task    = new TaskModel();
 
-    let tasks = await Task.find('all',{
+    let page  = 1,
+        count = 0;
+    if(req.query.page != undefined){
+        page = req.query.page;
+    }
 
+    count = await Task.find('count', {
         join: [ ['inner', 'catalog','catalog.id  = task.catalog_id'],
-            [ 'inner','task_has_tag', 'task.id= task_has_tag.task_id '],
+            [ 'inner','task_has_tag', 'task.id = task_has_tag.task_id '],
             ['inner','tag','task_has_tag.tag_id = tag.id'],
         ],
-        select: ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
         group: 'task.id',
-        order: 'isReady',
     });
 
+    let pagination = new Pagination({
+        pageSize  : 4,
+        limit     : 1,
+        page      : page,
+        url       : '/tasks',
+        count     : count,
+    });
 
-    let tags     = await Tag.find('all', {
+    let tasks = await Task.find('all',{
+        join: [ ['inner', 'catalog','catalog.id  = task.catalog_id'],
+            [ 'inner','task_has_tag', 'task.id = task_has_tag.task_id '],
+            ['inner','tag','task_has_tag.tag_id = tag.id'],
+        ],
+        select: ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result', 'task.description'],
+        group: 'task.id',
+        order: 'isReady',
+        orderDesc: true,
+        limit: pagination.skip + ', ' + pagination.limit,
+    });
+
+    let tags = await Tag.find('all', {
         order : 'id_parent',
     });
 
@@ -44,21 +66,11 @@ exports.index  = async function (req,res) {
         }
     }
 
-    let pagination = new Pagination({
-        pageSize  : 4,
-        limit     : 5,
-        page      : req.query.page,
-        url       : '/index',
-        count     : tasks.length,
-    });
-    // console.log(pagination);
-
     res.render('tasks/index',{
         tasks       : tasks,
         catalogs    : catalogs,
         disciplines : disciplines,
         pages: pagination.getPages(),
-
     });
 
 };
@@ -105,45 +117,68 @@ exports.filter = async function (req,res) {
         id_tag_quary = id_tag_quary+'( ';
     }
     for (let i = 0 ;i  < tag_id.length ; i++){
-        if (i!= tag_id.length-1){
-            id_tag_quary =id_tag_quary+'tag.id = '+tag_id[i]+' or ';
+        if (i!= tag_id.length - 1){
+            id_tag_quary =id_tag_quary + 'tag.id = ' + tag_id[i] + ' or ';
         }else{
-            id_tag_quary = id_tag_quary+'tag.id = '+tag_id[i]+' )';
+            id_tag_quary = id_tag_quary + 'tag.id = ' + tag_id[i] + ' )';
         }
     }
 
-    let tasks = [];
-    if ((tag_id.length == 0)&&(catalog_id.length == 0)){
-        tasks = await Task.find('all',{
-
-            join: [ ['inner', 'catalog','catalog.id  = task.catalog_id'],
-                [ 'inner','task_has_tag', 'task.id= task_has_tag.task_id '],
-                ['inner','tag','task_has_tag.tag_id = tag.id'],
-            ],
-            select: ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
-            group: 'task.id',
-            order: 'isReady',
-        });}else{
-         tasks = await Task.find('all',{
-            join: [
-                ['inner', 'catalog','catalog.id  = task.catalog_id'],
-                ['inner','task_has_tag', 'task.id= task_has_tag.task_id '],
-                ['left','tag','task_has_tag.tag_id = tag.id'],
-            ],
-            select: ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
-            where: [id_catalog_quary+id_tag_quary],
-            group: 'task.id',
-            order: 'isReady',
-        });
-
+    let page  = 1,
+        count = 0;
+    if(req.query.page != undefined){
+        page = req.query.page;
     }
 
 
-    let tags     = await Tag.find('all', {
+    let where = '';
+    if ((tag_id.length == 0) && (catalog_id.length == 0)){
+        where = '1 = 1';
+    }else{
+        where = id_catalog_quary + id_tag_quary;
+    }
+
+    
+    count = await Task.find('count', {
+        join: [ ['inner', 'catalog','catalog.id  = task.catalog_id'],
+            [ 'inner','task_has_tag', 'task.id = task_has_tag.task_id '],
+            ['inner','tag','task_has_tag.tag_id = tag.id'],
+        ],
+        group: 'task.id',
+        where: where,
+    });
+
+
+
+    let pagination = new Pagination({
+        pageSize  : 4,
+        limit     : 1,
+        page      : page,
+        url       : '/tasks/filter',
+        count     : count,
+    });
+
+
+
+    let tasks = await Task.find('all',{
+       join: [
+           ['inner', 'catalog','catalog.id  = task.catalog_id'],
+           ['inner','task_has_tag', 'task.id= task_has_tag.task_id '],
+           ['left','tag','task_has_tag.tag_id = tag.id'],
+       ],
+       select: ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
+       where: where,
+       group: 'task.id',
+       order: 'isReady',
+       orderDesc: true,
+       limit: pagination.skip + ', ' + pagination.limit,
+    });
+
+    let tags = await Tag.find('all', {
         order : 'id_parent',
     });
 
-    let catalogs = await Catalog.find('all' );
+    let catalogs = await Catalog.find('all');
 
     disciplines = {};
     for (let i = 0; i < tags.length; i++){
@@ -186,6 +221,7 @@ exports.filter = async function (req,res) {
         tasks       : tasks,
         catalogs    : catalogs,
         disciplines : disciplines,
+        pages: pagination.getPages(),
     });
 };
 
