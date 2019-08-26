@@ -41,35 +41,52 @@
     document.getElementById("B").innerHTML = "B: {" + B.getStr(";") + "}";
     document.getElementById("C").innerHTML = "C: {" + C.getStr(";") + "}";
 
+    //структура пока выглядит как некоторое дерьмо, open to suggestions
     let equasion = {
         "left": {
-            "set1": A,
-            "oper": new Operation(1, 1, 1, 1),
-            "set2": C
+            "A": A,
+            "oper": new Operation(0, 0, 0, 0, 1),
+            "C": C
         },
         "right": {
-            "bracket": {
-                "set1": A,
-                "oper1": new Operation(0, 1, 0, 0),
-                "bracket": {
-                    "set2": C,
-                    "oper2": new Operation(0, 0, 1, 0),
-                    "set3": B
+            "bracket_1": {
+                "A": A,
+                "oper": new Operation(0, 0, 0, 0, 1),
+                "bracket_1": {
+                    "C": C,
+                    "oper": new Operation(0, 0, 1, 0, 0),
+                    "B": B
                 }
             },
-            "oper3": new Operation(0, 1, 0, 0),
-            "bracket": {
-                "set1": A,
-                "oper1": new Operation(0, 1, 0, 0),
-                "bracket": {
-                    "set2": C,
-                    "oper2": new Operation(1, 0, 0, 0),
-                    "set3": B
+            "oper": new Operation(0, 0, 0, 0, 1),
+            "bracket_2": {
+                "A": A,
+                "oper": new Operation(0, 0, 0, 0, 1),
+                "bracket_1": {
+                    "C": C,
+                    "oper": new Operation(1, 0, 0, 0, 0),
+                    "B": B
                 }
             }
         }
-
     }
 
-    document.getElementById("equasion").innerHTML = "A" + oper.code + "C" + " = " + "TBA";
+    function displayEquasion(data) {
+        for (d in data) {
+            if (d != "oper" && !d.startsWith("bracket")) {
+                document.getElementById("equasion").innerHTML += d;
+            } else if (d == "oper") {
+                document.getElementById("equasion").innerHTML += data[d].code;
+            } else if (d.startsWith("bracket")) {
+                document.getElementById("equasion").innerHTML += "(";
+                displayEquasion(data[d]);
+                document.getElementById("equasion").innerHTML += ")";
+            }
+        }
+    }
+
+    displayEquasion(equasion.left);
+
+    document.getElementById("equasion").innerHTML += " = ";
+    displayEquasion(equasion.right);
 </script>
