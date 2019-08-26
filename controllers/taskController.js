@@ -58,18 +58,6 @@ exports.filter = async function (req,res) {
     let id_tag_quary = '';
     let id_catalog_quary = '';
 
-    // for (let i = 0 ;i  < tag_id.length ; i++){
-    //     if (i!= tag_id.length-1){
-    //         id_tag_quary =id_tag_quary+'tag.id = '+tag_id[i]+' or ';
-    //     }else{
-    //         id_tag_quary = id_tag_quary+'tag.id = '+tag_id[i]+' ';
-    //     }
-    // }
-
-
-    // if (id_tag_quary != []){
-    //     id_catalog_quary = ' and ';
-    // }
     console.log(catalog_id);
     if (catalog_id.length != 0){
         id_catalog_quary = '(';
