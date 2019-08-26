@@ -37,10 +37,20 @@ exports.index  = async function (req,res) {
         }
     }
 
+    let pagination = new Pagination({
+        pageSize  : 4,
+        limit     : 5,
+        page      : req.query.page,
+        url       : '/index',
+        count     : tasks.length,
+    });
+    console.log(pagination);
+
     res.render('tasks/index',{
         tasks       : tasks,
         catalogs    : catalogs,
         disciplines : disciplines,
+        pages: pagination.getPages(),
 
     });
 
