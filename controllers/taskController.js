@@ -110,16 +110,17 @@ exports.filter = async function (req,res) {
     }
 
     let tasks = await Task.find('all',{
-
-       join: [ ['inner', 'catalog','catalog.id  = task.catalog_id'],
-       [ 'inner','task_has_tag', 'task.id= task_has_tag.task_id '],
-       ['left','tag','task_has_tag.tag_id = tag.id'],
-           ],
-        where:[id_catalog_quary+id_tag_quary],
-
-    //  sql : true,
-
+        join: [
+            ['inner', 'catalog','catalog.id  = task.catalog_id'],
+            ['inner','task_has_tag', 'task.id= task_has_tag.task_id '],
+            ['left','tag','task_has_tag.tag_id = tag.id'],
+        ],
+        select: ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
+        where: [id_catalog_quary+id_tag_quary],
+        group: 'task.id',
+        order: 'isReady',
     });
+
 
     let tags     = await Tag.find('all', {
         order : 'id_parent',
