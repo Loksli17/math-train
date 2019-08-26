@@ -38,7 +38,7 @@ exports.index  = async function (req,res) {
 };
 
 exports.filter = async function (req,res) {
-    console.log(req.body);
+
     let Task  =  new TaskModel();
 
     let tag_id = [];
@@ -58,7 +58,7 @@ exports.filter = async function (req,res) {
     let id_tag_quary = '';
     let id_catalog_quary = '';
 
-    console.log(catalog_id);
+
     if (catalog_id.length != 0){
         id_catalog_quary = '(';
     }
@@ -85,8 +85,7 @@ exports.filter = async function (req,res) {
         }
     }
 
-    console.log(id_tag_quary);
-    console.log(id_catalog_quary);
+
 
 
     let tasks = await Task.find('all',{
@@ -101,7 +100,7 @@ exports.filter = async function (req,res) {
       // sql : true,
 
     });
-    console.log(tasks);
+    
 
     res.send(tasks);
 };
