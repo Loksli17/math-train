@@ -56,6 +56,7 @@ exports.index  = async function (req,res) {
 
 };
 
+
 exports.filter = async function (req,res) {
     let Task  =  new TaskModel();
     let Catalog = new CatalogModel();
@@ -73,7 +74,6 @@ exports.filter = async function (req,res) {
             catalog_id.push(req.body[tag]);
         }
     }
-
 
     let id_tag_quary = '';
     let id_catalog_quary = '';
@@ -121,9 +121,54 @@ exports.filter = async function (req,res) {
 
     });
 
+    let tags     = await Tag.find('all', {
+        order : 'id_parent',
+    });
 
-<<<<<<< HEAD
-    res.send(tasks);
+    let catalogs = await Catalog.find('all' );
+
+    disciplines = {};
+    for (let i = 0; i < tags.length; i++){
+        if (tags[i].id_parent == null){
+            disciplines[tags[i].id]   = {};
+            disciplines[tags[i].id].name = tags[i].title;
+            disciplines[tags[i].id].tags = [];
+
+        }else{
+            let find = false;
+            for(let j = 0; j<tag_id.length; j++){
+                if (tags[i].id == tag_id[j]){
+                    find = true;
+                    disciplines[tags[i].id_parent].tags.push({
+                        name : tags[i].title,
+                        id   : tags[i].id,
+                        checked : 'checked',
+                    });
+                    break;
+                }
+            }
+            if (find == false){
+                disciplines[tags[i].id_parent].tags.push({
+                    name : tags[i].title,
+                    id   : tags[i].id,
+                });
+            }
+        }
+    }
+
+    for (let i = 0; i< catalogs.length;i ++){
+        for (let j = 0; j < catalog_id.length; j++){
+            if(catalogs[i].id == catalog_id[j]){
+                catalogs[i].checked = 'checked';
+            }
+        }
+    }
+
+    res.render('tasks/index',{
+        tasks       : tasks,
+        catalogs    : catalogs,
+        disciplines : disciplines,
+    });
 };
 
 
@@ -155,57 +200,3 @@ exports.actionTask = async function(req, res){
         task: task
     });
 }
-=======
-    let tags     = await Tag.find('all', {
-        order : 'id_parent',
-    });
-
-    let catalogs = await Catalog.find('all' );
-
-    disciplines = {};
-    for (let i = 0; i < tags.length; i++){
-        if (tags[i].id_parent == null){
-            disciplines[tags[i].id]   = {};
-            disciplines[tags[i].id].name = tags[i].title;
-            disciplines[tags[i].id].tags = [];
-
-        }else{
-            let find = false;
-            for(let j = 0; j<tag_id.length; j++){
-                if (tags[i].id == tag_id[j]){
-
-                    find = true;
-                    disciplines[tags[i].id_parent].tags.push({
-                        name : tags[i].title,
-                        id   : tags[i].id,
-                        checked : 'checked',
-                    });
-                    break;
-                }
-            }
-            if (find == false){
-                disciplines[tags[i].id_parent].tags.push({
-                    name : tags[i].title,
-                    id   : tags[i].id,
-                });
-            }
-        }
-    }
-
-    for (let i = 0; i< catalogs.length;i ++){
-        for (let j = 0; j < catalog_id.length; j++){
-            if(catalogs[i].id == catalog_id[j]){
-                catalogs[i].checked = 'checked';
-            }
-        }
-    }
-
-
-
-    res.render('tasks/index',{
-        tasks       : tasks,
-        catalogs    : catalogs,
-        disciplines : disciplines,
-    });
-};
->>>>>>> 27732e5b5eacafe27339e3cf192af96790e62143
