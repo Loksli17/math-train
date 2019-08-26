@@ -1,0 +1,110 @@
+<style type="text/css">
+
+
+    .section{
+        width: 600px;
+        padding: 40px;
+    }
+
+    #canvas{
+        border: 1px dashed;
+    }
+
+
+    .button{
+        padding: 10px 15px;
+        background: #ccc;
+        border-radius: 5px;
+        width: max-content;
+        margin-top: 15px;
+    }
+
+    .button:hover{
+        transition: 0.5s;
+        cursor: pointer;
+        background: #fcc;
+    }
+
+    .cont-button{
+        margin-top: 20px;
+    }
+</style>
+
+
+
+
+
+
+
+<div class="section" id='section'>
+
+
+<canvas id="canvas">
+</canvas>
+
+    <div class="cont-button">
+        <div id='give-desicion' class="button">
+            Решить
+        </div>
+        <div class="result">
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="models/graphVertex.js"></script>
+<script type="text/javascript" src="models/graph.js"></script>
+
+
+<script>
+$(document).ready(function(){
+    var canvas = document.getElementById("canvas");
+    let graph = new Graph(4, 8, 150, 15, 0, 0, 0);
+
+    //функция изменения размера канваса
+    function changeWidthCanvas(){
+        context = canvas.getContext("2d");
+        var sectionSize = document.getElementById("section").getBoundingClientRect();
+        canvas.setAttribute('width', sectionSize.width);
+        canvas.setAttribute('height', 500);
+    }
+
+    //отрисовка канваса после загрузки страницы
+    changeWidthCanvas();
+
+    //отловим изменение окна
+    $(window).resize(function() {
+        changeWidthCanvas();
+        graph.createVertex(canvas);
+        graph.draw(canvas);
+    });
+
+    graph.createVertex(canvas);
+    graph.draw(canvas);
+
+    canvas.addEventListener('mousedown', function(e){
+        x = e.offsetX;
+        y = e.offsetY;
+        graph.checkClick(x, y, canvas);
+    });
+
+    $('#give-desicion').on('click', function(){
+        for(let i = 0; i < graph.countVertex; i++){
+            for(let j = 0; j < graph.countVertex; j++){
+                if(!graph.adjac[i][j]){
+                    $('.result').text('Неверно').css({'color': 'red'});
+                    $('#give-desicion').hide();
+                    return 0;
+                }
+            }
+        }
+        $('.result').text('Верно').css({'color': 'green'});
+        $('#give-desicion').hide();
+    });
+
+
+
+    });
+</script>
