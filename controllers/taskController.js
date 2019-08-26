@@ -28,7 +28,7 @@ exports.index  = async function (req,res) {
         }
     }
 
-    console.log(disciplines);
+
     res.render('tasks/difficulty',{
 
         catalogs    : catalogs,
@@ -53,7 +53,7 @@ exports.filter = async function (req,res) {
             catalog_id.push(req.body[tag]);
         }
     }
-    console.log(tag_id);
+
 
     let id_tag_quary = '';
     let id_catalog_quary = '';
@@ -100,7 +100,7 @@ exports.filter = async function (req,res) {
       // sql : true,
 
     });
-    
+
 
     res.send(tasks);
 };
