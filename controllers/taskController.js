@@ -11,10 +11,17 @@ exports.index  = async function (req,res) {
     let Tag     = new TagModel();
     let Task    = new TaskModel();
 
-    let tasks  = await Task.find('all', {
-        order : 'isReady',
-        orderDesc : true,
+    let tasks = await Task.find('all',{
+
+        join: [ ['inner', 'catalog','catalog.id  = task.catalog_id'],
+            [ 'inner','task_has_tag', 'task.id= task_has_tag.task_id '],
+            ['inner','tag','task_has_tag.tag_id = tag.id'],
+        ],
+        select: ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
+        group: 'task.id',
+        order: 'isReady',
     });
+
 
     let tags     = await Tag.find('all', {
         order : 'id_parent',
@@ -44,7 +51,7 @@ exports.index  = async function (req,res) {
         url       : '/index',
         count     : tasks.length,
     });
-    console.log(pagination);
+    // console.log(pagination);
 
     res.render('tasks/index',{
         tasks       : tasks,
@@ -105,21 +112,31 @@ exports.filter = async function (req,res) {
         }
     }
 
+    let tasks = [];
     if ((tag_id.length == 0)&&(catalog_id.length == 0)){
-        id_catalog_quary = '1=1';
-    }
+        tasks = await Task.find('all',{
 
-    let tasks = await Task.find('all',{
-        join: [
-            ['inner', 'catalog','catalog.id  = task.catalog_id'],
-            ['inner','task_has_tag', 'task.id= task_has_tag.task_id '],
-            ['left','tag','task_has_tag.tag_id = tag.id'],
-        ],
-        select: ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
-        where: [id_catalog_quary+id_tag_quary],
-        group: 'task.id',
-        order: 'isReady',
-    });
+            join: [ ['inner', 'catalog','catalog.id  = task.catalog_id'],
+                [ 'inner','task_has_tag', 'task.id= task_has_tag.task_id '],
+                ['inner','tag','task_has_tag.tag_id = tag.id'],
+            ],
+            select: ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
+            group: 'task.id',
+            order: 'isReady',
+        });}else{
+         tasks = await Task.find('all',{
+            join: [
+                ['inner', 'catalog','catalog.id  = task.catalog_id'],
+                ['inner','task_has_tag', 'task.id= task_has_tag.task_id '],
+                ['left','tag','task_has_tag.tag_id = tag.id'],
+            ],
+            select: ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
+            where: [id_catalog_quary+id_tag_quary],
+            group: 'task.id',
+            order: 'isReady',
+        });
+
+    }
 
 
     let tags     = await Tag.find('all', {
