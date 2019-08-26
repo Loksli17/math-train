@@ -11,14 +11,16 @@ class Graph{
     orient;
     countClick = 0;
     clicked = 0;
+    reflex = 0;
 
-    constructor(maxVertex, minVertex, rGraph, rVertex, orient, clicked){
+    constructor(maxVertex, minVertex, rGraph, rVertex, orient, clicked, reflex){
         this.countVertex = this.getRandomNumber(maxVertex, minVertex);
         this.rGraph = rGraph;
         this.adjac = this.getAdjac();
         this.rVertex = rVertex;
         this.orient = orient;
         this.clicked = clicked;
+        this.reflex = reflex;
     }
 
     getRandomNumber(a, b) {
@@ -41,9 +43,14 @@ class Graph{
         //генерация матрицы смежности
         for(var i = 0; i < this.countVertex; i++){
             for(var j = 0; j < this.countVertex; j++){
-                adjac[i][j] = this.getRandomNumber(0, 2);
+                if(!this.reflex && i == j){
+                    adjac[i][j] = 0;
+                }else{
+                    adjac[i][j] = this.getRandomNumber(0, 2);
+                }
             }
         }
+        console.log(adjac);
         return adjac;
     }
 
