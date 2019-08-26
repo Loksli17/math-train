@@ -14,16 +14,20 @@
         <p>{{this.name}}</p>
 
             {{#each this.tags}}
-                <p><input type="radio" value="{{this.id}}" name = "tag[{{this.id}}]">{{this.name}}</p>
+                <p><input type="checkbox" value="{{this.id}}" name = "tag[{{this.id}}]" {{this.checked}}>{{this.name}}</p>
             {{/each}}
     {{/each}}
 
     <p>Сложность</p>
     {{#each catalogs}}
-        <p> <input type="radio" name="catalog[{{this.id}}]" value="{{this.id}}">{{this.title}}<Br>
+        <p> <input type="checkbox" name="catalog[{{this.id}}]" value="{{this.id}}" {{this.checked}}>{{this.title}}<Br>
     {{/each}}
     <p> <input type="submit"></p>
 </form>
+
+{{#each tasks}}
+    <p>id: {{this.id}} title: {{this.title}} text: {{this.text}} description: {{this.description}}</p>
+{{/each}}
 
 </body>
 </html>
