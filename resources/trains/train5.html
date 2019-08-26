@@ -61,14 +61,14 @@
 <script>
 $(document).ready(function(){
     var canvas = document.getElementById("canvas");
-    let graph = new Graph(4, 8, 150, 15, 0, 0, 0);
+    let graph = new Graph(7, 9, 200, 15, 0, 0, 0);
 
     //функция изменения размера канваса
     function changeWidthCanvas(){
         context = canvas.getContext("2d");
         var sectionSize = document.getElementById("section").getBoundingClientRect();
         canvas.setAttribute('width', sectionSize.width);
-        canvas.setAttribute('height', 500);
+        canvas.setAttribute('height', 600);
     }
 
     //отрисовка канваса после загрузки страницы
@@ -91,6 +91,9 @@ $(document).ready(function(){
     });
 
     $('#give-desicion').on('click', function(){
+        //проверка решения после нажатия на кнопку
+
+        //пример обхода графа
         for(let i = 0; i < graph.countVertex; i++){
             for(let j = 0; j < graph.countVertex; j++){
                 if(!graph.adjac[i][j]){
