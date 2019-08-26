@@ -104,3 +104,33 @@ exports.filter = async function (req,res) {
 
     res.send(tasks);
 };
+
+
+exports.actionTask = async function(req, res){
+    let get = req.query;
+    let id = get.id;
+
+    //провека пришедшего id
+    id = Number(id);
+    console.log(id);
+    if(!id){
+        res.status(404);
+        res.render('server/404', {error: 'Тренажер на найден'});
+        return;
+    }
+
+    //поиск тренажера по id
+    let Task = new TaskModel();
+    let task = await Task.find('one', {
+        select: ['task.title', 'task.text', 'task.isReady', 'catalog.title AS ctitle'],
+        join: [
+            ['inner', 'catalog', 'task.catalog_id = catalog.id']
+        ],
+    });
+
+    console.log(task);
+
+    res.render('tasks/task', {
+        task: task
+    });
+}
