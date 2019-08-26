@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Тег FORM</title>
+    <style>
+        .pages{
+            margin-top: 30px;
+        }
+
+        .pages ul{
+            display: flex;
+        }
+
+        .pages li{
+            width: 40px;
+            height: 40px;
+            list-style: none;
+            margin-left: 10px;
+        }
+
+        .pages .page{
+            background: #fff;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            line-height: 40px;
+            display: block;
+            color: #cc33cc;
+            border: 1.5px solid;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .pages .active{
+            background: #cc33cc;
+            border: 1.5px solid #cc33cc;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+
+<form action = "/tasks/filter" method="post">
+    <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+    <p>Дисциплины</p>
+    {{#each disciplines}}
+        <!--<p><input type="radio" name = ""></p>-->
+        <p>{{this.name}}</p>
+
+            {{#each this.tags}}
+                <p><input type="checkbox" value="{{this.id}}" name = "tag[{{this.id}}]" {{this.checked}}>{{this.name}}</p>
+            {{/each}}
+    {{/each}}
+
+    <p>Сложность</p>
+    {{#each catalogs}}
+        <p> <input type="checkbox" name="catalog[{{this.id}}]" value="{{this.id}}" {{this.checked}}>{{this.title}}<Br>
+    {{/each}}
+    <p> <input type="submit"></p>
+</form>
+
+{{#each tasks}}
+    <p>id: {{this.id}} title: {{this.title}} text: {{this.text}} description: {{this.description}}</p>
+{{/each}}
+
+
+{{#each pages}}не
+<li>
+    {{#if current}}
+        <a class="active page" href="{{route}}?page={{id}}">{{content}}</a>
+    {{else}}
+        <a class="page" href="{{route}}?page={{id}}">{{content}}</a>
+    {{/if}}
+</li>
+{{/each}}
+
+</body>
+</html>
