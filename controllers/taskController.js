@@ -138,11 +138,9 @@ exports.filter = async function (req,res) {
             order: 'isReady',
         });
 
-<<<<<<< HEAD
     }
 
-=======
->>>>>>> 5ee8fd363986a1aa95cfbfab51dfe1672100ae43
+
     let tags     = await Tag.find('all', {
         order : 'id_parent',
     });
@@ -221,4 +219,4 @@ exports.actionTask = async function(req, res){
     res.render('tasks/task', {
         task: task
     });
-}
+};
