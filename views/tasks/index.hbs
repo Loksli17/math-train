@@ -46,9 +46,7 @@
     <input type="hidden" name="_csrf" value="{{_csrfToken}}">
     <p>Дисциплины</p>
     {{#each disciplines}}
-        <!--<p><input type="radio" name = ""></p>-->
         <p>{{this.name}}</p>
-
             {{#each this.tags}}
                 <p><input type="checkbox" value="{{this.id}}" name = "tag[{{this.id}}]" {{this.checked}}>{{this.name}}</p>
             {{/each}}
@@ -66,15 +64,19 @@
 {{/each}}
 
 
-{{#each pages}}не
-<li>
-    {{#if current}}
-        <a class="active page" href="{{route}}?page={{id}}">{{content}}</a>
-    {{else}}
-        <a class="page" href="{{route}}?page={{id}}">{{content}}</a>
-    {{/if}}
-</li>
-{{/each}}
+<div class="pages">
+    <ul>
+        {{#each pages}}
+        <li>
+            {{#if current}}
+                <a class="active page" href="{{route}}?page={{id}}">{{content}}</a>
+            {{else}}
+                <a class="page" href="{{route}}?page={{id}}">{{content}}</a>
+            {{/if}}
+        </li>
+        {{/each}}
+    </ul>
+</div>
 
 </body>
 </html>
