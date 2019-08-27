@@ -84,6 +84,7 @@ exports.index = async function (req,res) {
     });
 };
 
+
 exports.singlePost = async function (req,res) {
     const Post = new PostModel();
 

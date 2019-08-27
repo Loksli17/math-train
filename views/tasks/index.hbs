@@ -53,7 +53,13 @@
 </form>
 
 {{#each tasks}}
-    <p>id: {{this.id}} tag: {{this.ttitle}} catalog: {{this.ctitle}} title:  {{this.title}} text: {{this.text}} description: {{this.description}}</p>
+    <p>
+        tag: {{this.ttitle}}
+        catalog: {{this.ctitle}}
+        <a href="/tasks/task?id={{this.id}}">{{this.title}}</a>
+        text: {{this.text}}
+        description: {{this.description}}
+    </p>
 {{/each}}
 
 

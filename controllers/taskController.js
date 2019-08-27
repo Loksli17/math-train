@@ -162,15 +162,12 @@ exports.index  = async function (req,res) {
     let tasks = await Task.find('all',{
         join: [
             ['inner', 'catalog','catalog.id  = task.catalog_id'],
-            ['inner','task_has_tag', 'task.id= task_has_tag.task_id '],
-            ['left','tag','task_has_tag.tag_id = tag.id'],
         ],
-        select: ['tag.title as ttitle','task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
+        select: ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
         where: where,
         group: 'task.id',
         order: 'isReady',
         orderDesc: true,
-        sql: true,
         // limit: pagination.skip + ', ' + pagination.limit,
     });
 
@@ -202,16 +199,22 @@ exports.actionTask = async function(req, res){
     //поиск тренажера по id
     let Task = new TaskModel();
     let task = await Task.find('one', {
-        select: ['task.id', 'task.title', 'task.text', 'task.isReady', 'catalog.title AS ctitle'],
+        select: ['task.id', 'task.title', 'task.text', 'task.isReady', 'catalog.title AS ctitle', 'task.code_file AS codeFile'],
         join: [
             ['inner', 'catalog', 'task.catalog_id = catalog.id'],
         ],
         where: 'task.id = ' + id,
     });
 
+    //проверка тренажера
     if(task == undefined){
         res.status(404);
         res.render('server/404', {error: 'Тренажер на найден'});
+        return;
+    }
+
+    if(!task.isReady){
+        res.render('tasks/notReady', {layout: null});
         return;
     }
 
@@ -224,8 +227,14 @@ exports.actionTask = async function(req, res){
         where: 'task_id = ' + task.id,
     });
 
+    //подключение серверного модуля тренажера
+    const trainModel = require('./../lib/trains/' + task.codeFile);
+    let train = new trainModel();
+    let data = train.getData();
+
     res.render('tasks/task', {
         task: task,
         tags: tags,
+        data: data,
     });
 };
