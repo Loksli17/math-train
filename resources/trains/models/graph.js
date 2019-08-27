@@ -30,7 +30,7 @@ class Graph {
     }
 
 
-    //мб стоит их объединить в одну функцию
+    //мб стоит их объединить в одну функцию ХМММММ
     initAdjac() {
         for (var i = 0; i < this.countVertex; i++) {
             this.adjac[i] = new Array();
@@ -135,12 +135,10 @@ class Graph {
     }
 
     calcEccent() {
-        let unvisited = new Array();
-        for (let i = 0; i < this.vertex.length; i++) {
-            unvisited.push(this.vertex[i]);
-        }
+        let unvisit = this.vertex.slice();
         console.log(this.vertex);
-        console.log(unvisited);
+        console.log(unvisit);
+        
         for (let i = 0; i < this.vertex.length; i++) {
             let current;
             //unvisited[i].eccent = 0;
