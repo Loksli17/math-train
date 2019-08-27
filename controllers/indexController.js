@@ -1,6 +1,5 @@
 const TaskModel = require('../models/mysql/TaskModel');
 
-
 exports.actionIndex = async function(req, res){
 
     let Task = new TaskModel();
