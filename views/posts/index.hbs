@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -43,42 +42,34 @@
 </head>
 <body>
 
-<form action = "/tasks/filter" method="post">
-<form action = "/tasks" method="get">
+<form action = "/posts" method="get">
     <input type="hidden" name="_csrf" value="{{_csrfToken}}">
     <p>Дисциплины</p>
     {{#each disciplines}}
         <p>{{this.name}}</p>
-            {{#each this.tags}}
-                <p><input type="checkbox" value="{{this.id}}" name = "tag[{{this.id}}]" {{this.checked}}>{{this.name}}</p>
-            {{/each}}
         {{#each this.tags}}
             <p><input type="checkbox" value="{{this.id}}" name = "tag[{{this.id}}]" {{this.checked}}>{{this.name}}</p>
         {{/each}}
     {{/each}}
-
-    <p>Сложность</p>
-    {{#each catalogs}}
-    <p> <input type="checkbox" name="catalog[{{this.id}}]" value="{{this.id}}" {{this.checked}}>{{this.title}}<Br>
-    {{/each}}
     <p> <input type="submit"></p>
+
 </form>
 
-{{#each tasks}}
-    <p>id: {{this.id}} tag: {{this.ttitle}} catalog: {{this.ctitle}} title:  {{this.title}} text: {{this.text}} description: {{this.description}}</p>
+{{#each posts}}
+    <a href="/posts/post?id={{this.id}}"><p>id: {{this.id}} title: {{this.title}} tag: {{this.ttitle}} view: {{this.view}} text: {{this.text}}</p></a>
 {{/each}}
 
 
 <div class="pages">
     <ul>
         {{#each pages}}
-        <li>
-            {{#if current}}
-                <a class="active page" href="{{route}}?page={{id}}">{{content}}</a>
-            {{else}}
-                <a class="page" href="{{route}}?page={{id}}">{{content}}</a>
-            {{/if}}
-        </li>
+            <li>
+                {{#if current}}
+                    <a class="active page" href="{{route}}?page={{id}}">{{content}}</a>
+                {{else}}
+                    <a class="page" href="{{route}}?page={{id}}">{{content}}</a>
+                {{/if}}
+            </li>
         {{/each}}
     </ul>
 </div>
