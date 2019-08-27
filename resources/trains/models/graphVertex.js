@@ -51,7 +51,6 @@ class Vertex {
         ctx.fill();
         ctx.fillStyle = "#083560";
         ctx.font = 'bold 30px sans-serif';
-
         ctx.fillText(String.fromCharCode(this.name), this.x, this.y);
     }
 

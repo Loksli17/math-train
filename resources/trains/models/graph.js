@@ -3,6 +3,8 @@ class Graph {
     countVertex;
     rGraph;
     adjac = new Array();
+    dist = new Array();
+    incid = new Array();
     vertex = new Array();
     vector = new Array();
     rVertex;
@@ -16,9 +18,9 @@ class Graph {
     constructor(maxVertex, minVertex, rGraph, rVertex, orient, clicked, reflex) {
         this.countVertex = this.getRandomNumber(maxVertex, minVertex);
         this.rGraph = rGraph;
-        this.adjac = this.getAdjac();
         this.rVertex = rVertex;
         this.orient = orient;
+        this.adjac = this.getAdjac();
         this.clicked = clicked;
         this.reflex = reflex;
     }
@@ -27,9 +29,61 @@ class Graph {
         return parseInt(Math.random() * (a - b) + b);
     }
 
+
+    //мб стоит их объединить в одну функцию
     initAdjac() {
         for (var i = 0; i < this.countVertex; i++) {
             this.adjac[i] = new Array();
+        }
+    }
+
+    initDist() {
+        for (var i = 0; i < this.countVertex; i++) {
+            this.dist[i] = new Array();
+        }
+    }
+
+    initIncid() {
+        for (var i = 0; i < this.countVertex; i++) {
+            this.incid[i] = new Array();
+        }
+    }
+
+    getDist() {
+        this.initDist();
+        for (var i = 0; i < this.countVertex; i++) {
+            this.dist[i] = new Array();
+        }
+
+        for (var i = 0; i < this.countVertex; i++) {
+            for (var j = 0; j < this.countVertex; j++) {
+                if (this.adjac[i][j]) {
+                    //евклидово расстояние ftw
+                    this.dist[i][j] = Math.round(Math.sqrt(Math.pow((this.vertex[i].x - this.vertex[j].x), 2) +
+                        Math.pow((this.vertex[i].y - this.vertex[j].y), 2)) / 10);
+
+                    //добавление рёбер в массив рёбер
+                    this.vector.push({
+                        "start": this.vertex[i], //начальная вершина ребра
+                        "dist": this.dist[i][j], //длина ребра
+                        "end": this.vertex[j] //конечная вершина ребра
+                    });
+
+
+                } else {
+                    this.dist[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    removeDoubles() {
+        for (let i = 0; i < this.vector.length; i++) {
+            for (let j = i + 1; j < this.vector.length; j++) {
+                if (this.vector[i].start == this.vector[j].end && this.vector[i].end == this.vector[j].start) {
+                    this.vector.splice(j, 1);
+                }
+            }
         }
     }
 
@@ -45,13 +99,30 @@ class Graph {
             for (var j = 0; j < this.countVertex; j++) {
                 if (!this.reflex && i == j) {
                     adjac[i][j] = 0;
-                } else {
+                } else if (this.orient) {
                     adjac[i][j] = this.getRandomNumber(0, 2);
+                } else if (!this.orient && !adjac[j][i]) {
+                    adjac[i][j] = this.getRandomNumber(0, 2);
+                    adjac[j][i] = adjac[i][j];
                 }
             }
         }
         console.log(adjac);
         return adjac;
+    }
+
+    getIncid() {
+        this.initIncid();
+        for (var i = 0; i < this.countVertex; i++) {
+            for (var j = 0; j < this.vector.length; j++) {
+                if (this.vertex[i] == this.vector[j].start) {
+                    this.incid[i][j] = 1;
+                } else {
+                    this.incid[i][j] = 0;
+                }
+            }
+        }
+        console.log(this.incid);
     }
 
     createVertex(canvas) {

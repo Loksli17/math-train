@@ -1,17 +1,15 @@
 <style type="text/css">
-
-
-    .section{
+    .section {
         width: 600px;
         padding: 40px;
     }
 
-    #canvas{
+    #canvas {
         border: 1px dashed;
     }
 
 
-    .button{
+    .button {
         padding: 10px 15px;
         background: #ccc;
         border-radius: 5px;
@@ -19,13 +17,13 @@
         margin-top: 15px;
     }
 
-    .button:hover{
+    .button:hover {
         transition: 0.5s;
         cursor: pointer;
         background: #fcc;
     }
 
-    .cont-button{
+    .cont-button {
         margin-top: 20px;
     }
 </style>
@@ -39,8 +37,13 @@
 <div class="section" id='section'>
 
 
-<canvas id="canvas">
-</canvas>
+    <canvas id="canvas">
+    </canvas>
+
+    <label class="label">
+        <span><b>Рёбра графа</b></span>
+        <div id="list"></div>
+    </label>
 
     <div class="cont-button">
         <div id='give-desicion' class="button">
@@ -59,53 +62,73 @@
 
 
 <script>
-$(document).ready(function(){
-    var canvas = document.getElementById("canvas");
-    let graph = new Graph(7, 9, 200, 15, 0, 0, 0);
+    $(document).ready(function() {
+        var canvas = document.getElementById("canvas");
+        let graph = new Graph(7, 9, 200, 15, 0, 0, 0);
 
-    //функция изменения размера канваса
-    function changeWidthCanvas(){
-        context = canvas.getContext("2d");
-        var sectionSize = document.getElementById("section").getBoundingClientRect();
-        canvas.setAttribute('width', sectionSize.width);
-        canvas.setAttribute('height', 600);
-    }
+        //функция изменения размера канваса
+        function changeWidthCanvas() {
+            context = canvas.getContext("2d");
+            var sectionSize = document.getElementById("section").getBoundingClientRect();
+            canvas.setAttribute('width', sectionSize.width);
+            canvas.setAttribute('height', 600);
+        }
 
-    //отрисовка канваса после загрузки страницы
-    changeWidthCanvas();
+        function printList(array) {
+            let list = document.createElement("ul");
+            for (let el of array) {
+                let item = document.createElement("li");
+                item.appendChild(document.createTextNode(String.fromCharCode(el.start.name) + String.fromCharCode(el.end.name) + ": " + el.dist));
+                list.appendChild(item);
+            }
+            return list;
+        }
 
-    //отловим изменение окна
-    $(window).resize(function() {
+
+        //отрисовка канваса после загрузки страницы
         changeWidthCanvas();
+
+        //отловим изменение окна
+        $(window).resize(function() {
+            changeWidthCanvas();
+            graph.createVertex(canvas);
+            graph.draw(canvas);
+        });
+
         graph.createVertex(canvas);
+        graph.getDist();
+        graph.getIncid();
+        graph.removeDoubles();
         graph.draw(canvas);
-    });
 
-    graph.createVertex(canvas);
-    graph.draw(canvas);
+        document.getElementById("list").appendChild(printList(graph.vector));
 
-    canvas.addEventListener('mousedown', function(e){
-        x = e.offsetX;
-        y = e.offsetY;
-        graph.checkClick(x, y, canvas);
-    });
+        canvas.addEventListener('mousedown', function(e) {
+            x = e.offsetX;
+            y = e.offsetY;
+            graph.checkClick(x, y, canvas);
+        });
 
-    $('#give-desicion').on('click', function(){
-        //проверка решения после нажатия на кнопку
+        $('#give-desicion').on('click', function() {
+            //проверка решения после нажатия на кнопку
 
-        //пример обхода графа
-        for(let i = 0; i < graph.countVertex; i++){
-            for(let j = 0; j < graph.countVertex; j++){
-                if(!graph.adjac[i][j]){
-                    $('.result').text('Неверно').css({'color': 'red'});
-                    $('#give-desicion').hide();
-                    return 0;
+            //пример обхода графа
+            for (let i = 0; i < graph.countVertex; i++) {
+                for (let j = 0; j < graph.countVertex; j++) {
+                    if (!graph.adjac[i][j]) {
+                        $('.result').text('Неверно').css({
+                            'color': 'red'
+                        });
+                        $('#give-desicion').hide();
+                        return 0;
+                    }
                 }
             }
-        }
-        $('.result').text('Верно').css({'color': 'green'});
-        $('#give-desicion').hide();
-    });
+            $('.result').text('Верно').css({
+                'color': 'green'
+            });
+            $('#give-desicion').hide();
+        });
 
 
 
