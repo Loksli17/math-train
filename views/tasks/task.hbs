@@ -1,1 +1,13 @@
-<h1>Одно задание</h1>
+<h2>{{task.title}}</h2>
+<div class="">
+    <span>{{task.text}}</span>
+</div>
+<div class="">
+    <span>Сложность:  <b>{{task.ctitle}}</b></span>
+</div>
+<h3>Направления тренажера</h3>
+<div class="">
+    {{#each tags}}
+        <li>{{title}}</li>
+    {{/each}}
+</div>

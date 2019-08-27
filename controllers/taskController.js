@@ -1,9 +1,10 @@
 const mysql = require('./../lib/database/mysql');
 const Pagination = require('./../lib/pagination');
 
-const CatalogModel  = require ('./../models/mysql/catalogModel');
-const TagModel      = require ('./../models/mysql/tagModel');
-const TaskModel     = require('./../models/mysql/taskModel');
+const CatalogModel    = require ('./../models/mysql/catalogModel');
+const TagModel        = require ('./../models/mysql/tagModel');
+const TaskModel       = require('./../models/mysql/taskModel');
+const TaskHasTagModel = require('./../models/mysql/taskHasTagModel');
 
 
 exports.index  = async function (req,res) {
@@ -192,7 +193,6 @@ exports.actionTask = async function(req, res){
 
     //провека пришедшего id
     id = Number(id);
-    console.log(id);
     if(!id){
         res.status(404);
         res.render('server/404', {error: 'Тренажер на найден'});
@@ -202,17 +202,30 @@ exports.actionTask = async function(req, res){
     //поиск тренажера по id
     let Task = new TaskModel();
     let task = await Task.find('one', {
-        select: ['task.title', 'task.text', 'task.isReady', 'catalog.title AS ctitle', 'tag.title as ttitle'],
+        select: ['task.id', 'task.title', 'task.text', 'task.isReady', 'catalog.title AS ctitle'],
         join: [
             ['inner', 'catalog', 'task.catalog_id = catalog.id'],
-            ['inner', 'task_has_tag', 'task_has_tag.task_id = task.id'],
-            ['left', 'tag', 'task_has_tag.tag_id = tag.id'],
         ],
+        where: 'task.id = ' + id,
     });
 
-    console.log(task);
+    if(task == undefined){
+        res.status(404);
+        res.render('server/404', {error: 'Тренажер на найден'});
+        return;
+    }
+
+    let TaskHasTag = new TaskHasTagModel();
+    let tags = await TaskHasTag.find('all', {
+        select: ['title'],
+        join: [
+            ['inner', 'tag', 'task_has_tag.tag_id = tag.id'],
+        ],
+        where: 'task_id = ' + task.id,
+    });
 
     res.render('tasks/task', {
-        task: task
+        task: task,
+        tags: tags,
     });
 };
