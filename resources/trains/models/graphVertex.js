@@ -4,12 +4,14 @@ class Vertex {
     y;
     click;
     name;
+    eccent;
 
     constructor(x = 0, y = 0, name) {
         this.x = x;
         this.y = y;
         this.click = false;
         this.name = name;
+        this.eccent = Infinity;
     }
 
     get x() {
@@ -42,6 +44,14 @@ class Vertex {
 
     set name(name) {
         this.name = name;
+    }
+
+    get eccent() {
+        return this.eccent;
+    }
+
+    set eccent(eccent) {
+        this.eccent = eccent;
     }
 
     draw(ctx, r = 10, startAngle = 0, endAngle, anticlockwise, color) {

@@ -134,6 +134,48 @@ class Graph {
         }
     }
 
+    calcEccent() {
+        let unvisited = new Array();
+        for (let i = 0; i < this.vertex.length; i++) {
+            unvisited.push(this.vertex[i]);
+        }
+        console.log(this.vertex);
+        console.log(unvisited);
+        for (let i = 0; i < this.vertex.length; i++) {
+            let current;
+            //unvisited[i].eccent = 0;
+            let visited = new Array();
+            while (unvisited.length) {
+                let wIndex = 0;
+                for (let j = 0; j < unvisited.length; j++) {
+                    if (unvisited[j].eccent < unvisited[wIndex].eccent) {
+                        wIndex = j;
+                    }
+                }
+                current = unvisited[wIndex];
+                current.visited = true;
+                unvisited.splice(wIndex, 1);
+                visited.push(current);
+                for (let j = 0; j < this.vertex.length; j++) {
+                    if (this.adjac[i][j]) {
+                        let newEccent = current.eccent + this.dist[i][j];
+                        if (newEccent < current.eccent) {
+                            current.eccent = newEccent;
+                        }
+                    }
+                }
+            }
+            let max = 0;
+            for (let j = 0; j < unvisited.length; j++) {
+                if (visited[j].eccent > visited[max].eccent) {
+                    max = j;
+                }
+            }
+            this.vertex[i].eccent = visited[max].eccent;
+        }
+        //console.log(this.vertex);
+    }
+
     drawVector(ctx, x1, y1, x2, y2, color) {
         if (this.orient) {
             var r = 20;

@@ -99,6 +99,7 @@
         graph.getDist();
         graph.getIncid();
         graph.removeDoubles();
+        graph.calcEccent();
         graph.draw(canvas);
 
         document.getElementById("list").appendChild(printList(graph.vector));
