@@ -140,13 +140,6 @@ exports.index  = async function (req,res) {
     //     page = req.query.page;
     // }
 
-
-    // if ((req.query.tag == undefined) && (req.query.catalog == undefined)){
-    //     where = '1 = 1';
-    // }else{
-    //     where = id_catalog_quary + id_tag_quary;
-    // }
-
     // count = await Task.find('count', {
     //     join: [ ['inner', 'catalog','catalog.id  = task.catalog_id'],
     //         [ 'inner','task_has_tag', 'task.id = task_has_tag.task_id '],
@@ -176,8 +169,11 @@ exports.index  = async function (req,res) {
         group: 'task.id',
         order: 'isReady',
         orderDesc: true,
+        sql: true,
         // limit: pagination.skip + ', ' + pagination.limit,
     });
+
+    console.log(tasks);
 
     res.render('tasks/index',{
         tasks       : tasks,
@@ -206,9 +202,11 @@ exports.actionTask = async function(req, res){
     //поиск тренажера по id
     let Task = new TaskModel();
     let task = await Task.find('one', {
-        select: ['task.title', 'task.text', 'task.isReady', 'catalog.title AS ctitle'],
+        select: ['task.title', 'task.text', 'task.isReady', 'catalog.title AS ctitle', 'tag.title as ttitle'],
         join: [
-            ['inner', 'catalog', 'task.catalog_id = catalog.id']
+            ['inner', 'catalog', 'task.catalog_id = catalog.id'],
+            ['inner', 'task_has_tag', 'task_has_tag.task_id = task.id'],
+            ['left', 'tag', 'task_has_tag.tag_id = tag.id'],
         ],
     });
 
