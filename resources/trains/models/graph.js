@@ -133,45 +133,44 @@ class Graph {
             this.vertex[i] = new Vertex(x, y, 65 + i);
         }
     }
-
+    //work in progress, это оказалось сложнее, чем я предполагал
     calcEccent() {
-        let unvisit = this.vertex.slice();
-        console.log(this.vertex);
-        console.log(unvisit);
-        
         for (let i = 0; i < this.vertex.length; i++) {
+            let unv = this.vertex.slice();
             let current;
-            //unvisited[i].eccent = 0;
+            unv[i].pathTo = 0;
             let visited = new Array();
-            while (unvisited.length) {
+            while (unv.length) {
                 let wIndex = 0;
-                for (let j = 0; j < unvisited.length; j++) {
-                    if (unvisited[j].eccent < unvisited[wIndex].eccent) {
+                for (let j = 0; j < unv.length; j++) {
+                    if (unv[j].pathTo < unv[wIndex].pathTo) {
                         wIndex = j;
                     }
                 }
-                current = unvisited[wIndex];
-                current.visited = true;
-                unvisited.splice(wIndex, 1);
+                current = unv[wIndex];
+                //console.log(current);
+                unv.splice(wIndex, 1);
                 visited.push(current);
+                //console.log(visited);
                 for (let j = 0; j < this.vertex.length; j++) {
                     if (this.adjac[i][j]) {
-                        let newEccent = current.eccent + this.dist[i][j];
-                        if (newEccent < current.eccent) {
-                            current.eccent = newEccent;
+                        let newPathTo = current.pathTo + this.dist[i][j];
+                        if (newPathTo < this.vertex[j].pathTo) {
+                            this.vertex[j].pathTo = newPathTo;
                         }
                     }
                 }
             }
+            //console.log(visited);
             let max = 0;
-            for (let j = 0; j < unvisited.length; j++) {
-                if (visited[j].eccent > visited[max].eccent) {
-                    max = j;
+            for (let j = 0; j < visited.length; j++) {
+                if (visited[j].pathTo > max) {
+                    max = visited[j].pathTo;
                 }
             }
-            this.vertex[i].eccent = visited[max].eccent;
+            this.vertex[i].eccent = max;
         }
-        //console.log(this.vertex);
+        console.log(this.vertex);
     }
 
     drawVector(ctx, x1, y1, x2, y2, color) {

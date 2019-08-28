@@ -5,13 +5,15 @@ class Vertex {
     click;
     name;
     eccent;
+    pathTo;
 
     constructor(x = 0, y = 0, name) {
         this.x = x;
         this.y = y;
         this.click = false;
         this.name = name;
-        this.eccent = Infinity;
+        this.eccent = 0;
+        this.pathTo = Infinity;
     }
 
     get x() {

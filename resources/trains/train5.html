@@ -45,6 +45,39 @@
         <div id="list"></div>
     </label>
 
+    <form action="" method="post">
+        <label class="label">
+            <span>Эксцентриситет</span>
+            <input type="text" name="eccent" value=""><br>
+            <span>Радиус</span>
+            <input type="text" name="rad" value=""><br>
+            <span>Диаметр</span>
+            <input type="text" name="diam" value="">
+            <div></div>
+        </label>
+
+        <label class="label">
+            <span><b>Размер матрицы смежности: </b></span>
+            <select name="width" id="width">
+
+            </select>
+            <span>x</span>
+            <select name="height" id="height">
+
+            </select>
+            <div></div>
+
+        </label>
+
+        <label class="label">
+            <table id="adjac">
+
+            </table>
+            <div></div>
+        </label>
+
+    </form>
+
     <div class="cont-button">
         <div id='give-desicion' class="button">
             Решить
@@ -84,6 +117,68 @@
             return list;
         }
 
+        function populateDropMenu(graph) {
+            let w = document.getElementById("width");
+            let h = document.getElementById("height");
+
+            for (let i = 0; i < graph.countVertex; i++) {
+                w[i] = new Option(i + 1);
+                h[i] = new Option(i + 1);
+            }
+        }
+
+        //document.getElementById("resizeBtn").addEventListener("click", );
+
+        //вот эту муйню бы оптимизировать
+        document.getElementById("width").addEventListener("change", () => {
+            let table = document.getElementById("adjac");
+            table.deleteTHead();
+            let thead = table.createTHead();
+            let col = thead.insertRow();
+            let w = document.getElementById("width").value;
+            let h = document.getElementById("height").value;
+            for (let i = 0; i < h; i++) {
+                let row = table.insertRow();
+                for (let j = 0; j < w; j++) {
+                    let cell = row.insertCell();
+                    let input = document.createElement("input");
+                    input.type = "text";
+                    input.id = "row" + i + "col" + j;
+                    cell.appendChild(input);
+                }
+            }
+        });
+        document.getElementById("height").addEventListener("change", () => {
+            let table = document.getElementById("adjac");
+            table.deleteTHead();
+            let thead = table.createTHead();
+            let col = thead.insertRow();
+            let w = document.getElementById("width").value;
+            let h = document.getElementById("height").value;
+            for (let i = 0; i < h; i++) {
+                let row = table.insertRow();
+                for (let j = 0; j < w; j++) {
+                    let cell = row.insertCell();
+                    let input = document.createElement("input");
+                    input.type = "text";
+                    input.id = "row" + i + "col" + j;
+                    cell.appendChild(input);
+                }
+            }
+        });
+
+        function checkMatrix(table) {
+            let adjac = new Array();
+            for (let i = 0; i < table.rows.length - 1; i++) {
+                adjac[i] = new Array();
+            }
+            for (let i = 0; i < table.rows.length; i++) {
+                for (let j = 0; j < table.rows[i].cells.length; j++) {
+                    adjac[i - 1][j] = document.getElementById(`row${i - 1}col${j}`).value;
+                }
+            }
+            return adjac;
+        }
 
         //отрисовка канваса после загрузки страницы
         changeWidthCanvas();
@@ -99,9 +194,11 @@
         graph.getDist();
         graph.getIncid();
         graph.removeDoubles();
-        graph.calcEccent();
+        //graph.calcEccent();
         graph.draw(canvas);
+        populateDropMenu(graph);
 
+        //generateTable();
         document.getElementById("list").appendChild(printList(graph.vector));
 
         canvas.addEventListener('mousedown', function(e) {
@@ -114,9 +211,22 @@
             //проверка решения после нажатия на кнопку
 
             //пример обхода графа
-            for (let i = 0; i < graph.countVertex; i++) {
-                for (let j = 0; j < graph.countVertex; j++) {
-                    if (!graph.adjac[i][j]) {
+            // for (let i = 0; i < graph.countVertex; i++) {
+            //     for (let j = 0; j < graph.countVertex; j++) {
+            //         if (!graph.adjac[i][j]) {
+            //             $('.result').text('Неверно').css({
+            //                 'color': 'red'
+            //             });
+            //             $('#give-desicion').hide();
+            //             return 0;
+            //         }
+            //     }
+            // }
+            //тестовая проверка матрицы (удивительно, но работает)
+            let matAdj = checkMatrix(document.getElementById("adjac"));
+            for (let i = 0; i < matAdj.length; i++) {
+                for (let j = 0; j < matAdj[i].length; j++) {
+                    if (matAdj[i][j] != graph.adjac[i][j]) {
                         $('.result').text('Неверно').css({
                             'color': 'red'
                         });
@@ -125,6 +235,7 @@
                     }
                 }
             }
+
             $('.result').text('Верно').css({
                 'color': 'green'
             });
