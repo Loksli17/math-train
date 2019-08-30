@@ -75,6 +75,7 @@ class Graph {
                 }
             }
         }
+        console.log(this.dist);
     }
 
     removeDoubles() {

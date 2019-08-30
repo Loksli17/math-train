@@ -139,7 +139,8 @@
 <script>
     $(document).ready(function() {
         var canvas = document.getElementById("canvas");
-        let graph = new Graph(7, 9, 200, 15, 0, 0, 0);
+        // let graph = new Graph(7, 9, 200, 15, 0, 0, 0);
+        let graph = new Graph(4, 5, 200, 15, 0, 0, 0);
 
         //функция изменения размера канваса
         function changeWidthCanvas() {
@@ -166,8 +167,8 @@
                 w[i] = new Option(i + 1);
                 h[i] = new Option(i + 1);
             }
-            w.value = Math.floor(w[graph.countVertex - 1].value / 2);
-            h.value = Math.floor(h[graph.countVertex - 1].value / 2);
+            w.value = 2;
+            h.value = 2;
         }
 
         function populateDropMenuIncid(graph, w, h) {
@@ -177,21 +178,21 @@
             for (let i = 0; i < graph.incid[0].length; i++) {
                 h[i] = new Option(i + 1);
             }
-            w.value = Math.floor(w[graph.countVertex - 1].value / 2);
-            h.value = Math.floor(h[graph.incid.length - 1].value / 2);
+            w.value = 2;
+            h.value = 2;
         }
         //изменение размера таблицы ввода на основе ширины и высоты
         function resizeTable(table, w, h) {
             table.deleteTHead();
             let thead = table.createTHead();
             let col = thead.insertRow();
-            for (let i = 0; i < h; i++) {
+            for (let i = 0; i < w; i++) {
                 let row = table.insertRow();
-                for (let j = 0; j < w; j++) {
+                for (let j = 0; j < h; j++) {
                     let cell = row.insertCell();
                     let input = document.createElement("input");
                     input.type = "text";
-                    input.id = "row" + i + "col" + j;
+                    input.id = "row" + i + "col" + j + table.id;
                     cell.appendChild(input);
                 }
             }
@@ -200,7 +201,6 @@
         document.getElementById("adjacResizeBtn").addEventListener("click", function() {
             resizeTable(document.getElementById("adjac"), document.getElementById("adjacWidth").value, document.getElementById("adjacHeight").value)
         });
-
         document.getElementById("distResizeBtn").addEventListener("click", function() {
             resizeTable(document.getElementById("dist"), document.getElementById("distWidth").value, document.getElementById("distHeight").value)
         });
@@ -216,7 +216,7 @@
             }
             for (let i = 0; i < table.rows.length; i++) {
                 for (let j = 0; j < table.rows[i].cells.length; j++) {
-                    mat[i - 1][j] = document.getElementById(`row${i - 1}col${j}`).value;
+                    mat[i - 1][j] = document.getElementById(`row${i - 1}col${j}${table.id}`).value;
                 }
             }
             return mat;
@@ -239,10 +239,13 @@
 
         //graph.calcEccent();
         graph.draw(canvas);
+
         populateDropMenu(graph, document.getElementById("adjacWidth"), document.getElementById("adjacHeight"));
         resizeTable(document.getElementById("adjac"), document.getElementById("adjacWidth").value, document.getElementById("adjacHeight").value);
+
         populateDropMenu(graph, document.getElementById("distWidth"), document.getElementById("distHeight"));
         resizeTable(document.getElementById("dist"), document.getElementById("distWidth").value, document.getElementById("distHeight").value);
+
         populateDropMenuIncid(graph, document.getElementById("incidWidth"), document.getElementById("incidHeight"));
         resizeTable(document.getElementById("incid"), document.getElementById("incidWidth").value, document.getElementById("incidHeight").value);
 
@@ -271,6 +274,9 @@
             // }
             //тестовая проверка матрицы (удивительно, но работает)
             let matAdj = checkMatrix(document.getElementById("adjac"));
+            let matDist = checkMatrix(document.getElementById("dist"));
+            let matIncid = checkMatrix(document.getElementById("incid"));
+            console.log(matDist);
             for (let i = 0; i < matAdj.length; i++) {
                 for (let j = 0; j < matAdj[i].length; j++) {
                     if (matAdj[i][j] != graph.adjac[i][j]) {
@@ -282,7 +288,28 @@
                     }
                 }
             }
-
+            for (let i = 0; i < matDist.length; i++) {
+                for (let j = 0; j < matDist[i].length; j++) {
+                    if (matDist[i][j] != graph.dist[i][j]) {
+                        $('.result').text('Неверно').css({
+                            'color': 'red'
+                        });
+                        $('#give-desicion').hide();
+                        return 0;
+                    }
+                }
+            }
+            for (let i = 0; i < matIncid.length; i++) {
+                for (let j = 0; j < matIncid[i].length; j++) {
+                    if (matIncid[i][j] != graph.incid[i][j]) {
+                        $('.result').text('Неверно').css({
+                            'color': 'red'
+                        });
+                        $('#give-desicion').hide();
+                        return 0;
+                    }
+                }
+            }
             $('.result').text('Верно').css({
                 'color': 'green'
             });
