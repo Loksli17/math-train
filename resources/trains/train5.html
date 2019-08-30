@@ -57,16 +57,17 @@
         </label>
 
         <label class="label">
-            <span><b>Размер матрицы смежности: </b></span>
-            <select name="width" id="width">
+            <span><b>Матрица смежности: </b></span>
+            <span>Размер матрицы: </span>
+            <select name="width" id="adjacWidth">
 
             </select>
             <span>x</span>
-            <select name="height" id="height">
+            <select name="height" id="adjacHeight">
 
             </select>
+            <input type="button" name="resize" value="Применить" id="adjacResizeBtn">
             <div></div>
-
         </label>
 
         <label class="label">
@@ -76,6 +77,47 @@
             <div></div>
         </label>
 
+        <label class="label">
+            <span><b>Матрица расстояний: </b></span>
+            <span>Размер матрицы: </span>
+            <select name="width" id="distWidth">
+
+            </select>
+            <span>x</span>
+            <select name="height" id="distHeight">
+
+            </select>
+            <input type="button" name="resize" value="Применить" id="distResizeBtn">
+            <div></div>
+        </label>
+
+        <label class="label">
+            <table id="dist">
+
+            </table>
+            <div></div>
+        </label>
+
+        <label class="label">
+            <span><b>Матрица инцидентности: </b></span>
+            <span>Размер матрицы: </span>
+            <select name="width" id="incidWidth">
+
+            </select>
+            <span>x</span>
+            <select name="height" id="incidHeight">
+
+            </select>
+            <input type="button" name="resize" value="Применить" id="incidResizeBtn">
+            <div></div>
+        </label>
+
+        <label class="label">
+            <table id="incid">
+
+            </table>
+            <div></div>
+        </label>
     </form>
 
     <div class="cont-button">
@@ -107,6 +149,7 @@
             canvas.setAttribute('height', 600);
         }
 
+        //вывод списка рёбер
         function printList(array) {
             let list = document.createElement("ul");
             for (let el of array) {
@@ -114,29 +157,34 @@
                 item.appendChild(document.createTextNode(String.fromCharCode(el.start.name) + String.fromCharCode(el.end.name) + ": " + el.dist));
                 list.appendChild(item);
             }
-            return list;
+            document.getElementById("list").appendChild(list);
         }
 
-        function populateDropMenu(graph) {
-            let w = document.getElementById("width");
-            let h = document.getElementById("height");
-
+        //заполнение выпадающего списка размеров (ширина и высота)
+        function populateDropMenu(graph, w, h) {
             for (let i = 0; i < graph.countVertex; i++) {
                 w[i] = new Option(i + 1);
                 h[i] = new Option(i + 1);
             }
+            w.value = Math.floor(w[graph.countVertex - 1].value / 2);
+            h.value = Math.floor(h[graph.countVertex - 1].value / 2);
         }
 
-        //document.getElementById("resizeBtn").addEventListener("click", );
-
-        //вот эту муйню бы оптимизировать
-        document.getElementById("width").addEventListener("change", () => {
-            let table = document.getElementById("adjac");
+        function populateDropMenuIncid(graph, w, h) {
+            for (let i = 0; i < graph.countVertex; i++) {
+                w[i] = new Option(i + 1);
+            }
+            for (let i = 0; i < graph.incid[0].length; i++) {
+                h[i] = new Option(i + 1);
+            }
+            w.value = Math.floor(w[graph.countVertex - 1].value / 2);
+            h.value = Math.floor(h[graph.incid.length - 1].value / 2);
+        }
+        //изменение размера таблицы ввода на основе ширины и высоты
+        function resizeTable(table, w, h) {
             table.deleteTHead();
             let thead = table.createTHead();
             let col = thead.insertRow();
-            let w = document.getElementById("width").value;
-            let h = document.getElementById("height").value;
             for (let i = 0; i < h; i++) {
                 let row = table.insertRow();
                 for (let j = 0; j < w; j++) {
@@ -147,37 +195,31 @@
                     cell.appendChild(input);
                 }
             }
-        });
-        document.getElementById("height").addEventListener("change", () => {
-            let table = document.getElementById("adjac");
-            table.deleteTHead();
-            let thead = table.createTHead();
-            let col = thead.insertRow();
-            let w = document.getElementById("width").value;
-            let h = document.getElementById("height").value;
-            for (let i = 0; i < h; i++) {
-                let row = table.insertRow();
-                for (let j = 0; j < w; j++) {
-                    let cell = row.insertCell();
-                    let input = document.createElement("input");
-                    input.type = "text";
-                    input.id = "row" + i + "col" + j;
-                    cell.appendChild(input);
-                }
-            }
+        }
+
+        document.getElementById("adjacResizeBtn").addEventListener("click", function() {
+            resizeTable(document.getElementById("adjac"), document.getElementById("adjacWidth").value, document.getElementById("adjacHeight").value)
         });
 
+        document.getElementById("distResizeBtn").addEventListener("click", function() {
+            resizeTable(document.getElementById("dist"), document.getElementById("distWidth").value, document.getElementById("distHeight").value)
+        });
+        document.getElementById("incidResizeBtn").addEventListener("click", function() {
+            resizeTable(document.getElementById("incid"), document.getElementById("incidWidth").value, document.getElementById("incidHeight").value)
+        });
+
+        //сохранение введенных в таблицу данных в 2d массив
         function checkMatrix(table) {
-            let adjac = new Array();
+            let mat = new Array();
             for (let i = 0; i < table.rows.length - 1; i++) {
-                adjac[i] = new Array();
+                mat[i] = new Array();
             }
             for (let i = 0; i < table.rows.length; i++) {
                 for (let j = 0; j < table.rows[i].cells.length; j++) {
-                    adjac[i - 1][j] = document.getElementById(`row${i - 1}col${j}`).value;
+                    mat[i - 1][j] = document.getElementById(`row${i - 1}col${j}`).value;
                 }
             }
-            return adjac;
+            return mat;
         }
 
         //отрисовка канваса после загрузки страницы
@@ -192,14 +234,19 @@
 
         graph.createVertex(canvas);
         graph.getDist();
-        graph.getIncid();
         graph.removeDoubles();
+        graph.getIncid();
+
         //graph.calcEccent();
         graph.draw(canvas);
-        populateDropMenu(graph);
+        populateDropMenu(graph, document.getElementById("adjacWidth"), document.getElementById("adjacHeight"));
+        resizeTable(document.getElementById("adjac"), document.getElementById("adjacWidth").value, document.getElementById("adjacHeight").value);
+        populateDropMenu(graph, document.getElementById("distWidth"), document.getElementById("distHeight"));
+        resizeTable(document.getElementById("dist"), document.getElementById("distWidth").value, document.getElementById("distHeight").value);
+        populateDropMenuIncid(graph, document.getElementById("incidWidth"), document.getElementById("incidHeight"));
+        resizeTable(document.getElementById("incid"), document.getElementById("incidWidth").value, document.getElementById("incidHeight").value);
 
-        //generateTable();
-        document.getElementById("list").appendChild(printList(graph.vector));
+        printList(graph.vector);
 
         canvas.addEventListener('mousedown', function(e) {
             x = e.offsetX;

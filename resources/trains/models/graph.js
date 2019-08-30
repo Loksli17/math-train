@@ -115,7 +115,7 @@ class Graph {
         this.initIncid();
         for (var i = 0; i < this.countVertex; i++) {
             for (var j = 0; j < this.vector.length; j++) {
-                if (this.vertex[i] == this.vector[j].start) {
+                if (this.vertex[i] == this.vector[j].start || this.vertex[i] == this.vector[j].end) {
                     this.incid[i][j] = 1;
                 } else {
                     this.incid[i][j] = 0;
