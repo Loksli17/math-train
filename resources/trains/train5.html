@@ -139,8 +139,7 @@
 <script>
     $(document).ready(function() {
         var canvas = document.getElementById("canvas");
-        // let graph = new Graph(7, 9, 200, 15, 0, 0, 0);
-        let graph = new Graph(4, 5, 200, 15, 0, 0, 0);
+        let graph = new Graph(7, 9, 200, 15, 0, 0, 0);
 
         //функция изменения размера канваса
         function changeWidthCanvas() {
@@ -183,9 +182,7 @@
         }
         //изменение размера таблицы ввода на основе ширины и высоты
         function resizeTable(table, w, h) {
-            table.deleteTHead();
-            let thead = table.createTHead();
-            let col = thead.insertRow();
+            table.innerHTML = "";
             for (let i = 0; i < w; i++) {
                 let row = table.insertRow();
                 for (let j = 0; j < h; j++) {
