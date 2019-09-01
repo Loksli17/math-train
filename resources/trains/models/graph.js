@@ -137,11 +137,24 @@ class Graph {
     //work in progress, это оказалось сложнее, чем я предполагал
     calcEccent() {
         for (let i = 0; i < this.vertex.length; i++) {
+            for (let j = 0; j < this.vertex.length; j++) {
+                if (this.adjac[i][j]) {
+                    this.vertex[i].neighbors.push(this.vertex[j]);
+                }
+            }
+        }
+
+        for (let i = 0; i < this.vertex.length; i++) {
             let unv = this.vertex.slice();
             let current;
+
+            for (let j = 0; j < this.vertex.length; j++) {
+                this.vertex[j].pathTo = Infinity;
+            }
+
             unv[i].pathTo = 0;
-            let visited = new Array();
-            while (unv.length) {
+            let visit = new Array();
+            while (unv.length > 0) {
                 let wIndex = 0;
                 for (let j = 0; j < unv.length; j++) {
                     if (unv[j].pathTo < unv[wIndex].pathTo) {
@@ -149,24 +162,20 @@ class Graph {
                     }
                 }
                 current = unv[wIndex];
-                //console.log(current);
                 unv.splice(wIndex, 1);
-                visited.push(current);
-                //console.log(visited);
-                for (let j = 0; j < this.vertex.length; j++) {
-                    if (this.adjac[i][j]) {
-                        let newPathTo = current.pathTo + this.dist[i][j];
-                        if (newPathTo < this.vertex[j].pathTo) {
-                            this.vertex[j].pathTo = newPathTo;
-                        }
+                visit.push(current);
+                for (let j = 0; j < current.neighbors.length; j++) {
+                    let newPathTo = current.pathTo + this.dist[i][j];
+                    if (newPathTo < current.neighbors[j].pathTo) {
+                        current.neighbors[j].pathTo = newPathTo;
                     }
                 }
             }
-            //console.log(visited);
+            //console.log(visit);
             let max = 0;
-            for (let j = 0; j < visited.length; j++) {
-                if (visited[j].pathTo > max) {
-                    max = visited[j].pathTo;
+            for (let j = 0; j < visit.length; j++) {
+                if (visit[j].pathTo > max) {
+                    max = visit[j].pathTo;
                 }
             }
             this.vertex[i].eccent = max;

@@ -6,6 +6,7 @@ class Vertex {
     name;
     eccent;
     pathTo;
+    neighbors;
 
     constructor(x = 0, y = 0, name) {
         this.x = x;
@@ -13,7 +14,8 @@ class Vertex {
         this.click = false;
         this.name = name;
         this.eccent = 0;
-        this.pathTo = Infinity;
+        this.pathTo = 0;
+        this.neighbors = new Array();
     }
 
     get x() {
