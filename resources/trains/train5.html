@@ -47,12 +47,22 @@
 
     <form action="" method="post">
         <label class="label">
-            <span>Эксцентриситет</span>
-            <input type="text" name="eccent" value=""><br>
+            <span><b>Эксцентриситет: </b></span>
+            <span>Количество вершин: </span>
+            <select name="width" id="eccentWidth">
+
+            </select>
+
+            <input type="button" name="resize" value="Применить" id="eccentResizeBtn">
+            <div></div>
+            <table id="eccent">
+
+            </table>
+            <div></div>
             <span>Радиус</span>
-            <input type="text" name="rad" value=""><br>
+            <input type="text" name="rad" value="" id="rad"><br>
             <span>Диаметр</span>
-            <input type="text" name="diam" value="">
+            <input type="text" name="diam" value="" id="diam">
             <div></div>
         </label>
 
@@ -180,6 +190,13 @@
             w.value = 2;
             h.value = 2;
         }
+
+        function populateDropMenuEccent(graph, w) {
+            for (let i = 0; i < graph.countVertex; i++) {
+                w[i] = new Option(i + 1);
+            }
+            w.value = 2;
+        }
         //изменение размера таблицы ввода на основе ширины и высоты
         function resizeTable(table, w, h) {
             table.innerHTML = "";
@@ -195,6 +212,9 @@
             }
         }
 
+        document.getElementById("eccentResizeBtn").addEventListener("click", function() {
+            resizeTable(document.getElementById("eccent"), document.getElementById("eccentWidth").value, 1)
+        });
         document.getElementById("adjacResizeBtn").addEventListener("click", function() {
             resizeTable(document.getElementById("adjac"), document.getElementById("adjacWidth").value, document.getElementById("adjacHeight").value)
         });
@@ -208,12 +228,12 @@
         //сохранение введенных в таблицу данных в 2d массив
         function checkMatrix(table) {
             let mat = new Array();
-            for (let i = 0; i < table.rows.length - 1; i++) {
+            for (let i = 0; i < table.rows.length; i++) {
                 mat[i] = new Array();
             }
             for (let i = 0; i < table.rows.length; i++) {
                 for (let j = 0; j < table.rows[i].cells.length; j++) {
-                    mat[i - 1][j] = document.getElementById(`row${i - 1}col${j}${table.id}`).value;
+                    mat[i][j] = document.getElementById(`row${i}col${j}${table.id}`).value;
                 }
             }
             return mat;
@@ -236,6 +256,9 @@
 
         graph.calcEccent();
         graph.draw(canvas);
+
+        populateDropMenuEccent(graph, document.getElementById("eccentWidth"));
+        resizeTable(document.getElementById("eccent"), document.getElementById("eccentWidth").value, 1);
 
         populateDropMenu(graph, document.getElementById("adjacWidth"), document.getElementById("adjacHeight"));
         resizeTable(document.getElementById("adjac"), document.getElementById("adjacWidth").value, document.getElementById("adjacHeight").value);
@@ -269,11 +292,12 @@
             //         }
             //     }
             // }
-            //тестовая проверка матрицы (удивительно, но работает)
             let matAdj = checkMatrix(document.getElementById("adjac"));
             let matDist = checkMatrix(document.getElementById("dist"));
             let matIncid = checkMatrix(document.getElementById("incid"));
-            console.log(matDist);
+            let matEccent = checkMatrix(document.getElementById("eccent"));
+            let rad = document.getElementById("rad").value;
+            let diam = document.getElementById("diam").value;
             for (let i = 0; i < matAdj.length; i++) {
                 for (let j = 0; j < matAdj[i].length; j++) {
                     if (matAdj[i][j] != graph.adjac[i][j]) {
@@ -307,6 +331,32 @@
                     }
                 }
             }
+            for (let i = 0; i < matEccent.length; i++) {
+                if (matIncid[i] != graph.vertex[i].eccent) {
+                    $('.result').text('Неверно').css({
+                        'color': 'red'
+                    });
+                    $('#give-desicion').hide();
+                    return 0;
+                }
+            }
+
+            if (rad != graph.getRadius()) {
+                $('.result').text('Неверно').css({
+                    'color': 'red'
+                });
+                $('#give-desicion').hide();
+                return 0;
+            }
+
+            if (diam != graph.getDiam()) {
+                $('.result').text('Неверно').css({
+                    'color': 'red'
+                });
+                $('#give-desicion').hide();
+                return 0;
+            }
+
             $('.result').text('Верно').css({
                 'color': 'green'
             });

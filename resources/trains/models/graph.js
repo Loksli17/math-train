@@ -189,6 +189,26 @@ class Graph {
         console.log(this.vertex);
     }
 
+    getRadius() {
+        let min = Infinity;
+        for (let v of this.vertex) {
+            if (v.eccent < min) {
+                min = v.eccent;
+            }
+        }
+        return min;
+    }
+
+    getDiam() {
+        let max = 0;
+        for (let v of this.vertex) {
+            if (v.eccent > max) {
+                max = v.eccent;
+            }
+        }
+        return max;
+    }
+
     drawVector(ctx, x1, y1, x2, y2, color) {
         if (this.orient) {
             var r = 20;
