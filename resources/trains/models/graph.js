@@ -49,6 +49,10 @@ class Graph {
         }
     }
 
+    distance(a, b) {
+        return Math.round(Math.sqrt(Math.pow((a.x - b.x), 2) + Math.pow((a.y - b.y), 2)) / 10);
+    }
+
     getDist() {
         this.initDist();
         for (var i = 0; i < this.countVertex; i++) {
@@ -59,8 +63,7 @@ class Graph {
             for (var j = 0; j < this.countVertex; j++) {
                 if (this.adjac[i][j]) {
                     //евклидово расстояние ftw
-                    this.dist[i][j] = Math.round(Math.sqrt(Math.pow((this.vertex[i].x - this.vertex[j].x), 2) +
-                        Math.pow((this.vertex[i].y - this.vertex[j].y), 2)) / 10);
+                    this.dist[i][j] = this.distance(this.vertex[i], this.vertex[j]);
 
                     //добавление рёбер в массив рёбер
                     this.vector.push({
@@ -134,7 +137,8 @@ class Graph {
             this.vertex[i] = new Vertex(x, y, 65 + i);
         }
     }
-    //work in progress, это оказалось сложнее, чем я предполагал
+
+    //я не уверен, что рботает 100% верно, но вроде работает
     calcEccent() {
         for (let i = 0; i < this.vertex.length; i++) {
             for (let j = 0; j < this.vertex.length; j++) {
@@ -154,6 +158,7 @@ class Graph {
 
             unv[i].pathTo = 0;
             let visit = new Array();
+
             while (unv.length > 0) {
                 let wIndex = 0;
                 for (let j = 0; j < unv.length; j++) {
@@ -165,19 +170,20 @@ class Graph {
                 unv.splice(wIndex, 1);
                 visit.push(current);
                 for (let j = 0; j < current.neighbors.length; j++) {
-                    let newPathTo = current.pathTo + this.dist[i][j];
+                    let newPathTo = current.pathTo + this.distance(current, current.neighbors[j]);
                     if (newPathTo < current.neighbors[j].pathTo) {
                         current.neighbors[j].pathTo = newPathTo;
                     }
                 }
             }
-            //console.log(visit);
+
             let max = 0;
             for (let j = 0; j < visit.length; j++) {
                 if (visit[j].pathTo > max) {
                     max = visit[j].pathTo;
                 }
             }
+
             this.vertex[i].eccent = max;
         }
         console.log(this.vertex);
