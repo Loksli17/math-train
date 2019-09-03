@@ -1,5 +1,4 @@
-
- <style media="screen">
+<style media="screen">
 
     .train{
         padding: 40px;
@@ -99,73 +98,63 @@
 </div>
 
 
-<div id="kekLol"></div>
-
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="models/setModelProto.js?ver=2"></script>
-<script type="text/javascript" src="models/randoperationModel.js"></script>
-<script type="text/javascript" src="models/operationModel.js"></script>
-
-
+<script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript">
-
 window.onload = function(){
 
-
-    let a = new Set(5),
-        b = new Set(4),
-        oper = new RandOperation(1, 1, 1, 1);
-
-    let algebra = new Operation();
-    let newSet = algebra.do(a, b, oper);
-
-    console.log(a.getStr('kek'));
-
-
-    document.getElementById('kekLol').innerHTML = oper.cod;
-
-
-
-
-    //множества
-    let U = new Set(12),
-        A = new Set(7, U.elems),
-        B = new Set(7, U.elems);
-
-    //операции
-    let unionOper     = new RandOperation(0, 1, 0, 0),
-        interOper     = new RandOperation(1, 0, 0, 0),
-        minusOper     = new RandOperation(0, 0, 1, 0),
-        symDifferOper = new RandOperation(0, 0, 0, 1);
-
+    let A         = '{{data.A}}',
+        B         = '{{data.B}}',
+        inter     = '{{data.inter}}',
+        union     = '{{data.union}}',
+        minus     = '{{data.minus}}',
+        symDiffer = '{{data.symDiffer}}';
 
     //получение блоков для вывода множеств
     let set1 = document.getElementsByClassName('set1')[0],
         set2 = document.getElementsByClassName('set2')[0];
 
+    set1.innerHTML = 'Множество A = { ' + A + '}';
+    set2.innerHTML = 'Множество B = { ' + B + '}';
 
-    set1.innerHTML = 'Множество A = { ' + A.getStr(',') + '}';
-    set2.innerHTML = 'Множество B = { ' + B.getStr(',') + '}';
-
-    let operation = new Operation();
-
-    //новые множества
-    let union     = operation.do(A, B, unionOper),
-        inter     = operation.do(A, B, interOper),
-        minus     = operation.do(A, B, minusOper),
-        symDiffer = operation.do(A, B, symDifferOper);
 
     let butAnswer = document.getElementById('butAnswer');
     butAnswer.addEventListener('click', getAnswer, false);
     let timer;
 
     function getAnswer(){
-
         let u  = document.getElementsByName('union')[0].value,
             i  = document.getElementsByName('inter')[0].value,
             m  = document.getElementsByName('minus')[0].value,
             sD = document.getElementsByName('symDiffer')[0].value;
 
+        let data = {
+            id       : {{id}},
+            union    : u,
+            inter    : i,
+            minus    : m,
+            symDiffer: sD,
+            A        : A,
+            B        : B,
+            csrf     : '{{_csrfToken}}',
+        }
+
+        $.ajax({
+            url: '/tasks/task-answer',
+            type: 'get',
+            data: data,
+            dataType: 'json',
+            cashe: false,
+            success: function(data){
+                console.log(data);
+                if(data.success){
+                    let bool = data.result;
+                    printAnswer(bool);
+
+                }else{
+                    console.log('no');
+                }
+            }
+        });
 
         if(!checkInput(u, i, m, sD)){
             document.getElementById('result').style.block = "block";
@@ -174,42 +163,32 @@ window.onload = function(){
             timer = setInterval(close, 2000, 'result');
         }
 
-        if(checkAnswer(u, i, m, sD)){
-            document.getElementById('result').style.block = "block";
-            document.getElementById('result').style.color = "green";
-            document.getElementById('result').innerHTML   = "Верно";
-            close('butAnswer');
-        }else{
-            document.getElementById('result').style.block = "block";
-            document.getElementById('result').style.color = "red";
-            document.getElementById('result').innerHTML   = "Неверно";
-            close('butAnswer');
+        function printAnswer(bool){
+            if(bool){
+                document.getElementById('result').style.block = "block";
+                document.getElementById('result').style.color = "green";
+                document.getElementById('result').innerHTML   = "Верно";
+                close('butAnswer');
+            }else{
+                document.getElementById('result').style.block = "block";
+                document.getElementById('result').style.color = "red";
+                document.getElementById('result').innerHTML   = "Неверно";
+                close('butAnswer');
+            }
         }
 
-    }
-
-    function checkInput(u, i, m, sD){
-        if(u == "" || i == "" || m == "" || sD == ""){
-            return false;
-        }
-        return true;
-    }
-
-    function checkAnswer(u, i, m, sD){
-        // union, inter, minus, symDiffer
-        if(union.checkStr(u) && inter.checkStr(i) && minus.checkStr(m) && symDiffer.checkStr(sD)){
+        function checkInput(u, i, m, sD){
+            if(u == "" || i == "" || m == "" || sD == ""){
+                return false;
+            }
             return true;
         }
-        return false;
+
+        function close(nameId){
+            clearInterval(timer);
+            document.getElementById(nameId).style.display = "none";
+        }
     }
-
-    function close(nameId){
-        clearInterval(timer);
-        document.getElementById(nameId).style.display = "none";
-    }
-
-
-
 }
 
 

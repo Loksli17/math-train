@@ -149,6 +149,7 @@ exports.actionLoginPost = async function(req, res){
         if(user!=null && user.pass==hash){
 
             var user = {
+                id     : user._id,
                 login  : user.login,
                 email  : user.email,
                 isAdmin: 0,
@@ -224,21 +225,25 @@ exports.actionSignupPost = async function(req, res){
             var user = await User.findOne({email: email});
 
             if(user != null){
-                error = "Ввыеденный E-mail уже используется";
+                error = "Введенный E-mail уже используется";
                 res.render('auth/singup', {
                     error: error,
                 });
             }else{
                 //сохранение пользователя
                 let hash = crypto.createHash('sha256', config.user.passSecret).update(pass).digest('hex');
-                User({
+                var save = await User({
                     login  : login,
                     email  : email.toLowerCase(),
                     pass   : hash,
                     isAdmin: 0,
                 }).save();
 
+                var id = await User.findOne({email: email.toLowerCase()});
+                id = id._id;
+
                 var user = {
+                    id     : id,
                     login  : login,
                     email  : email,
                     isAdmin: 0,

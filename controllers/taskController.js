@@ -5,6 +5,7 @@ const CatalogModel    = require ('./../models/mysql/catalogModel');
 const TagModel        = require ('./../models/mysql/tagModel');
 const TaskModel       = require('./../models/mysql/taskModel');
 const TaskHasTagModel = require('./../models/mysql/taskHasTagModel');
+const Result          = require('./../models/mongoose/resultModel');
 
 
 exports.index  = async function (req,res) {
@@ -185,7 +186,6 @@ exports.index  = async function (req,res) {
 };
 
 
-
 exports.actionTask = async function(req, res){
     let get = req.query;
     let id = get.id;
@@ -235,8 +235,55 @@ exports.actionTask = async function(req, res){
     let data = train.getData();
 
     res.render('tasks/task', {
+        id  : id,
         task: task,
         tags: tags,
         data: data,
+        file: 'trains/' + task.codeFile,
     });
 };
+
+
+exports.actionTaskAnswer = async function(req, res){
+    if(req.xhr || req.accepts('json,html' ) === 'json' ){
+        let Task = new TaskModel(),
+            data = req.query;
+        let id = data.id;
+
+        id = Number(id);
+        if(!id){
+            res.send({success: false});
+            return;
+        }
+
+        let task = await Task.findById(data.id);
+
+        if(!task){
+            res.send({success: false});
+            return;
+        }
+
+        const trainModel = require('./../lib/trains/' + task.code_file);
+        let train = new trainModel();
+        let answer = train.checkAnswer(data);
+
+        //увелечение кол-ва ответов
+        task.count_result = Number(task.count_result);
+        task.count_result++;
+        Task.save(task, task.id);
+
+        answer.task_id = task.id;
+        answer.user_id = req.cookies.userUdentity.id;
+        Result(answer).save();
+
+        res.send({
+            success: true,
+            result: answer.isRight,
+        });
+    }else{
+        res.status(404);
+        res.render('server/404', {
+            layout: null,
+        });
+    }
+}

@@ -40,11 +40,11 @@ Operation.prototype.initOperation = function() {
     }
 }
 
-Operation.prototype.code = function() {
+Operation.prototype.code = function(){
     return this.code;
 }
 
-Operation.prototype.int = function() {
+Operation.prototype.int = function(){
     return this.num;
 }
 

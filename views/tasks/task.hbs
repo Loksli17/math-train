@@ -12,7 +12,4 @@
     {{/each}}
 </div>
 
-<script type="text/javascript">
-    let data = {{data}};
-    console.log(data);
-</script>
+{{> (lookup . 'file') }}

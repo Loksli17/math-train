@@ -10,10 +10,14 @@ const resultSchema  = new mongoose.Schema({
        required: true,
    },
    isRight:{
-       type    : Number,
+       type    : Boolean,
        required: true,
    },
    task_id:{
+       type    : Number,
+       required: true,
+   },
+   user_id:{
        type    : String,
        required: true,
    }

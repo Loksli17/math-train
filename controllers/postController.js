@@ -71,11 +71,13 @@ exports.index = async function (req,res) {
         where = '1=1';
     }
 
-    posts= await Post.find('all' ,{
+    posts = await Post.find('all' ,{
         join: [ ['inner', 'post_has_tag','post_has_tag.post_id = post.id'],
             ['inner', 'tag','post_has_tag.tag_id = tag.id']],
         where : where,
         select: ['post.id','tag.title as ttitle','post.view','post.text','post.description','post.image'],
+        order: 'id',
+        orderDesc: true,
     });
 
     res.render('posts/index',{

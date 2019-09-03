@@ -5,5 +5,5 @@ exports.actionIndex = async function(req, res){
     let Task = new TaskModel();
     let tasks = await Task.find('all', {limit: '0, 1'});
 
-    res.send(tasks);
+    res.render('index/index');
 };
