@@ -26,6 +26,28 @@
     .cont-button {
         margin-top: 20px;
     }
+
+    .inputCell {
+        width: 30px;
+    }
+
+    .error {
+        width: 30px;
+        background-color: #f68686;
+    }
+
+    .errorField {
+        background-color: #f68686;
+    }
+
+    .correct {
+        width: 30px;
+        background-color: #8bf783;
+    }
+
+    .correctField {
+        background-color: #8bf783;
+    }
 </style>
 
 
@@ -206,6 +228,7 @@
                     let cell = row.insertCell();
                     let input = document.createElement("input");
                     input.type = "text";
+                    input.className = "inputCell";
                     input.id = "row" + i + "col" + j + table.id;
                     cell.appendChild(input);
                 }
@@ -233,7 +256,7 @@
             }
             for (let i = 0; i < table.rows.length; i++) {
                 for (let j = 0; j < table.rows[i].cells.length; j++) {
-                    mat[i][j] = document.getElementById(`row${i}col${j}${table.id}`).value;
+                    mat[i][j] = parseInt(document.getElementById(`row${i}col${j}${table.id}`).value, 10);
                 }
             }
             return mat;
@@ -298,58 +321,58 @@
             let matEccent = checkMatrix(document.getElementById("eccent"));
             let rad = document.getElementById("rad").value;
             let diam = document.getElementById("diam").value;
+            let err = false;
+
             for (let i = 0; i < matAdj.length; i++) {
                 for (let j = 0; j < matAdj[i].length; j++) {
                     if (matAdj[i][j] != graph.adjac[i][j]) {
-                        $('.result').text('Неверно').css({
-                            'color': 'red'
-                        });
-                        $('#give-desicion').hide();
-                        return 0;
+                        document.getElementById(`row${i}col${j}adjac`).className = "error";
+                        err = true;
+                    } else {
+                        document.getElementById(`row${i}col${j}adjac`).className = "correct";
                     }
                 }
             }
             for (let i = 0; i < matDist.length; i++) {
                 for (let j = 0; j < matDist[i].length; j++) {
                     if (matDist[i][j] != graph.dist[i][j]) {
-                        $('.result').text('Неверно').css({
-                            'color': 'red'
-                        });
-                        $('#give-desicion').hide();
-                        return 0;
+                        document.getElementById(`row${i}col${j}dist`).className = "error";
+                        err = true;
+                    } else {
+                        document.getElementById(`row${i}col${j}dist`).className = "correct";
                     }
                 }
             }
             for (let i = 0; i < matIncid.length; i++) {
                 for (let j = 0; j < matIncid[i].length; j++) {
                     if (matIncid[i][j] != graph.incid[i][j]) {
-                        $('.result').text('Неверно').css({
-                            'color': 'red'
-                        });
-                        $('#give-desicion').hide();
-                        return 0;
+                        document.getElementById(`row${i}col${j}incid`).className = "error";
+                        err = true;
+                    } else {
+                        document.getElementById(`row${i}col${j}incid`).className = "correct";
                     }
                 }
             }
             for (let i = 0; i < matEccent.length; i++) {
                 if (matIncid[i] != graph.vertex[i].eccent) {
-                    $('.result').text('Неверно').css({
-                        'color': 'red'
-                    });
-                    $('#give-desicion').hide();
-                    return 0;
+                    document.getElementById(`row${i}col0eccent`).className = "error";
+                    err = true;
+                } else {
+                    document.getElementById(`row${i}col0eccent`).className = "correct";
                 }
             }
 
             if (rad != graph.getRadius()) {
-                $('.result').text('Неверно').css({
-                    'color': 'red'
-                });
-                $('#give-desicion').hide();
-                return 0;
-            }
+                document.getElementById("rad").className = "errorField";
+                err = true;
+            } else document.getElementById("rad").className = "correctField";
 
             if (diam != graph.getDiam()) {
+                document.getElementById("diam").className = "errorField";
+                err = true;
+            } else document.getElementById("diam").className = "correctField";
+
+            if (err) {
                 $('.result').text('Неверно').css({
                     'color': 'red'
                 });
