@@ -11,7 +11,8 @@ PostModel.prototype = Object.create(modelMysql.prototype);
 PostModel.prototype.constructor = PostModel;
 
 PostModel.prototype.rules = {
-    required : ['title','view','text','description','image'],
+    // required : ['title', 'view', 'text', 'description', 'image'],
+    str: ['title', 'text'],
 };
 
 module.exports = PostModel;

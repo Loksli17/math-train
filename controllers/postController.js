@@ -92,7 +92,7 @@ exports.singlePost = async function (req,res) {
 
     let post = {};
     let id_post = req.query.id;
-    let where   = 'post.id = '+id_post;
+    let where   = 'post.id = ' + id_post;
 
     post= await Post.find('one' ,{
         join: [ ['inner', 'post_has_tag','post_has_tag.post_id = post.id'],

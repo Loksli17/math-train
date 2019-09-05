@@ -12,7 +12,7 @@ CatalogModel.prototype = Object.create(modelMysql.prototype);
 CatalogModel.prototype.constructor = CatalogModel;
 
 CatalogModel.prototype.rules = {
-  required : ['title','catalog_group_id'],
+    required : ['title','catalog_group_id'],
 };
 
 module.exports = CatalogModel;
