@@ -13,7 +13,11 @@
 				404
 			</span>
 			<span>
+				{{#if error}}
+				{{error}}
+				{{else}}
 				Кажется, страница не найдена
+				{{/if}}
 			</span>
 		</span>
 		<span>

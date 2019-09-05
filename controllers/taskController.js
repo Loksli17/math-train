@@ -211,7 +211,10 @@ exports.actionTask = async function(req, res){
     //проверка тренажера
     if(task == undefined){
         res.status(404);
-        res.render('server/404', {error: 'Тренажер на найден'});
+        res.render('server/404', {
+            error: 'Тренажер на найден',
+            layout: null,
+        });
         return;
     }
 
