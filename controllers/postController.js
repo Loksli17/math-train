@@ -92,6 +92,14 @@ exports.singlePost = async function (req,res) {
 
     let post = {};
     let id_post = req.query.id;
+
+    id_post = Number(id_post);
+    if(!id_post){
+        res.status(404);
+        res.render('server/404', {error: 'Пост на найден'});
+        return;
+    }
+
     let where   = 'post.id = ' + id_post;
 
     post= await Post.find('one' ,{
@@ -100,6 +108,12 @@ exports.singlePost = async function (req,res) {
         where : where,
         select: ['post.id','tag.title as ttitle','post.view','post.text','post.description','post.image'],
     });
+
+    if (post == undefined){
+        res.status(404);
+        res.render('server/404', {error: 'Пост на найден'});
+        return;
+    }
 
     res.render('posts/post',{
         post  : post,

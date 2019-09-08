@@ -43,6 +43,7 @@ const indexRouter= require('./routes/indexRouter');
 const authRouter = require('./routes/authRouter');
 const taskRouter = require('./routes/taskRouter');
 const postRouter = require('./routes/postRouter');
+const newsRouter = require('./routes/newsRouter');
 
 //locals
 app.use(function(req, res, next){
@@ -59,6 +60,7 @@ app.use('/',     indexRouter);
 app.use('/auth', authRouter);
 app.use('/tasks',taskRouter);
 app.use('/posts',postRouter);
+app.use('/news', newsRouter);
 
 //soft
 app.use(function(req, res){

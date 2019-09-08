@@ -25,7 +25,10 @@ let query = async () => {
                     description:"The place was dark and dusty and half-lost \n" +
                         "In tangles of old alleys near the quays",
 
-                    date :"09-08-2019 17:21",
+                    date :{
+                      date : "09-08-2019",
+                      time : "17:21",
+                    },
 
                     view : 0,
                 });
@@ -55,7 +58,10 @@ let query = async () => {
                     description:"The place was dark and dusty and half-lost \n" +
                         "In tangles of old alleys near the quays",
 
-                    date :"09-08-2019 17:21",
+                    date :{
+                        date : "09-08-2019",
+                        time : "17:21",
+                    },
 
                     view : 0,
                 });
@@ -85,7 +91,10 @@ let query = async () => {
                     description:"The place was dark and dusty and half-lost \n" +
                         "In tangles of old alleys near the quays",
 
-                    date :"09-08-2019 17:21",
+                    date :{
+                        date : "09-08-2019",
+                        time : "17:21",
+                    },
 
                     view : 0,
                 });
@@ -115,7 +124,10 @@ let query = async () => {
                     description:"The place was dark and dusty and half-lost \n" +
                         "In tangles of old alleys near the quays",
 
-                    date :"09-08-2019 17:21",
+                    date :{
+                        date : "09-08-2019",
+                        time : "17:21",
+                    },
 
                     view : 0,
                 });

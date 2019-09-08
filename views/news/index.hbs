@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>News</title>
+</head>
+<body>
+{{#each news}}
+    <a href="/news/new?id={{this._id}}"> title: {{this.title}}  date: {{this.date.date}} time {{this.date.time}}</a>  <br>
+{{/each}}
+</body>
+</html>

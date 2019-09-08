@@ -21,9 +21,14 @@ const newsSchema = new mongoose.Schema({
        required: true,
    },
    date:{
-       type: String,
-       required: true,
-
+       date : {
+           type: String,
+           required: true,
+       },
+       time: {
+           type: String,
+           required: true,
+       },
    },
    view:{
        type: Number,

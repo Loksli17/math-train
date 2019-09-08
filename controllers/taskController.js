@@ -14,7 +14,6 @@ exports.index  = async function (req,res) {
     let Catalog = new CatalogModel();
     let Tag     = new TagModel();
 
-    console.log(req.query);
 
     let id_tag_quary = '';
     let id_catalog_quary = '';
@@ -173,8 +172,6 @@ exports.index  = async function (req,res) {
         orderDesc: true,
         // limit: pagination.skip + ', ' + pagination.limit,
     });
-
-    console.log(tasks);
 
     res.render('tasks/index',{
         tasks       : tasks,
