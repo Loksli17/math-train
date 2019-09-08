@@ -6,7 +6,21 @@
 </head>
 <body>
 {{#each news}}
-    <a href="/news/new?id={{this._id}}"> title: {{this.title}}  date: {{this.date.date}} time {{this.date.time}}</a>  <br>
+    <a href="/news/new?id={{this._id}}"> id: {{this._id}} title: {{this.title}}  date: {{this.date.date}} time {{this.date.time}}</a>  <br>
 {{/each}}
+
+<div class="pages">
+    <ul>
+        {{#each pages}}
+            <li>
+                {{#if current}}
+                    <a class="active page" href="{{route}}page={{id}}">{{content}}</a>
+                {{else}}
+                    <a class="page" href="{{route}}page={{id}}">{{content}}</a>
+                {{/if}}
+            </li>
+        {{/each}}
+    </ul>
+</div>
 </body>
 </html>

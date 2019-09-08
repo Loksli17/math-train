@@ -59,19 +59,22 @@
         <a href="/tasks/task?id={{this.id}}">{{this.title}}</a>
         text: {{this.text}}
         description: {{this.description}}
+        id: {{this.id}}
     </p>
 {{/each}}
 
 
-<div class="pages">
-    <ul>
-        {{#each pages}}
-                {{#if current}}
-                    <a class="active page" href="{{route}}?page={{id}}">{{content}}</a>
-                {{else}}
-                    <a class="page" href="{{route}}?page={{id}}">{{content}}</a>
-                {{/if}}
-            </li>
-        {{/each}}
-    </ul>
-</div>
+    <div class="pages">
+        <ul>
+            {{#each pages}}
+                <li>
+                    {{#if current}}
+                        <a class="active page" href="{{route}}page={{id}}">{{content}}</a>
+                    {{else}}
+                        <a class="page" href="{{route}}page={{id}}">{{content}}</a>
+                    {{/if}}
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+

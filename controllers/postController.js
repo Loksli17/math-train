@@ -82,6 +82,7 @@ exports.index = async function (req, res) {
     if(req.query.page != undefined){
         page = req.query.page;
         url = req.originalUrl.substring(0, req.originalUrl.length - 7);
+
     }
 
     count = await Post.find('count', {
