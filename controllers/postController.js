@@ -114,7 +114,7 @@ exports.index = async function (req, res) {
     res.render('posts/index',{
         disciplines :  disciplines,
         posts       : posts,
-        pages: pagination.getPages(),
+        pages       : pagination.getPages(),
     });
 };
 
