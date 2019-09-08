@@ -65,9 +65,9 @@
         {{#each pages}}
             <li>
                 {{#if current}}
-                    <a class="active page" href="{{route}}?page={{id}}">{{content}}</a>
+                    <a class="active page" href="{{route}}page={{id}}">{{content}}</a>
                 {{else}}
-                    <a class="page" href="{{route}}?page={{id}}">{{content}}</a>
+                    <a class="page" href="{{route}}page={{id}}">{{content}}</a>
                 {{/if}}
             </li>
         {{/each}}

@@ -84,8 +84,6 @@ exports.index = async function (req, res) {
         url = req.originalUrl.substring(0, req.originalUrl.length - 7);
     }
 
-    console.log(url);
-
     count = await Post.find('count', {
         join: [ ['inner', 'post_has_tag','post_has_tag.post_id = post.id'],
             ['inner', 'tag','post_has_tag.tag_id = tag.id']],
