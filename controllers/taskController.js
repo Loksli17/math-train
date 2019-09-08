@@ -135,30 +135,6 @@ exports.index  = async function (req,res) {
         }
     }
 
-    // let page  = 1,
-    //     count = 0;
-    // if(req.query.page != undefined){
-    //     page = req.query.page;
-    // }
-
-    // count = await Task.find('count', {
-    //     join: [ ['inner', 'catalog','catalog.id  = task.catalog_id'],
-    //         [ 'inner','task_has_tag', 'task.id = task_has_tag.task_id '],
-    //         ['inner','tag','task_has_tag.tag_id = tag.id'],
-    //     ],
-    //     group: 'task.id',
-    //     where: where,
-    // });
-    //
-    // console.log(count);
-    // let pagination = new Pagination({
-    //     pageSize  : 4,
-    //     limit     : 3,
-    //     page      : page,
-    //     url       : '/tasks/filter',
-    //     count     : count,
-    // });
-
     //пагинация
     let page  = 1,
         url   = req.originalUrl,
