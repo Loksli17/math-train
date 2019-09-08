@@ -1,7 +1,10 @@
-const PostModel = require('./../models/mysql/postModel');
-const TagModel  = require('./../models/mysql/tagModel');
+const PostModel  = require('./../models/mysql/postModel');
+const TagModel   = require('./../models/mysql/tagModel');
+const Pagination = require('./../lib/pagination');
 
-exports.index = async function (req,res) {
+
+exports.index = async function (req, res) {
+
     const Tag = new TagModel();
     const Post= new PostModel();
 
@@ -71,6 +74,33 @@ exports.index = async function (req,res) {
         where = '1=1';
     }
 
+    //пагинация
+    let page  = 1,
+        url   = req.originalUrl,
+        count = 0;
+
+    if(req.query.page != undefined){
+        page = req.query.page;
+        url = req.originalUrl.substring(0, req.originalUrl.length - 7);
+    }
+
+    console.log(url);
+
+    count = await Post.find('count', {
+        join: [ ['inner', 'post_has_tag','post_has_tag.post_id = post.id'],
+            ['inner', 'tag','post_has_tag.tag_id = tag.id']],
+        where : where,
+    });
+
+
+    let pagination = new Pagination({
+        pageSize  : 4,
+        limit     : 1,
+        page      : page,
+        url       : url,
+        count     : count,
+    });
+
     posts = await Post.find('all' ,{
         join: [ ['inner', 'post_has_tag','post_has_tag.post_id = post.id'],
             ['inner', 'tag','post_has_tag.tag_id = tag.id']],
@@ -78,11 +108,13 @@ exports.index = async function (req,res) {
         select: ['post.id','tag.title as ttitle','post.view','post.text','post.description','post.image'],
         order: 'id',
         orderDesc: true,
+        limit: pagination.skip + ', ' + pagination.limit,
     });
 
     res.render('posts/index',{
         disciplines :  disciplines,
         posts       : posts,
+        pages: pagination.getPages(),
     });
 };
 
