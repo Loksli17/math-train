@@ -179,7 +179,6 @@ exports.index  = async function (req,res) {
         limit: pagination.skip + ', ' + pagination.limit,
     });
 
-    console.log(tasks);
 
 
     res.render('tasks/index',{
