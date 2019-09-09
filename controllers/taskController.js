@@ -153,12 +153,13 @@ exports.index  = async function (req,res) {
             ['left','tag','task_has_tag.tag_id = tag.id'],
         ],
         where : where,
+        group: 'task.id',
     });
 
 
     let pagination = new Pagination({
         pageSize  : 4,
-        limit     : 4,
+        limit     : 1,
         page      : page,
         url       : url,
         count     : count,
@@ -171,15 +172,14 @@ exports.index  = async function (req,res) {
             ['inner','task_has_tag', 'task.id= task_has_tag.task_id '],
             ['left','tag','task_has_tag.tag_id = tag.id'],
         ],
-        select: ['task.id', 'tag.title as ttitle','catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
+        select: ['task.id', 'tag.title as ttitle', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
         where: where,
-        group: 'task.id',
         order: 'isReady',
         orderDesc: true,
         limit: pagination.skip + ', ' + pagination.limit,
     });
 
-
+    console.log(tasks);
 
     res.render('tasks/index',{
         tasks       : tasks,
