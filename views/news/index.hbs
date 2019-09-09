@@ -3,6 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>News</title>
+    <style>
+        .pages{
+            margin-top: 30px;
+        }
+
+        .pages ul{
+            display: flex;
+        }
+
+        .pages li{
+            width: 40px;
+            height: 40px;
+            list-style: none;
+            margin-left: 10px;
+        }
+
+        .pages .page{
+            background: #fff;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            line-height: 40px;
+            display: block;
+            color: #cc33cc;
+            border: 1.5px solid;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .pages .active{
+            background: #cc33cc;
+            border: 1.5px solid #cc33cc;
+            color: #fff;
+        }
+
+    </style>
 </head>
 <body>
 {{#each news}}
