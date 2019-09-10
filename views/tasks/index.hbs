@@ -54,7 +54,10 @@
 
 {{#each tasks}}
     <p>
-        tag: {{this.ttitle}}
+        tags:
+        {{#each this.tags}}
+            {{this}}
+        {{/each}}
         catalog: {{this.ctitle}}
         <a href="/tasks/task?id={{this.id}}">{{this.title}}</a>
         text: {{this.text}}
@@ -77,4 +80,3 @@
             {{/each}}
         </ul>
     </div>
-

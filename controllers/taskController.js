@@ -10,19 +10,18 @@ const Result          = require('./../models/mongoose/resultModel');
 
 exports.index  = async function (req,res) {
 
-    let Task  =  new TaskModel();
+    let Task    =  new TaskModel();
     let Catalog = new CatalogModel();
     let Tag     = new TagModel();
+    let TaskHasTag = new TaskHasTagModel();
 
-
-    let id_tag_quary = '';
-    let id_catalog_quary = '';
-    let where = '';
+    let idTagQuery     = '';
+    let idCatalogQuery = '';
+    let where          = '';
 
     let disciplines = {};
-    let catalogs = {};
-    let tags  = [];
-
+    let catalogs    = {};
+    let tags        = [];
 
     if (req.query.catalog != undefined || req.query.tag != undefined){
 
@@ -34,7 +33,7 @@ exports.index  = async function (req,res) {
 
         for (let i = 0; i < tags.length; i++){
             if (tags[i].id_parent == null){
-                disciplines[tags[i].id]   = {};
+                disciplines[tags[i].id]      = {};
                 disciplines[tags[i].id].name = tags[i].title;
                 disciplines[tags[i].id].tags = [];
 
@@ -47,16 +46,16 @@ exports.index  = async function (req,res) {
         }
 
         if (req.query.catalog != undefined){
-            id_catalog_quary = '(';
-            for (let i = 0 ;i  < req.query.catalog.length ; i++){
+            idCatalogQuery = '(';
+            for (let i = 0; i < req.query.catalog.length; i++){
                 if (i!= req.query.catalog.length-1){
-                    id_catalog_quary =id_catalog_quary+' catalog.id = '+req.query.catalog[i]+' or ';
+                    idCatalogQuery = idCatalogQuery +' catalog.id = ' + req.query.catalog[i] + ' or ';
                 }else{
-                    id_catalog_quary = id_catalog_quary+'catalog.id = '+req.query.catalog[i] +' )';
+                    idCatalogQuery = idCatalogQuery +'catalog.id = ' + req.query.catalog[i] + ' )';
                 }
             }
 
-            for (let i = 0; i< catalogs.length;i ++){
+            for (let i = 0; i < catalogs.length; i++){
                 for (let j = 0; j < req.query.catalog .length; j++){
                     if(catalogs[i].id == req.query.catalog[j]){
                         catalogs[i].checked = 'checked';
@@ -65,35 +64,34 @@ exports.index  = async function (req,res) {
             }
         }
 
-        if ((req.query.catalog != undefined) && ( req.query.tag!= undefined)){
-            id_tag_quary = ' AND ';
+        if ((req.query.catalog != undefined) && (req.query.tag != undefined)){
+            idTagQuery = ' AND ';
         }
 
         if (req.query.tag != undefined){
-            id_tag_quary = id_tag_quary+'( ';
+            idTagQuery = idTagQuery + '( ';
 
             for (let i = 0 ;i  < req.query.tag.length ; i++){
                 if (i!= req.query.tag.length - 1){
-                    id_tag_quary =id_tag_quary + 'tag.id = ' + req.query.tag[i] + ' or ';
+                    idTagQuery = idTagQuery + 'tag_id = ' + req.query.tag[i] + ' or ';
                 }else{
-                    id_tag_quary = id_tag_quary + 'tag.id = ' + req.query.tag[i] + ' )';
+                    idTagQuery = idTagQuery + 'tag_id = ' + req.query.tag[i] + ' )';
                 }
             }
 
             for (let i = 0; i < tags.length; i++){
                 if (tags[i].id_parent == null){
-                    disciplines[tags[i].id]   = {};
+                    disciplines[tags[i].id]      = {};
                     disciplines[tags[i].id].name = tags[i].title;
                     disciplines[tags[i].id].tags = [];
-
                 }else{
                     let find = false;
-                    for(let j = 0; j<req.query.tag.length; j++){
+                    for(let j = 0; j < req.query.tag.length; j++){
                         if (tags[i].id == req.query.tag[j]){
                             find = true;
                             disciplines[tags[i].id_parent].tags.push({
-                                name : tags[i].title,
-                                id   : tags[i].id,
+                                name    : tags[i].title,
+                                id      : tags[i].id,
                                 checked : 'checked',
                             });
                             break;
@@ -108,9 +106,7 @@ exports.index  = async function (req,res) {
                 }
             }
         }
-
-        where = id_catalog_quary + id_tag_quary;
-
+        where = idCatalogQuery + idTagQuery;
     }else{
         where = '1 = 1 ';
 
@@ -118,8 +114,7 @@ exports.index  = async function (req,res) {
             order : 'id_parent',
         });
 
-        catalogs = await Catalog.find('all' );
-
+        catalogs = await Catalog.find('all');
 
         for (let i = 0; i < tags.length; i++){
             if (tags[i].id_parent == null){
@@ -144,22 +139,44 @@ exports.index  = async function (req,res) {
     if(req.query.page != undefined){
         page = req.query.page;
         url = req.originalUrl.substring(0, req.originalUrl.length - 7);
-
     }
 
-    count = await Task.find('count', {
+    var relations = await TaskHasTag.find('all', {
         join: [
-            ['inner', 'catalog','catalog.id  = task.catalog_id'],
-            ['inner','task_has_tag', 'task.id= task_has_tag.task_id '],
-            ['left','tag','task_has_tag.tag_id = tag.id'],
+            ['inner', 'task', 'task.id= task_has_tag.task_id '],
+            ['inner', 'catalog', 'catalog.id  = task.catalog_id'],
         ],
-        where : where,
-        group: 'task.id',
+        where: where,
     });
+    let minusCount = 0;
+    for(let i = 0; i < relations.length; i++){
+        for(let j = i; j < relations.length; j++){
+            if(relations[i].task_id == relations[j].task_id){
+                minusCount++;
+            }
+        }
+    }
+    minusCount = minusCount - relations.length;
+    count = relations.length - minusCount;
+
+    if(!count){
+        res.render('tasks/index',{
+            tasks       : [],
+            catalogs    : catalogs,
+            disciplines : disciplines,
+        });
+        return;
+    }
+
+    if(page > count && count != 0){
+        res.status(404);
+        res.render('server/404', {layout: null});
+        return;
+    }
 
     let pagination = new Pagination({
         pageSize  : 4,
-        limit     : 1,
+        limit     : 4,
         page      : page,
         url       : url,
         count     : count,
@@ -168,50 +185,52 @@ exports.index  = async function (req,res) {
     let tasks = await Task.find('all',{
         join: [
             ['inner', 'catalog','catalog.id  = task.catalog_id'],
-            ['inner','task_has_tag', 'task.id= task_has_tag.task_id '],
-            ['left','tag','task_has_tag.tag_id = tag.id'],
+            ['inner', 'task_has_tag', 'task.id= task_has_tag.task_id '],
         ],
-        select: ['task.id', 'tag.title as ttitle', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
-        where: where,
-        order: 'isReady',
+        select   : ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
+        where    : where,
+        group    : 'task_id',
+        order    : 'isReady',
         orderDesc: true,
-        limit: pagination.skip + ', ' + pagination.limit,
+        limit    : pagination.skip + ', ' + pagination.limit,
     });
 
-<<<<<<< HEAD
-    let choosen_tags = req.query.tag;
+    //получение связей между тегами и добавление тегов для тренажеров
+    let ids = '';
+    for(let i = 0; i < tasks.length; i++){
+        ids += tasks[i].id;
+        tasks[i].tags = new Array();
+        if(i != tasks.length - 1){
+            ids += ',';
+        }
+    }
 
-    if ((choosen_tags != undefined) && (choosen_tags.length > 1) && (tasks.length > 2)){
-        let find      = false;
-        let new_tasks = [];
-        for (let i = 0; i < tasks.length; i++){
-            for (let j = 0; j < new_tasks.length; j++){
-                if (tasks[i].id == new_tasks[j].id){
-                    new_tasks[j].ttitle.push(tasks[i].ttitle);
-                    find = true;
-                    break;
+    relations = await TaskHasTag.find('all', {
+        where: 'task_id in (' + ids + ')',
+    });
+
+    for(let i = 0; i < tasks.length; i++){
+        for(let j = 0; j < relations.length; j++){
+            if(tasks[i].id == relations[j].task_id){
+                var tagId = relations[j].tag_id;
+                for(let k = 0; k < tags.length; k++){
+                    if(tags[k].id == tagId){
+                        tasks[i].tags.push(tags[k].title);
+                    }
                 }
             }
-            if (find != true){
-                tasks[i].ttitle = [tasks[i].ttitle];
-                new_tasks.push(tasks[i]);
-            }
-            find = false;
         }
-        tasks = new_tasks;
     }
-=======
-    console.log(tasks);
->>>>>>> d00fdac5c6123eb0b1b50fb547f936da77c5df0c
 
     res.render('tasks/index',{
         tasks       : tasks,
         catalogs    : catalogs,
         disciplines : disciplines,
-        pages: pagination.getPages(),
+        pages       : pagination.getPages(),
     });
 
 };
+
 
 
 exports.actionTask = async function(req, res){
@@ -273,6 +292,7 @@ exports.actionTask = async function(req, res){
         file: 'trains/' + task.codeFile,
     });
 };
+
 
 
 exports.actionTaskAnswer = async function(req, res){
