@@ -21,7 +21,8 @@ exports.index  = async function (req,res) {
 
     let disciplines = {};
     let catalogs = {};
-    let tags  = {};
+    let tags  = [];
+
 
     if (req.query.catalog != undefined || req.query.tag != undefined){
 
@@ -155,7 +156,6 @@ exports.index  = async function (req,res) {
         where : where,
     });
 
-
     let pagination = new Pagination({
         pageSize  : 4,
         limit     : 4,
@@ -163,7 +163,6 @@ exports.index  = async function (req,res) {
         url       : url,
         count     : count,
     });
-
 
     let tasks = await Task.find('all',{
         join: [
@@ -173,13 +172,32 @@ exports.index  = async function (req,res) {
         ],
         select: ['task.id', 'tag.title as ttitle','catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
         where: where,
-        group: 'task.id',
         order: 'isReady',
         orderDesc: true,
         limit: pagination.skip + ', ' + pagination.limit,
     });
 
+    let choosen_tags = req.query.tag;
 
+    if ((choosen_tags != undefined) && (choosen_tags.length > 1) && (tasks.length > 2)){
+        let find      = false;
+        let new_tasks = [];
+        for (let i = 0; i < tasks.length; i++){
+            for (let j = 0; j < new_tasks.length; j++){
+                if (tasks[i].id == new_tasks[j].id){
+                    new_tasks[j].ttitle.push(tasks[i].ttitle);
+                    find = true;
+                    break;
+                }
+            }
+            if (find != true){
+                tasks[i].ttitle = [tasks[i].ttitle];
+                new_tasks.push(tasks[i]);
+            }
+            find = false;
+        }
+        tasks = new_tasks;
+    }
 
     res.render('tasks/index',{
         tasks       : tasks,
