@@ -4,7 +4,7 @@ const PostModel = require('../models/mysql/PostModel');
 exports.actionIndex = async function(req, res){
 
     let Task = new TaskModel();
-    let Post = new PostModel()
+    let Post = new PostModel();
 
     // let subQuery = await Post.find('all', {
     //     select: ['1', 'text', '3', 'view', '5', '6', '7', '8'],
@@ -19,7 +19,7 @@ exports.actionIndex = async function(req, res){
     // console.log(tasks);
 
     let save = await Post.save({title: 7, text: 5});
-    console.log(save);
+    // console.log(save);
 
     res.render('index/index');
 };
