@@ -319,6 +319,7 @@
             let matDist = checkMatrix(document.getElementById("dist"));
             let matIncid = checkMatrix(document.getElementById("incid"));
             let matEccent = checkMatrix(document.getElementById("eccent"));
+            console.log(matEccent);
             let rad = document.getElementById("rad").value;
             let diam = document.getElementById("diam").value;
             let err = false;
@@ -354,7 +355,7 @@
                 }
             }
             for (let i = 0; i < matEccent.length; i++) {
-                if (matIncid[i] != graph.vertex[i].eccent) {
+                if (matEccent[i] != graph.vertex[i].eccent) {
                     document.getElementById(`row${i}col0eccent`).className = "error";
                     err = true;
                 } else {
