@@ -209,19 +209,6 @@ exports.index  = async function (req,res) {
         where: 'task_id in (' + ids + ')',
     });
 
-<<<<<<< HEAD
-    let choosen_tags = req.query.tag;
-
-    if ((choosen_tags != undefined) && (choosen_tags.length > 1) && (tasks.length > 2)){
-        let find      = false;
-        let new_tasks = [];
-        for (let i = 0; i < tasks.length; i++){
-            for (let j = 0; j < new_tasks.length; j++){
-                if (tasks[i].id == new_tasks[j].id){
-                    new_tasks[j].ttitle.push(tasks[i].ttitle);
-                    find = true;
-                    break;
-=======
     for(let i = 0; i < tasks.length; i++){
         for(let j = 0; j < relations.length; j++){
             if(tasks[i].id == relations[j].task_id){
@@ -230,18 +217,16 @@ exports.index  = async function (req,res) {
                     if(tags[k].id == tagId){
                         tasks[i].tags.push(tags[k].title);
                     }
->>>>>>> 52b393960f2f4b2cf7d5150c9bdb6ed9928db7a2
+
                 }
             }
         }
-<<<<<<< HEAD
+
         tasks = new_tasks;
         console.log(tasks);
     }
     console.log(tasks);
-=======
-    }
->>>>>>> 52b393960f2f4b2cf7d5150c9bdb6ed9928db7a2
+
 
     res.render('tasks/index',{
         tasks       : tasks,

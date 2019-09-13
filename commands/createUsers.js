@@ -17,6 +17,7 @@ let query = async () => {
                     email  : 'ami0504@mail.ru',
                     pass   : crypto.createHash('sha256', config.user.passSecret).update('123').digest('hex'),
                     isAdmin: '1',
+                    subNews: '0',
                 });
                 user.save(function(err){
                     if(err){
@@ -32,6 +33,7 @@ let query = async () => {
                         email  : 'ami0505@mail.ru',
                         pass   : crypto.createHash('sha256', config.user.passSecret).update('1234').digest('hex'),
                         isAdmin: '0',
+                        subNews: '0',
                 });
                 user.save(function(err){
                     if(err){
@@ -47,6 +49,7 @@ let query = async () => {
                     email  : 'ami0506@mail.ru',
                     pass   : crypto.createHash('sha256', config.user.passSecret).update('123').digest('hex'),
                     isAdmin: '0',
+                    subNews: '0',
                 });
                 user.save(function(err){
                     if(err){
@@ -62,6 +65,7 @@ let query = async () => {
                     email  : 'smh@mail.com',
                     pass   : crypto.createHash('sha256', config.user.passSecret).update('123').digest('hex'),
                     isAdmin: '1',
+                    subNews: '1',
                     });
                  user.save(function(err){
                     if(err){
@@ -77,6 +81,7 @@ let query = async () => {
                     email  : 'ami0508@mail.ru',
                     pass   : crypto.createHash('sha256', config.user.passSecret).update('123').digest('hex'),
                     isAdmin: '0',
+                    subNews: '0',
                 });
                 user.save(function(err){
                     if(err){
@@ -92,6 +97,7 @@ let query = async () => {
                     email  : 'ami0509@mail.ru',
                     pass   : crypto.createHash('sha256', config.user.passSecret).update('123').digest('hex'),
                     isAdmin: '0',
+                    subNews: '0',
                 });
                 user.save(function(err){
                     if(err){
