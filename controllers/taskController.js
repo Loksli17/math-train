@@ -24,7 +24,6 @@ exports.index  = async function (req,res) {
     let tags        = [];
 
     if (req.query.catalog != undefined || req.query.tag != undefined){
-
         tags = await Tag.find('all', {
             order : 'id_parent',
         });
@@ -141,6 +140,7 @@ exports.index  = async function (req,res) {
         url = req.originalUrl.substring(0, req.originalUrl.length - 7);
     }
 
+    //count для пагинации
     var relations = await TaskHasTag.find('all', {
         join: [
             ['inner', 'task', 'task.id= task_has_tag.task_id '],
@@ -228,7 +228,6 @@ exports.index  = async function (req,res) {
         disciplines : disciplines,
         pages       : pagination.getPages(),
     });
-
 };
 
 
