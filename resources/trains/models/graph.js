@@ -138,7 +138,6 @@ class Graph {
         }
     }
 
-    //я не уверен, что рботает 100% верно, но вроде работает
     calcEccent() {
         for (let i = 0; i < this.vertex.length; i++) {
             for (let j = 0; j < this.vertex.length; j++) {
@@ -150,10 +149,13 @@ class Graph {
 
         for (let i = 0; i < this.vertex.length; i++) {
             let unv = this.vertex.slice();
-            let current;
 
             for (let j = 0; j < this.vertex.length; j++) {
-                this.vertex[j].pathTo = Infinity;
+                if (this.vertex[j].neighbors.length > 0) {
+                    this.vertex[j].pathTo = Infinity;
+                } else {
+                    this.vertex[j].pathTo = undefined;
+                }
             }
 
             unv[i].pathTo = 0;
@@ -166,7 +168,7 @@ class Graph {
                         wIndex = j;
                     }
                 }
-                current = unv[wIndex];
+                let current = unv[wIndex];
                 unv.splice(wIndex, 1);
                 visit.push(current);
                 for (let j = 0; j < current.neighbors.length; j++) {
@@ -183,8 +185,12 @@ class Graph {
                     max = visit[j].pathTo;
                 }
             }
+            if (this.vertex[i].neighbors.length > 0) {
+                this.vertex[i].eccent = max;
+            } else {
+                this.vertex[i].eccent = 0;
+            }
 
-            this.vertex[i].eccent = max;
         }
         console.log(this.vertex);
     }
