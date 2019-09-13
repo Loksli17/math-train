@@ -18,6 +18,7 @@ exports.actionIndex = async function(req, res){
 
     // console.log(tasks);
 
+
     let save = await Post.save({title: 7, text: 5});
     // console.log(save);
 

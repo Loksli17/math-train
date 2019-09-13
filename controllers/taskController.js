@@ -217,10 +217,16 @@ exports.index  = async function (req,res) {
                     if(tags[k].id == tagId){
                         tasks[i].tags.push(tags[k].title);
                     }
+
                 }
             }
         }
+
+        tasks = new_tasks;
+        console.log(tasks);
     }
+    console.log(tasks);
+
 
     res.render('tasks/index',{
         tasks       : tasks,

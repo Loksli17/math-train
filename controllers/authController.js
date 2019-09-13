@@ -1,10 +1,10 @@
 const bodyParser   = require('body-parser');
 const crypto       = require('crypto');
-const nodemailer   = require('nodemailer');
 
-const mongoose     = require('./../lib/database/mongoose');
-const User         = require('./../models/mongoose/userModel');
-const config       = require('./../config');
+const mongoose        = require('./../lib/database/mongoose');
+const User            = require('./../models/mongoose/userModel');
+const config          = require('./../config');
+const emailController = require('./emaiController');
 
 
 exports.sendEmail = function(req,res){
@@ -84,35 +84,18 @@ exports.pageRestore = async function (req, res) {
             req.session.userEmail           = user.email;
             req.session.passwordTryCounter  = 0;
 
-            let smtpTransport  = await nodemailer.createTransport({
-                service: "Yandex",
-                auth: {
-                    user: config.email.user,
-                    pass: config.email.pass,
-                }
-            });
-
-            var mail = {
-                from   : config.email.mail,
-                to     : email,
-                subject: "Restore password",
-                text   : "Your hash",
-                html   : hash,
-            };
-
-            smtpTransport.sendMail(mail, function(error, response){
-                if(error){
-                    console.log(error);
-                    error = "Произошла ошибка, попробуйте еще раз";
-                    res.render('auth/indicateEmail', {
-                        error: error,
-                        layout: null
-                    });
-                }else{
+            await  emailController.sendHash(email,hash)
+                .then(function () {
                     res.render('auth/restorePassword');
-                }
-                smtpTransport.close();
+                })
+                .catch(function () {
+                error = "Произошла ошибка, попробуйте еще раз";
+                        res.render('auth/indicateEmail', {
+                            error: error,
+                            layout: null
+                        });
             });
+
         }else{
             error = 'Пользователь с такой почтой не найден';
             res.render('auth/login', {
@@ -201,6 +184,10 @@ exports.actionSignup = function(req, res){
 };
 
 
+exports.pageSingupSuccess = function(req,res){
+   //in progress
+};
+
 exports.actionSignupPost = async function(req, res){
     let post = req.body;
 
@@ -208,7 +195,11 @@ exports.actionSignupPost = async function(req, res){
         pass  = post.password,
         pass2 = post.passwordSecond,
         email = post.email,
-        login = post.login;
+        login = post.login,
+        subNews = post.subNews;
+    if (subNews == undefined){
+        subNews = false;
+    }
 
     if(login == "" || pass  == "" || pass2 == "" || email == ""){
         error = "Есть незаполненные поля";
@@ -237,6 +228,7 @@ exports.actionSignupPost = async function(req, res){
                     email  : email.toLowerCase(),
                     pass   : hash,
                     isAdmin: 0,
+                    subNews: subNews,
                 }).save();
 
                 var id = await User.findOne({email: email.toLowerCase()});
@@ -255,6 +247,4 @@ exports.actionSignupPost = async function(req, res){
             }
         }
     }
-
-
 };

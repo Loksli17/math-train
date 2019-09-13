@@ -26,6 +26,10 @@ let userSchema = mongoose.Schema({
     isAdmin: {
         type   : Boolean,
         default: '0',
+    },
+    subNews : {
+       type : Boolean,
+       required: true,
     }
 });
 

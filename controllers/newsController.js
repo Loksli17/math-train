@@ -52,11 +52,8 @@ exports.singleNew = async function (req,res) {
    }
 
 
-
-
   res.render("news/new",{
       oneNew : oneNew,
 
   })
-
 };
