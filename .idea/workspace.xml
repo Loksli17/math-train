@@ -16,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controllers/taskController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1777">
-              <caret line="208" column="27" selection-start-line="208" selection-start-column="27" selection-end-line="208" selection-end-column="27" />
+            <state relative-caret-position="4848">
+              <caret line="202" column="23" selection-start-line="202" selection-start-column="23" selection-end-line="202" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -287,12 +287,13 @@
       <workItem from="1567916238714" duration="6980000" />
       <workItem from="1567937774268" duration="4525000" />
       <workItem from="1568021292670" duration="2792000" />
-      <workItem from="1568102684306" duration="4985000" />
+      <workItem from="1568102684306" duration="6960000" />
+      <workItem from="1568265694576" duration="562000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="152505000" />
+    <option name="totallyTimeSpent" value="155042000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -309,9 +310,9 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.51222736" side_tool="true" weight="0.9107649" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5128883" side_tool="true" weight="0.89943343" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3286119" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.48777264" weight="0.9107649" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4871117" weight="0.89943343" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -534,8 +535,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/taskController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1777">
-          <caret line="208" column="27" selection-start-line="208" selection-start-column="27" selection-end-line="208" selection-end-column="27" />
+        <state relative-caret-position="4848">
+          <caret line="202" column="23" selection-start-line="202" selection-start-column="23" selection-end-line="202" selection-end-column="23" />
         </state>
       </provider>
     </entry>

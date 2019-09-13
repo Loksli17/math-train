@@ -178,7 +178,6 @@ exports.index  = async function (req,res) {
         limit: pagination.skip + ', ' + pagination.limit,
     });
 
-<<<<<<< HEAD
     let choosen_tags = req.query.tag;
 
     if ((choosen_tags != undefined) && (choosen_tags.length > 1) && (tasks.length > 2)){
@@ -199,10 +198,9 @@ exports.index  = async function (req,res) {
             find = false;
         }
         tasks = new_tasks;
+        console.log(tasks);
     }
-=======
     console.log(tasks);
->>>>>>> d00fdac5c6123eb0b1b50fb547f936da77c5df0c
 
     res.render('tasks/index',{
         tasks       : tasks,
