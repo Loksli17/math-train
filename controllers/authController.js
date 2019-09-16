@@ -150,7 +150,7 @@ exports.actionLoginPost = async function(req, res){
             error = "Неправильный логин или пароль";
             res.render('auth/login', {
                 layout: null,
-                errors: error,
+                error: error,
             });
         }
     }else{
@@ -175,7 +175,7 @@ exports.actionLogout = function (req, res){
 
 exports.actionSignup = function(req, res){
     if(req.cookies.userUdentity == undefined){
-        res.render('auth/singup', {
+        res.render('auth/signup', {
             layout: null,
         })
     }else{
@@ -203,13 +203,15 @@ exports.actionSignupPost = async function(req, res){
 
     if(login == "" || pass  == "" || pass2 == "" || email == ""){
         error = "Есть незаполненные поля";
-        res.render('auth/singup', {
+        res.render('auth/signup', {
+            layout: null,
             error: error,
         });
     }else{
         if(pass != pass2){
             error = "Введенные пароли не совпадают";
-            res.render('auth/singup', {
+            res.render('auth/signup', {
+                layout: null,
                 error: error,
             });
         }else{
@@ -217,7 +219,8 @@ exports.actionSignupPost = async function(req, res){
 
             if(user != null){
                 error = "Введенный E-mail уже используется";
-                res.render('auth/singup', {
+                res.render('auth/signup', {
+                    layout: null,
                     error: error,
                 });
             }else{

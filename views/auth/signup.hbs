@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="/css/auth/signup.css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+	<div class="icon">
+		<img src="/img/site/logo.png" width="100%">
+	</div>
+	<div class="wrapper">
+		<div class="text-block">
+			<h2>
+				После регистрации вы получите следующие возможности:
+			</h2>
+			<p></p>
+			<ul>
+				<li>Доступ ко всем тренажерам на сайте</li>
+				<li>Личный кабинет со статистикой и анализом выполненных заданий</li>
+			</ul>
+		</div>
+		<div class="vert-line">
+		</div>
+		<div class="reg-block">
+			<form action="/auth/singup-post" name="" method="POST" id="singup-form">
+					<h2>
+						Регистрация
+					</h2>
+					<label>
+				        <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+				    </label>
+					<label>
+						<b>Логин</b>
+						<input name="login" type="text" autocomplete="false">
+						<div></div>
+					</label>
+					<label>
+						<b>Пароль</b>
+						<input name="password" type="password">
+						<div></div>
+					</label>
+					<label>
+						<b>Подтвердить пароль</b>
+						<input name="passwordSecond" type="password">
+						<div></div>
+					</label>
+					<label>
+						<b>Электронная почта</b>
+						<input name="email" type="email" autocomplete="false">
+						<div></div>
+					</label>
+					<label id="checkbox-cont">
+						<input type="checkbox" name="subNews" value="true"></p>
+						<span>Получать рассылку от сайта (уведомления, новости)</span>
+					</label>
+					<label>
+						<input id="signup-but" type="submit" value="Зарегистрироваться">
+	 				</label>
+					<label class="error" for="">
+				        <span>{{error}}</span>
+				    </label>
+	 		</form>
+		</div>
+	</div>
+</body>
+</html>

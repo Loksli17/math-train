@@ -128,6 +128,10 @@ input:-webkit-autofill {
     cursor: pointer;
 }
 
+.error{
+    color: red;
+}
+
 .icon{
     position: fixed;
     width: 50px;
@@ -142,6 +146,7 @@ input:-webkit-autofill {
     margin-top: 15px;
     position: fixed;
     bottom: 15px;
+    padding: 10px;
 }
 
 .singup-a > span{

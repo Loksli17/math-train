@@ -1,5 +1,6 @@
 const mysql = require('./../lib/database/mysql');
 const Pagination = require('./../lib/pagination');
+const fs = require('fs');
 
 const CatalogModel    = require ('./../models/mysql/catalogModel');
 const TagModel        = require ('./../models/mysql/tagModel');
@@ -8,11 +9,11 @@ const TaskHasTagModel = require('./../models/mysql/taskHasTagModel');
 const Result          = require('./../models/mongoose/resultModel');
 
 
-exports.index  = async function (req,res) {
+exports.index  = async function(req, res) {
 
-    let Task    =  new TaskModel();
-    let Catalog = new CatalogModel();
-    let Tag     = new TagModel();
+    let Task       =  new TaskModel();
+    let Catalog    = new CatalogModel();
+    let Tag        = new TagModel();
     let TaskHasTag = new TaskHasTagModel();
 
     let idTagQuery     = '';
@@ -221,12 +222,7 @@ exports.index  = async function (req,res) {
                 }
             }
         }
-
-        tasks = new_tasks;
-        console.log(tasks);
     }
-    console.log(tasks);
-
 
     res.render('tasks/index',{
         tasks       : tasks,
@@ -284,10 +280,21 @@ exports.actionTask = async function(req, res){
         where: 'task_id = ' + task.id,
     });
 
+    //проверка существования файла
+    const checkFile = fs.existsSync('lib/trains/' + task.codeFile + '.js');
     //подключение серверного модуля тренажера
+    if(!checkFile){
+        res.status('404');
+        res.render('server/404', {
+            error : 'Не найден рабочий файл тренажера',
+            layout: null,
+        });
+        return;
+    }
     const trainModel = require('./../lib/trains/' + task.codeFile);
     let train = new trainModel();
     let data = train.getData();
+
 
     res.render('tasks/task', {
         id  : id,
@@ -301,7 +308,7 @@ exports.actionTask = async function(req, res){
 
 
 exports.actionTaskAnswer = async function(req, res){
-    if(req.xhr || req.accepts('json,html' ) === 'json' ){
+    if(req.xhr || req.accepts('json, html' ) === 'json' ){
         let Task = new TaskModel(),
             data = req.query;
         let id = data.id;
