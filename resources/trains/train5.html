@@ -71,9 +71,8 @@
         <label class="label">
             <span><b>Эксцентриситет: </b></span>
             <span>Количество вершин: </span>
-            <select name="width" id="eccentWidth">
 
-            </select>
+            <input type="text" name="width" value="2" id="eccentWidth" class="inputCell">
 
             <input type="button" name="resize" value="Применить" id="eccentResizeBtn">
             <div></div>
@@ -91,13 +90,16 @@
         <label class="label">
             <span><b>Матрица смежности: </b></span>
             <span>Размер матрицы: </span>
-            <select name="width" id="adjacWidth">
+            <!-- <select name="width" id="adjacWidth">
 
-            </select>
+            </select> -->
+            <input type="text" name="width" value="2" id="adjacWidth" class="inputCell">
             <span>x</span>
-            <select name="height" id="adjacHeight">
+            <!-- <select name="height" id="adjacHeight">
 
-            </select>
+            </select> -->
+            <input type="text" name="height" value="2" id="adjacHeight" class="inputCell">
+
             <input type="button" name="resize" value="Применить" id="adjacResizeBtn">
             <div></div>
         </label>
@@ -112,13 +114,11 @@
         <label class="label">
             <span><b>Матрица расстояний: </b></span>
             <span>Размер матрицы: </span>
-            <select name="width" id="distWidth">
 
-            </select>
+            <input type="text" name="width" value="2" id="distWidth" class="inputCell">
             <span>x</span>
-            <select name="height" id="distHeight">
 
-            </select>
+            <input type="text" name="height" value="2" id="distHeight" class="inputCell">
             <input type="button" name="resize" value="Применить" id="distResizeBtn">
             <div></div>
         </label>
@@ -133,13 +133,9 @@
         <label class="label">
             <span><b>Матрица инцидентности: </b></span>
             <span>Размер матрицы: </span>
-            <select name="width" id="incidWidth">
-
-            </select>
+            <input type="text" name="width" value="2" id="incidWidth" class="inputCell">
             <span>x</span>
-            <select name="height" id="incidHeight">
-
-            </select>
+            <input type="text" name="height" value="2" id="incidHeight" class="inputCell">
             <input type="button" name="resize" value="Применить" id="incidResizeBtn">
             <div></div>
         </label>
@@ -192,36 +188,11 @@
             document.getElementById("list").appendChild(list);
         }
 
-        //заполнение выпадающего списка размеров (ширина и высота)
-        function populateDropMenu(graph, w, h) {
-            for (let i = 0; i < graph.countVertex; i++) {
-                w[i] = new Option(i + 1);
-                h[i] = new Option(i + 1);
-            }
-            w.value = 2;
-            h.value = 2;
-        }
-
-        function populateDropMenuIncid(graph, w, h) {
-            for (let i = 0; i < graph.countVertex; i++) {
-                w[i] = new Option(i + 1);
-            }
-            for (let i = 0; i < graph.incid[0].length; i++) {
-                h[i] = new Option(i + 1);
-            }
-            w.value = 2;
-            h.value = 2;
-        }
-
-        function populateDropMenuEccent(graph, w) {
-            for (let i = 0; i < graph.countVertex; i++) {
-                w[i] = new Option(i + 1);
-            }
-            w.value = 2;
-        }
         //изменение размера таблицы ввода на основе ширины и высоты
         function resizeTable(table, w, h) {
             table.innerHTML = "";
+            if (w > graph.vertex.length + 10) w = graph.vertex.length + 10;
+            if (h > graph.vector.length + 10) h = graph.vector.length + 10;
             for (let i = 0; i < w; i++) {
                 let row = table.insertRow();
                 for (let j = 0; j < h; j++) {
@@ -280,16 +251,12 @@
         graph.calcEccent();
         graph.draw(canvas);
 
-        populateDropMenuEccent(graph, document.getElementById("eccentWidth"));
         resizeTable(document.getElementById("eccent"), document.getElementById("eccentWidth").value, 1);
 
-        populateDropMenu(graph, document.getElementById("adjacWidth"), document.getElementById("adjacHeight"));
         resizeTable(document.getElementById("adjac"), document.getElementById("adjacWidth").value, document.getElementById("adjacHeight").value);
 
-        populateDropMenu(graph, document.getElementById("distWidth"), document.getElementById("distHeight"));
         resizeTable(document.getElementById("dist"), document.getElementById("distWidth").value, document.getElementById("distHeight").value);
 
-        populateDropMenuIncid(graph, document.getElementById("incidWidth"), document.getElementById("incidHeight"));
         resizeTable(document.getElementById("incid"), document.getElementById("incidWidth").value, document.getElementById("incidHeight").value);
 
         printList(graph.vector);
