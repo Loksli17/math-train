@@ -58,8 +58,8 @@ app.use(function(req, res, next){
 //routes init
 app.use('/',     indexRouter);
 app.use('/auth', authRouter);
-app.use('/tasks',taskRouter);
-app.use('/posts',postRouter);
+app.use('/tasks', taskRouter);
+app.use('/posts', postRouter);
 app.use('/news', newsRouter);
 
 //soft

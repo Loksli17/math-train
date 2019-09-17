@@ -144,7 +144,7 @@ exports.index  = async function(req, res) {
     //count для пагинации
     var relations = await TaskHasTag.find('all', {
         join: [
-            ['inner', 'task', 'task.id= task_has_tag.task_id '],
+            ['inner', 'task', 'task.id = task_has_tag.task_id'],
             ['inner', 'catalog', 'catalog.id  = task.catalog_id'],
         ],
         where: where,
