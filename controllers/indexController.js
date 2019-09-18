@@ -6,15 +6,15 @@ exports.actionIndex = async function(req, res){
     let Task = new TaskModel();
     let Post = new PostModel();
 
-    let tasks = await Task.find('all', {
-        like: [
-            ['text', '%о%'],
-        ],
-    });
+    // let tasks = await Task.find('all', {
+    //     like: [
+    //         ['text', '%о%'],
+    //     ],
+    // });
+    //
+    // console.log(tasks);
 
-    console.log(tasks);
-
-    let save = await Post.save({title: 7, text: 5});
+    let save = await Post.save({title: 'название', text: 'текст', image: '1.jpg', view: 1, description: null});
     // console.log(save);
 
     res.render('index/index');
