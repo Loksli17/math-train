@@ -7,6 +7,7 @@ const TagModel        = require ('./../models/mysql/tagModel');
 const TaskModel       = require('./../models/mysql/taskModel');
 const TaskHasTagModel = require('./../models/mysql/taskHasTagModel');
 const Result          = require('./../models/mongoose/resultModel');
+const checkGet        = require('./../lib/checkGet');
 
 
 exports.index  = async function(req, res) {
@@ -69,6 +70,7 @@ exports.index  = async function(req, res) {
         }
 
         if (req.query.tag != undefined){
+            req.query.tag = checkGet.check(req.query.tag);
             idTagQuery = idTagQuery + '( ';
 
             for (let i = 0 ;i  < req.query.tag.length ; i++){
