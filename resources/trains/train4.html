@@ -1,0 +1,27 @@
+<script src="models/SetModel.js" charset="utf-8"></script>
+<script src="models/OperationModel.js" charset="utf-8"></script>
+<script src="models/AlgebraModel.js" charset="utf-8"></script>
+<script src="models/RelationModel.js" charset="utf-8"></script>
+<script src="models/graphVertex.js"></script>
+<script src="models/graph.js"></script>
+
+<body>
+    <form action="/models/train4" method="post" id="train2">
+        <label class="label">
+            <span><b>Дано множество:</b></span>
+            <p id="A"></p>
+            <span><b>Дано отношение:</b></span>
+            <p id="rel"></p>
+        </label>
+    </form>
+</body>
+
+<script type="text/javascript">
+    let U = new Set(8),
+        A = new Set(5, U.elems);
+    let rel = new Relation(A, 3);
+
+    document.getElementById("A").innerHTML = "{" + A.getStr(",") + "}";
+
+    document.getElementById("rel").innerHTML = "{" + rel.getRel().map(x => "(" + x.getStr(",") + ")") + "}";
+</script>

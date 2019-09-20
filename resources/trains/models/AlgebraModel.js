@@ -22,7 +22,7 @@ Algebra.prototype.do = function(set1, set2, oper) {
             arr = this.simDiff(set1, set2).slice();
             break;
         case 5:
-            arr = this.cartСomp(set1, set2).slice();
+            arr = this.cartComp(set1, set2).slice();
             break;
     }
 
@@ -54,9 +54,13 @@ Algebra.prototype.equal = function(set1, set2) {
 Algebra.prototype.cartComp = function(set1, set2) {
     let comp = [];
     let iter = 0;
+    let arg1 = set1.elems.slice();
+    let arg2 = set2.elems.slice();
     for (i = 0; i < arg1.length; i++) {
         for (j = 0; j < arg2.length; j++) {
-            comp[iter] = arg1[i].concat(arg2[j]);
+            let res = new Set(2, 0, [arg1[i], arg2[j]]);
+            comp[iter] = res;
+            // comp[iter] = arg1[i].concat(arg2[j]);
             iter++;
         }
     }
