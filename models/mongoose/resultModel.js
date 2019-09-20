@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const resultSchema  = new mongoose.Schema({
    answer:{
-       type    : Array,
+       type    : Object,
        required: true,
    },
    data :{
-       type    : Array,
+       type    : Object,
        required: true,
    },
    isRight:{

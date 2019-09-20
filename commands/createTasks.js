@@ -17,13 +17,13 @@ let tasks = [
     },
     {
         id          : '2',
-        title       : 'Тренажер',
-        text        : 'Текст',
-        code_file   : 'simpleSets',
+        title       : 'Работа с неориентированным графом',
+        text        : 'Для данного неориентированного графа построить матрицу смежности, матрицу инцидентности, матрицу расстояний, найти экцентриситеты вершин, радиус и диаметр графа',
+        code_file   : 'undirectedGraph',
         isReady     : '0',
         description : 'Описание',
         count_result: '0',
-        catalog_id  : '1'
+        catalog_id  : '2'
     },
     {
         id          : '3',
@@ -45,7 +45,7 @@ let taskHasTag = [
     },
     {
         id     : '2',
-        task_id: '1',
+        task_id: '2',
         tag_id : '2',
     },
     {
