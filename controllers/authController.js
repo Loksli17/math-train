@@ -127,7 +127,7 @@ exports.actionLoginPost = async function(req, res){
     let hash = crypto.createHash('sha256', config.user.passSecret).update(password).digest('hex');
 
     if (login != '' && password !=''){
-        user = await User.findOne({email : login});
+        user = await User.findOne({$or: [{email : login}, {login: login}]});
 
         if(user!=null && user.pass==hash){
 

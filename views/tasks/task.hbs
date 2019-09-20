@@ -12,4 +12,22 @@
     {{/each}}
 </div>
 
+<h3>Последние 5 попыток</h3>
+<div class="">
+    {{#if results.length}}
+        {{#each results}}
+            <div class="">
+                {{#if isRight}}
+                <span style="color: green">Верно</span>
+                {{else}}
+                <span style="color: red">Неверно</span>
+                {{/if}}
+            </div>
+            {{/each}}
+    {{else}}
+        <em>Вы еще не решали данный тренажер</em>
+    {{/if}}
+
+</div>
+
 {{> (lookup . 'file') }}

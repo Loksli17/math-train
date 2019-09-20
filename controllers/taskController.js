@@ -293,16 +293,19 @@ exports.actionTask = async function(req, res){
         });
         return;
     }
+
+    let results = await Result.find({task_id: id, user_id: req.cookies.userUdentity.id}, null, {limit: 5});
     const trainModel = require('./../lib/trains/' + task.codeFile);
     let train = new trainModel();
     let data = train.getData();
 
     res.render('tasks/task', {
-        id  : id,
-        task: task,
-        tags: tags,
-        data: data,
-        file: 'trains/' + task.codeFile,
+        id     : id,
+        task   : task,
+        tags   : tags,
+        data   : data,
+        file   : 'trains/' + task.codeFile,
+        results: results,
     });
 };
 

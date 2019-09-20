@@ -1,6 +1,4 @@
 let timer;
-let butAnswer = document.getElementById('butAnswer');
-butAnswer.addEventListener('click', getAnswer, false);
 
 function trainAjax(data){
     $.ajax({
