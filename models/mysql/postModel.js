@@ -11,8 +11,15 @@ PostModel.prototype = Object.create(modelMysql.prototype);
 PostModel.prototype.constructor = PostModel;
 
 PostModel.prototype.rules = {
-    // required : ['title', 'view', 'text', 'description', 'image'],
-    str: ['title', 'text'],
+    string: ['title', 'text'],
+    integer: ['view'],
+    required : ['title', 'view', 'text', 'description', 'image'],
 };
+
+PostModel.prototype.rulesMesseges = {
+    string: 'Поле должно быть строкой',
+    integer: 'Поле должно быть числом',
+    required: 'Данное поле является обязательным',
+}
 
 module.exports = PostModel;

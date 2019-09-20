@@ -1,0 +1,347 @@
+*
+{
+	padding: 0px;
+	margin: 0px;
+}
+
+body
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: linear-gradient(180deg, rgba(0, 6, 43, 1), rgba(0, 76, 144));
+	color: white;
+	font-family: 'Open Sans', sans-serif;
+	letter-spacing: 0.5px;
+	height: 100vh;
+}
+
+.wrapper
+{
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+	align-items: center;
+	padding: 10vh;
+}
+
+.text-block
+{
+	margin-right: 60px;
+	width: 45%;
+}
+
+
+.text-block h2
+{
+	margin-bottom: 10px;
+}
+
+.text-block ul
+{
+	margin-left: 35px;
+}
+
+.vert-line
+{
+	background: white;
+	padding: 35vh 3px;
+}
+
+.reg-block
+{
+	margin-top: 0px;
+	margin-left: 60px;
+	width: 400px;
+}
+
+.icon
+{
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	width: 40px;
+	height: 40px;
+}
+
+label
+{
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: left;
+	align-items: left;
+}
+
+label input{
+	border: 0;
+	background: none;
+	color: #fff;
+	text-align: left;
+	background: rgba(0, 0, 0, 0);
+	padding: 5px 0;
+    font-size: 14px;
+}
+
+label input[type=password]{
+	-webkit-text-security: square;
+}
+
+label input:focus{
+	outline: 0;
+	border: 0;
+}
+
+.error{
+	margin-top: 20px;
+    color: red;
+}
+
+@-webkit-keyframes autofill {
+  to {
+    color: inherit;
+    background: transparent;
+  }
+}
+
+input:-webkit-autofill {
+  -webkit-animation-name: autofill;
+  -webkit-animation-fill-mode: both;
+}
+
+label div{
+	width: 80%;
+	height: 3px;
+	background: #fff;
+}
+
+#checkbox-cont{
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: left;
+	margin-top: 20px;
+}
+
+#checkbox-cont > input{
+    margin-top: 2px;
+    height: 17px;
+    width: 17px;
+}
+
+#checkbox-cont > span{
+	margin-left: 5px;
+}
+
+#signup-but{
+	margin-top: 15px;
+	font-size: 16px;
+	border: 0;
+	padding: 8px 15px;
+	border-radius: 20px;
+	color: #fff;
+	background: #8773ff;
+	text-align: center;
+	width: max-content;
+}
+
+#signup-but:hover{
+	cursor: pointer;
+}
+
+.reg-block > span:first-child
+{
+	font-size: 20px;
+}
+
+form h2
+{
+	margin-bottom: 15px;
+}
+
+
+.login-a{
+    display: flex;
+    flex-flow: row;
+    margin-top: 15px;
+    padding: 10px;
+	position: absolute;
+	top: 10px;
+	font-size: 15px;
+}
+
+.login-a > span{
+    margin-right: 10px;
+}
+
+.login-a > a{
+	text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 0.6px;
+    color: rgba(146, 128, 255, 1);
+}
+
+
+@media screen and (max-width: 960px)
+{
+	*
+	{
+		padding: 0px;
+		margin: 0px;
+	}
+
+	body
+	{
+		 background: linear-gradient(180deg, rgba(0, 6, 43, 1), rgba(0, 76, 144));
+		 color: white;
+		 height: max-content;
+	}
+
+	.wrapper
+	{
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: center;
+		align-items: center;
+		padding: 0px;
+		margin: 40px;
+	}
+
+	.wrapper .text-block
+	{
+		order: 3;
+	}
+
+	.wrapper .vert-line
+	{
+		order: 2;
+	}
+
+	.wrapper .reg-block
+	{
+		order: 1;
+	}
+
+	.wrapper .icon
+	{
+		order: 0;
+	}
+
+	.text-block
+	{
+		width: 90%;
+		margin-right: 0px;
+		text-align: center;
+	}
+
+	.text-block ul
+	{
+		margin-left: 0px;
+	}
+
+	.text-block ul li
+	{
+		list-style-position: inside;
+	}
+
+	.text-block h2
+	{
+		margin-bottom: 15px;
+	}
+
+	.vert-line
+	{
+		width: 250px;
+		background: white;
+		padding: 2px;
+	}
+
+	.reg-block
+	{
+		width: 250px;
+		text-align: center;
+		margin-top: 50px;
+		margin-left: 0px;
+	}
+
+	.reg-block h2
+	{
+		margin-top: 15px;
+		margin-bottom: 25px;
+	}
+
+	label
+	{
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: center;
+		align-items: center;
+	}
+
+	label div
+	{
+		width: 100%;
+		height: 3px;
+		background: #fff;
+	}
+
+	label input
+	{
+		border: 0;
+		background: none;
+		color: #fff;
+		text-align: center;
+	}
+
+	label input[type=password]
+	{
+		-webkit-text-security: square;
+	}
+
+	label input:focus
+	{
+		outline: 0;
+		border: 0;
+	}
+
+	#checkbox-cont
+	{
+		display: flex;
+		flex-flow: row nowrap;
+		justify-content: center;
+		margin-top: 20px;
+	}
+
+	#checkbox-cont > span{
+		margin-left: 5px;
+	}
+
+	#signup-but{
+		margin-top: 15px;
+		/* font-size: 16px;
+		border: 0;
+		padding: 10px 12px;
+		border-radius: 20px;
+		color: #fff;
+		background: #8773ff;
+		text-align: center;
+		width: 80%; */
+	}
+
+	.error{
+		margin-bottom: 60px;
+	}
+
+	.reg-block > span:first-child
+	{
+		font-size: 20px;
+	}
+
+	img
+	{
+		width: 100%;
+	}
+
+	.login-a{
+		top: 42px;
+	}
+
+}

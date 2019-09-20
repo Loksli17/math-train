@@ -1,18 +1,20 @@
 const mysql = require('./../lib/database/mysql');
 const Pagination = require('./../lib/pagination');
+const fs = require('fs');
 
 const CatalogModel    = require ('./../models/mysql/catalogModel');
 const TagModel        = require ('./../models/mysql/tagModel');
 const TaskModel       = require('./../models/mysql/taskModel');
 const TaskHasTagModel = require('./../models/mysql/taskHasTagModel');
 const Result          = require('./../models/mongoose/resultModel');
+const checkGet        = require('./../lib/checkGet');
 
 
-exports.index  = async function (req,res) {
+exports.index  = async function(req, res) {
 
-    let Task    =  new TaskModel();
-    let Catalog = new CatalogModel();
-    let Tag     = new TagModel();
+    let Task       =  new TaskModel();
+    let Catalog    = new CatalogModel();
+    let Tag        = new TagModel();
     let TaskHasTag = new TaskHasTagModel();
 
     let idTagQuery     = '';
@@ -24,7 +26,6 @@ exports.index  = async function (req,res) {
     let tags        = [];
 
     if (req.query.catalog != undefined || req.query.tag != undefined){
-
         tags = await Tag.find('all', {
             order : 'id_parent',
         });
@@ -69,6 +70,7 @@ exports.index  = async function (req,res) {
         }
 
         if (req.query.tag != undefined){
+            req.query.tag = checkGet.check(req.query.tag);
             idTagQuery = idTagQuery + '( ';
 
             for (let i = 0 ;i  < req.query.tag.length ; i++){
@@ -141,9 +143,10 @@ exports.index  = async function (req,res) {
         url = req.originalUrl.substring(0, req.originalUrl.length - 7);
     }
 
+    //count для пагинации
     var relations = await TaskHasTag.find('all', {
         join: [
-            ['inner', 'task', 'task.id= task_has_tag.task_id '],
+            ['inner', 'task', 'task.id = task_has_tag.task_id'],
             ['inner', 'catalog', 'catalog.id  = task.catalog_id'],
         ],
         where: where,
@@ -221,12 +224,7 @@ exports.index  = async function (req,res) {
                 }
             }
         }
-
-        tasks = new_tasks;
-        console.log(tasks);
     }
-    console.log(tasks);
-
 
     res.render('tasks/index',{
         tasks       : tasks,
@@ -234,7 +232,6 @@ exports.index  = async function (req,res) {
         disciplines : disciplines,
         pages       : pagination.getPages(),
     });
-
 };
 
 
@@ -285,10 +282,21 @@ exports.actionTask = async function(req, res){
         where: 'task_id = ' + task.id,
     });
 
+    //проверка существования файла
+    const checkFile = fs.existsSync('lib/trains/' + task.codeFile + '.js');
     //подключение серверного модуля тренажера
+    if(!checkFile){
+        res.status('404');
+        res.render('server/404', {
+            error : 'Не найден рабочий файл тренажера',
+            layout: null,
+        });
+        return;
+    }
     const trainModel = require('./../lib/trains/' + task.codeFile);
     let train = new trainModel();
     let data = train.getData();
+
 
     res.render('tasks/task', {
         id  : id,
@@ -302,7 +310,7 @@ exports.actionTask = async function(req, res){
 
 
 exports.actionTaskAnswer = async function(req, res){
-    if(req.xhr || req.accepts('json,html' ) === 'json' ){
+    if(req.xhr || req.accepts('json, html' ) === 'json' ){
         let Task = new TaskModel(),
             data = req.query;
         let id = data.id;

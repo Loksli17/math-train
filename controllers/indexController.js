@@ -7,6 +7,7 @@ exports.actionIndex = async function(req, res){
     let Task = new TaskModel();
     let Post = new PostModel();
 
+<<<<<<< HEAD
 
     // let subQuery = await Post.find('all', {
     //     select: ['1', 'text', '3', 'view', '5', '6', '7', '8'],
@@ -17,11 +18,18 @@ exports.actionIndex = async function(req, res){
     //     where: "id = 1",
     //     union: subQuery,
     // });
+=======
+    let tasks = await Task.find('all', {
+        like: [
+            ['text', '%о%'],
+        ],
+        where: 'id = 1',
+    });
+>>>>>>> 24faab9a615d6b20f1ceee5496af2259adb88661
 
-    // console.log(tasks);
+    console.log(tasks);
 
-
-    let save = await Post.save({title: 7, text: 5});
+    let save = await Post.save({title: 'название', text: 'текст', image: '1.jpg', view: 1, description: null});
     // console.log(save);
 
     res.render('index/index');
