@@ -252,70 +252,30 @@ exports.actionSignupPost = async function(req, res){
                 });
             }else{
                 //сохранение пользователя
-                let random = Math.random()+'';
-                let emailHashl = crypto.createHash('sha256', config.user.passSecret).update(random).digest('hex');
 
-                let url = req.protocol + '://' + req.get('host') + "/regSuccess?user="+emailHashl;
-                console.log(url);
+                let hash = crypto.createHash('sha256', config.user.passSecret).update(pass).digest('hex');
 
-                console.log(post.email);
+                var save = await User({
+                    login  : login,
+                    email  : email.toLowerCase(),
+                    pass   : hash,
+                    isAdmin: 0,
+                    subNews: subNews,
+                }).save();
 
-                await emailController.sendRegHash(email+'',url,login)
-                    .then(function () {
-                        let hash = crypto.createHash('sha256', config.user.passSecret).update(pass).digest('hex');
-                        req.session.user = {
-                            login  : login,
-                            email  : email.toLowerCase(),
-                            pass   : hash,
-                            isAdmin: 0,
-                            subNews: subNews,
-                        };
-                        req.session.emailHash = emailHash;
-                        res.redirect('/regSuccess');
-                    })
-                    .catch(function () {
-                        error = "Произошла ошибка, пожайлуста, попробуйте еще раз";
-                        res.render('auth/singup', {
-                            layout: null,
-                            error : error,
-                        })
-                    });
+                var id = await User.findOne({email: email.toLowerCase()});
+                id = id._id;
 
-                // await  emailController.sendHash(email+'',emailHashl)
-                //     .then(function () {
-                //         res.redirect('/regSuccess');
-                //     })
-                //     .catch(function () {
-                //         error = "Произошла ошибка, пожайлуста, попробуйте еще раз";
-                //                 res.render('auth/singup', {
-                //                     layout: null,
-                //                     error : error,
-                //                 })
-                //     });
-
-
-
-                // var save = await User({
-                //     login  : login,
-                //     email  : email.toLowerCase(),
-                //     pass   : hash,
-                //     isAdmin: 0,
-                //     subNews: subNews,
-                // }).save();
-
-                // var id = await User.findOne({email: email.toLowerCase()});
-                // id = id._id;
-                //
-                // var user = {
-                //     id     : id,
-                //     login  : login,
-                //     email  : email,
-                //     isAdmin: 0,
-                // };
-                // res.cookie('userUdentity', user, {
-                //     expires :  new Date(Date.now() + 1000 * 60 * 60 * 7),
-                // });
-                // res.redirect('/');
+                var user = {
+                    id     : id,
+                    login  : login,
+                    email  : email,
+                    isAdmin: 0,
+                };
+                res.cookie('userUdentity', user, {
+                    expires :  new Date(Date.now() + 1000 * 60 * 60 * 7),
+                });
+                res.redirect('/');
             }
         }
     }
