@@ -19,11 +19,17 @@ exports.searchAction = async function (req,res) {
     //let posts = await Post.find('all');
 
 
-   let  posts = await Post.find('all', {
-        join: [ ['inner', 'post_has_tag','post_has_tag.post_id = post.id'],
-            ['inner', 'tag','post_has_tag.tag_id = tag.id']],
-    });
+    let posts = await Post.find('all' ,{
+        join: [
+            ['inner', 'post_has_tag','post_has_tag.post_id = post.id'],
+            ['inner', 'tag','post_has_tag.tag_id = tag.id']
+        ],
 
+        select: ['post.id','tag.title as ttitle','post.view','post.text','post.description','post.image'],
+        order: 'id',
+        orderDesc: true,
+
+    });
 
     // console.log(news[0]);
     // console.log(tasks[0]);

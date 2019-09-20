@@ -2,7 +2,6 @@ const mongoose  = require('./../lib/database/mongoose');
 const News = require('./../models/mongoose/newsModel');
 const Pagination = require('./../lib/pagination');
 
-
 exports.index = async function (req,res) {
     let news = await News.find({});
 
