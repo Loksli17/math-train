@@ -4,6 +4,42 @@ const nodemailer   = require('nodemailer');
 const config       = require('./../config');
 const User         = require('./../models/mongoose/userModel');
 
+exports.sendRegHash = async function(email,url,name){
+    let mail = {};
+
+    let smtpTransport  = await nodemailer.createTransport({
+        service: "Yandex",
+        auth: {
+            user: config.email.user,
+            pass: config.email.pass,
+        }
+    });
+
+    mail = {
+        from   : config.email.mail,
+        to     : email,
+        subject: "Registration",
+        text   : "registr",
+        html   :    "<h1>Здравствуйте "+name+"!</h1>" +
+                    "Благодарим Вас за регистрацию, для подверждения перейдите по ссылке:" +
+                    "<a href="+url+">"+url+"</a>",
+        // html: "<h1>Здравствуйте "+name+"!</h1><a href="+url+">"+url+"</a>",
+    };
+
+     smtpTransport.sendMail(mail, function(error, response){
+        if(error){
+            console.log(error);
+            smtpTransport.close();
+
+            return reject();
+
+        }else{
+            smtpTransport.close();
+            return resolve();
+        }
+    });
+};
+
 exports.sendHash = async function (email,hash) {
 
     let smtpTransport  = await nodemailer.createTransport({
@@ -32,7 +68,6 @@ exports.sendHash = async function (email,hash) {
             smtpTransport.close();
             return resolve();
         }
-
     });
 };
 
@@ -46,6 +81,7 @@ exports.sendNews =async function (newsUrl,newsTitle) {
             pass: config.email.pass,
         }
     });
+
 
     users.forEach(function (user) {
 
@@ -66,5 +102,4 @@ exports.sendNews =async function (newsUrl,newsTitle) {
     });
 
     smtpTransport.close();
-
 };

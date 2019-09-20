@@ -39,11 +39,12 @@ app.set('port', process.env.PORT || config.app.port);
 
 
 //routes require
-const indexRouter= require('./routes/indexRouter');
-const authRouter = require('./routes/authRouter');
-const taskRouter = require('./routes/taskRouter');
-const postRouter = require('./routes/postRouter');
-const newsRouter = require('./routes/newsRouter');
+const indexRouter   = require('./routes/indexRouter');
+const authRouter    = require('./routes/authRouter');
+const taskRouter    = require('./routes/taskRouter');
+const postRouter    = require('./routes/postRouter');
+const newsRouter    = require('./routes/newsRouter');
+const searchRouter  = require('./routes/searchRouter');
 
 //locals
 app.use(function(req, res, next){
@@ -61,6 +62,7 @@ app.use('/auth', authRouter);
 app.use('/tasks',taskRouter);
 app.use('/posts',postRouter);
 app.use('/news', newsRouter);
+app.use('/search',searchRouter);
 
 //soft
 app.use(function(req, res){
