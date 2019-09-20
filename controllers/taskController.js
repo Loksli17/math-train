@@ -50,14 +50,14 @@ exports.index  = async function(req, res) {
             idCatalogQuery = '(';
             for (let i = 0; i < req.query.catalog.length; i++){
                 if (i!= req.query.catalog.length-1){
-                    idCatalogQuery = idCatalogQuery +' catalog.id = ' + req.query.catalog[i] + ' or ';
+                    idCatalogQuery = idCatalogQuery + 'catalog.id = ' + req.query.catalog[i] + ' or ';
                 }else{
-                    idCatalogQuery = idCatalogQuery +'catalog.id = ' + req.query.catalog[i] + ' )';
+                    idCatalogQuery = idCatalogQuery + 'catalog.id = ' + req.query.catalog[i] + ' )';
                 }
             }
 
             for (let i = 0; i < catalogs.length; i++){
-                for (let j = 0; j < req.query.catalog .length; j++){
+                for (let j = 0; j < req.query.catalog.length; j++){
                     if(catalogs[i].id == req.query.catalog[j]){
                         catalogs[i].checked = 'checked';
                     }
@@ -268,7 +268,8 @@ exports.actionTask = async function(req, res){
         return;
     }
 
-    if(!task.isReady){
+    console.log(res.locals.user);
+    if(!task.isReady && !req.cookies.userUdentity.isAdmin){
         res.render('tasks/notReady', {layout: null});
         return;
     }
@@ -341,7 +342,6 @@ exports.actionTaskAnswer = async function(req, res){
 
         answer.task_id = task.id;
         answer.user_id = req.cookies.userUdentity.id;
-        console.log(answer);
         await Result(answer).save();
 
         res.send({

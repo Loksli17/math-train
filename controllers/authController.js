@@ -129,13 +129,13 @@ exports.actionLoginPost = async function(req, res){
     if (login != '' && password !=''){
         user = await User.findOne({$or: [{email : login}, {login: login}]});
 
-        if(user!=null && user.pass==hash){
+        if(user != null && user.pass==hash){
 
             var user = {
                 id     : user._id,
                 login  : user.login,
                 email  : user.email,
-                isAdmin: 0,
+                isAdmin: user.isAdmin,
             };
 
             if (rememberMe == 'on'){
