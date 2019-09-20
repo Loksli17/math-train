@@ -297,7 +297,6 @@ exports.actionTask = async function(req, res){
     let train = new trainModel();
     let data = train.getData();
 
-
     res.render('tasks/task', {
         id  : id,
         task: task,
@@ -339,7 +338,8 @@ exports.actionTaskAnswer = async function(req, res){
 
         answer.task_id = task.id;
         answer.user_id = req.cookies.userUdentity.id;
-        Result(answer).save();
+        console.log(answer);
+        await Result(answer).save();
 
         res.send({
             success: true,
