@@ -84,7 +84,7 @@ exports.pageRestore = async function (req, res) {
             req.session.userEmail           = user.email;
             req.session.passwordTryCounter  = 0;
 
-            await  emailController.sendHash(email,hash)
+            await  emailController.sendHash(email+'',hash)
                 .then(function () {
                     res.render('auth/restorePassword');
                 })
@@ -95,7 +95,6 @@ exports.pageRestore = async function (req, res) {
                             layout: null
                         });
             });
-
         }else{
             error = 'Пользователь с такой почтой не найден';
             res.render('auth/login', {
@@ -127,15 +126,15 @@ exports.actionLoginPost = async function(req, res){
     let hash = crypto.createHash('sha256', config.user.passSecret).update(password).digest('hex');
 
     if (login != '' && password !=''){
-        user = await User.findOne({email : login});
+        user = await User.findOne({$or: [{email : login}, {login: login}]});
 
-        if(user!=null && user.pass==hash){
+        if(user != null && user.pass==hash){
 
             var user = {
                 id     : user._id,
                 login  : user.login,
                 email  : user.email,
-                isAdmin: 0,
+                isAdmin: user.isAdmin,
             };
 
             if (rememberMe == 'on'){
@@ -184,8 +183,36 @@ exports.actionSignup = function(req, res){
 };
 
 
-exports.pageSingupSuccess = function(req,res){
-   //in progress
+exports.pageSingupSuccess = async function(req,res){
+  if (req.session.user != undefined && req.query.user==req.session.emailHash){
+
+      await User(req.session.user).save();
+      var id = await User.findOne({email: email.toLowerCase()});
+      id = id._id;
+
+      var user = {
+          id     : id,
+          login  : login,
+          email  : email,
+          isAdmin: 0,
+      };
+      res.cookie('userUdentity', user, {
+          expires :  new Date(Date.now() + 1000 * 60 * 60 * 7),
+      });
+      req.session.user = undefined;
+      req.session.emailHash = undefined;
+
+      req.render('auth/endRegister',{
+          info : "Регистрация прошла успешно",
+      });
+  }else if (req.session.user!= undefined){
+      req.render('auth/endRegister',{
+          info : "Пожалуйста проверьте почту",
+      })
+  }else{
+      req.status(404);
+      req.render("server/404");
+  }
 };
 
 exports.actionSignupPost = async function(req, res){
@@ -225,7 +252,9 @@ exports.actionSignupPost = async function(req, res){
                 });
             }else{
                 //сохранение пользователя
+
                 let hash = crypto.createHash('sha256', config.user.passSecret).update(pass).digest('hex');
+
                 var save = await User({
                     login  : login,
                     email  : email.toLowerCase(),

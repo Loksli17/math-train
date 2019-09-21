@@ -99,8 +99,11 @@
 
 
 <script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/train.js"></script>
 <script type="text/javascript">
 window.onload = function(){
+    let butAnswer = document.getElementById('butAnswer');
+    butAnswer.addEventListener('click', getAnswer, false);
 
     let A         = '{{data.A}}',
         B         = '{{data.B}}',
@@ -115,11 +118,6 @@ window.onload = function(){
 
     set1.innerHTML = 'Множество A = { ' + A + '}';
     set2.innerHTML = 'Множество B = { ' + B + '}';
-
-
-    let butAnswer = document.getElementById('butAnswer');
-    butAnswer.addEventListener('click', getAnswer, false);
-    let timer;
 
     function getAnswer(){
         let u  = document.getElementsByName('union')[0].value,
@@ -138,43 +136,13 @@ window.onload = function(){
             csrf     : '{{_csrfToken}}',
         }
 
-        $.ajax({
-            url: '/tasks/task-answer',
-            type: 'get',
-            data: data,
-            dataType: 'json',
-            cashe: false,
-            success: function(data){
-                console.log(data);
-                if(data.success){
-                    let bool = data.result;
-                    printAnswer(bool);
-
-                }else{
-                    console.log('no');
-                }
-            }
-        });
-
         if(!checkInput(u, i, m, sD)){
             document.getElementById('result').style.block = "block";
             document.getElementById('result').style.color = "red";
             document.getElementById('result').innerHTML   = "Введите ответ";
             timer = setInterval(close, 2000, 'result');
-        }
-
-        function printAnswer(bool){
-            if(bool){
-                document.getElementById('result').style.block = "block";
-                document.getElementById('result').style.color = "green";
-                document.getElementById('result').innerHTML   = "Верно";
-                close('butAnswer');
-            }else{
-                document.getElementById('result').style.block = "block";
-                document.getElementById('result').style.color = "red";
-                document.getElementById('result').innerHTML   = "Неверно";
-                close('butAnswer');
-            }
+        }else{
+            trainAjax(data);
         }
 
         function checkInput(u, i, m, sD){
@@ -183,15 +151,8 @@ window.onload = function(){
             }
             return true;
         }
-
-        function close(nameId){
-            clearInterval(timer);
-            document.getElementById(nameId).style.display = "none";
-        }
     }
 }
-
-
 
 
 </script>
