@@ -4,6 +4,59 @@
 <script src="models/RelationModel.js" charset="utf-8"></script>
 <script src="models/graphVertex.js"></script>
 <script src="models/graph.js"></script>
+<script type="text/javascript" src="jquery.js"></script>
+
+<style type="text/css">
+    .section {
+        width: 600px;
+        padding: 40px;
+    }
+
+    #canvas {
+        border: 1px dashed;
+    }
+
+
+    .button {
+        padding: 10px 15px;
+        background: #ccc;
+        border-radius: 5px;
+        width: max-content;
+        margin-top: 15px;
+    }
+
+    .button:hover {
+        transition: 0.5s;
+        cursor: pointer;
+        background: #fcc;
+    }
+
+    .cont-button {
+        margin-top: 20px;
+    }
+
+    .inputCell {
+        width: 30px;
+    }
+
+    .error {
+        width: 30px;
+        background-color: #f68686;
+    }
+
+    .errorField {
+        background-color: #f68686;
+    }
+
+    .correct {
+        width: 30px;
+        background-color: #8bf783;
+    }
+
+    .correctField {
+        background-color: #8bf783;
+    }
+</style>
 
 <body>
     <form action="/models/train4" method="post" id="train2">
@@ -14,14 +67,108 @@
             <p id="rel"></p>
         </label>
     </form>
+
+    <div class="section" id="section">
+        <canvas id="canvas">
+        </canvas>
+
+        <div class="cont-button">
+            <div id='give-desicion' class="button">
+                Решить
+            </div>
+            <div class="result">
+            </div>
+        </div>
+
+    </div>
 </body>
 
 <script type="text/javascript">
+    const graphSize = 5;
+
+    var canvas = document.getElementById("canvas");
+
+    let graph = new Graph(graphSize, graphSize + 1, 200, 15, 1, 1, 1, 1);
+
+    function changeWidthCanvas() {
+        context = canvas.getContext("2d");
+        var sectionSize = document.getElementById("section").getBoundingClientRect();
+        canvas.setAttribute('width', sectionSize.width);
+        canvas.setAttribute('height', 600);
+    }
+
+    changeWidthCanvas();
+
+    $(window).resize(function() {
+        changeWidthCanvas();
+        graph.createVertex(canvas);
+        graph.draw(canvas);
+    });
+
+    graph.createVertex(canvas);
+    graph.setAdjacZero();
+    graph.draw(canvas);
+
+    canvas.addEventListener("click", createEdge, false);
+
+    function getCursorPos(e) {
+        let x, y;
+        if (e.PageX != undefined && e.pageY != undefined) {
+            x = e.pageX;
+            y = e.pageY;
+        } else {
+            x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        }
+
+        return [x, y];
+    }
+
+    function createEdge(e) {
+        let pos = getCursorPos(e);
+        graph.checkClick(pos[0] - this.offsetLeft, pos[1] - this.offsetTop, canvas);
+    }
+
     let U = new Set(8),
-        A = new Set(5, U.elems);
+        A = new Set(graphSize, ["A", "B", "C", "D", "E"]);
     let rel = new Relation(A, 3);
 
     document.getElementById("A").innerHTML = "{" + A.getStr(",") + "}";
 
     document.getElementById("rel").innerHTML = "{" + rel.getRel().map(x => "(" + x.getStr(",") + ")") + "}";
+
+    $('#give-desicion').on('click', function() {
+
+        let err = true;
+
+        for (let r of rel.relation) {
+            for (let i = 0; i < graph.countVertex; i++) {
+                for (let j = 0; j < graph.countVertex; j++) {
+                    if (graph.adjac[i][j]) {
+                        if (String.fromCharCode(graph.vertex[i].name) == r.elems[0]) {
+                            if (String.fromCharCode(graph.vertex[j].name) == r.elems[1]) {
+                                console.log(String.fromCharCode(graph.vertex[i].name), r.elems[0]);
+                                console.log(String.fromCharCode(graph.vertex[j].name), r.elems[1]);
+                                console.log("kek");
+                                err = false;
+                            } else err = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (err) {
+            $('.result').text('Неверно').css({
+                'color': 'red'
+            });
+            $('#give-desicion').hide();
+            return 0;
+        }
+
+        $('.result').text('Верно').css({
+            'color': 'green'
+        });
+        $('#give-desicion').hide();
+    });
 </script>
