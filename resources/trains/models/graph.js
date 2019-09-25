@@ -14,19 +14,13 @@ class Graph {
     countClick = 0;
     clicked = 0;
     reflex = 0;
-    noEdges;
 
-    constructor(maxVertex, minVertex, rGraph, rVertex, orient, clicked, reflex, noEdges) {
+    constructor(maxVertex, minVertex, rGraph, rVertex, orient, clicked, reflex) {
         this.countVertex = this.getRandomNumber(maxVertex, minVertex);
         this.rGraph = rGraph;
         this.rVertex = rVertex;
         this.orient = orient;
-        this.noEdges = noEdges;
-        if (this.noEdges == undefined) {
-            this.adjac = this.getAdjac();
-        } else {
-            this.initAdjac();
-        }
+        this.adjac = this.getAdjac();
         this.clicked = clicked;
         this.reflex = reflex;
     }
@@ -316,14 +310,12 @@ class Graph {
         var endAngle = 2 * Math.PI;
         var anticlockwise = true;
         // отрисовка ребер
-        if (this.noEdges == undefined) {
-            for (var i = 0; i < this.countVertex; i++) {
-                for (var j = 0; j < this.countVertex; j++) {
-                    if ((this.adjac[i][j]) && (i != j)) {
-                        this.drawVector(ctx, this.vertex[i].x, this.vertex[i].y, this.vertex[j].x, this.vertex[j].y, '#ccc');
-                    } else if ((this.adjac[i][j]) && (i == j)) {
-                        this.drawCurve(canvas, this.vertex[i].x, this.vertex[i].y, 30, startAngle, endAngle, anticlockwise); //рисуем кривую
-                    }
+        for (var i = 0; i < this.countVertex; i++) {
+            for (var j = 0; j < this.countVertex; j++) {
+                if ((this.adjac[i][j]) && (i != j)) {
+                    this.drawVector(ctx, this.vertex[i].x, this.vertex[i].y, this.vertex[j].x, this.vertex[j].y, '#ccc');
+                } else if ((this.adjac[i][j]) && (i == j)) {
+                    this.drawCurve(canvas, this.vertex[i].x, this.vertex[i].y, 30, startAngle, endAngle, anticlockwise); //рисуем кривую
                 }
             }
         }
