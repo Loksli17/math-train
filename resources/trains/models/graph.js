@@ -325,6 +325,18 @@ class Graph {
         }
     }
 
+    drawError(i, j, color) {
+        var ctx = canvas.getContext('2d');
+        var startAngle = 0;
+        var endAngle = 2 * Math.PI;
+        var anticlockwise = true;
+        if (i != j) {
+            this.drawVector(ctx, this.vertex[i].x, this.vertex[i].y, this.vertex[j].x, this.vertex[j].y, color);
+        } else if (i == j) {
+            this.drawCurve(canvas, this.vertex[i].x, this.vertex[i].y, 30, startAngle, endAngle, anticlockwise, color);
+        }
+    }
+
     clear(canvas) {
         context.clearRect(0, 0, canvas.width, canvas.height);
     }

@@ -7,9 +7,11 @@ function Relation(set, size, graph, mat) {
     if (graph != undefined && mat != undefined && !set && !size) {
         this.graph = graph;
         this.mat = mat;
-    } else {
+    } else if (set != undefined && size != undefined && !graph && !mat) {
         this.set = set;
         this.size = size;
+    } else {
+        this.relation = 0;
     }
 }
 
@@ -31,7 +33,7 @@ Relation.prototype.getRel = function() {
             this.relation.push(res[index]);
             res.splice(index, 1);
         }
-    } else {
+    } else if (this.graph != undefined) {
         for (let i = 0; i < graph.countVertex; i++) {
             for (let j = 0; j < graph.countVertex; j++) {
                 if (this.mat[i][j]) {
@@ -41,4 +43,12 @@ Relation.prototype.getRel = function() {
         }
     }
     return this.relation;
+}
+
+Relation.prototype.copy = function(orig) {
+    this.relation = orig.relation;
+    this.set = orig.set;
+    this.size = orig.size;
+    this.graph = orig.graph;
+    this.mat = orig.mat;
 }

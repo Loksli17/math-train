@@ -93,6 +93,7 @@
 
     let equivMat, partMat, linearMat, strictMat, strictLinMat;
     let adjacCopy;
+    let equivRel, partRel, linearRel, strictRel, strictLinRel;
 
     let step = 0;
 
@@ -149,30 +150,88 @@
 
     document.getElementById("rel").innerHTML = "{" + rel.getRel().map(x => " (" + x.getStr(",") + ")") + "}";
 
+    function relToMat(relation, mat, gr) {
+        for (let i = 0; i < gr.countVertex; i++) {
+            mat[i] = new Array();
+        }
+
+        for (let i = 0; i < gr.countVertex; i++) {
+            for (let j = 0; j < gr.countVertex; j++) {
+                mat[i][j] = 0;
+            }
+        }
+
+        for (let r of relation.relation) {
+            for (let i = 0; i < gr.countVertex; i++) {
+                for (let j = 0; j < gr.countVertex; j++) {
+                    if (r.elems[0] == String.fromCharCode(graph.vertex[i].name) && r.elems[1] == String.fromCharCode(graph.vertex[j].name)) {
+                        console.log(String.fromCharCode(graph.vertex[i].name), r.elems[0]);
+                        mat[i][j] = 1;
+                    }
+                }
+            }
+        }
+        console.log(mat);
+    }
+
     $('#give-desicion').on('click', function() {
 
-        let err = true;
+        let err = false;
 
         if (step == 0) {
-            for (let r of rel.relation) {
-                for (let i = 0; i < graph.countVertex; i++) {
-                    for (let j = 0; j < graph.countVertex; j++) {
-                        if (graph.adjac[i][j]) {
-                            if (String.fromCharCode(graph.vertex[i].name) == r.elems[0]) {
-                                if (String.fromCharCode(graph.vertex[j].name) == r.elems[1]) {
-                                    err = false;
-                                    break;
-                                } else err = true;
-                            }
-                        }
+
+            let adjMat = new Array();
+            relToMat(rel, adjMat, graph);
+
+            for (let i = 0; i < graph.countVertex; i++) {
+                for (let j = 0; j < graph.countVertex; j++) {
+                    if (graph.adjac[i][j] != adjMat[i][j]) {
+                        graph.drawError(i, j, '#f68686');
+                        err = true;
                     }
                 }
             }
         } else if (step == 1) {
-            err = false;
             for (let i = 0; i < graph.countVertex; i++) {
                 for (let j = 0; j < graph.countVertex; j++) {
                     if (equivMat[i][j] != graph.adjac[i][j]) {
+                        graph.drawError(i, j, '#f68686');
+                        err = true;
+                    }
+                }
+            }
+        } else if (step == 2) {
+            for (let i = 0; i < graph.countVertex; i++) {
+                for (let j = 0; j < graph.countVertex; j++) {
+                    if (partMat[i][j] != graph.adjac[i][j]) {
+                        graph.drawError(i, j, '#f68686');
+                        err = true;
+                    }
+                }
+            }
+        } else if (step == 3) {
+            // for (let i = 0; i < graph.countVertex; i++) {
+            //     for (let j = 0; j < graph.countVertex; j++) {
+            //         if (linearMat[i][j] != graph.adjac[i][j]) {
+            //             graph.drawError(i, j, '#f68686');
+            //             err = true;
+            //         }
+            //     }
+            // }
+        } else if (step == 4) {
+            for (let i = 0; i < graph.countVertex; i++) {
+                for (let j = 0; j < graph.countVertex; j++) {
+                    if (strictMat[i][j] != graph.adjac[i][j]) {
+                        graph.drawError(i, j, '#f68686');
+                        err = true;
+                    }
+                }
+            }
+        } else if (step == 5) {
+            for (let i = 0; i < graph.countVertex; i++) {
+                for (let j = 0; j < graph.countVertex; j++) {
+                    if (strictLinMat[i][j] != graph.adjac[i][j]) {
+                        graph.drawError(i, j, '#f68686');
                         err = true;
                     }
                 }
@@ -194,108 +253,278 @@
         $('#continue').show();
     });
 
+
+    function copyAdjac(graph, arr) {
+
+        for (var i = 0; i < graph.countVertex; i++) {
+            arr[i] = new Array(graph.countVertex);
+        }
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                if (graph.adjac[i][j]) {
+                    arr[i][j] = 1;
+                } else arr[i][j] = 0;
+            }
+        }
+    }
+
+    function genEquiv(graph, inMat, eqMat, eqRel) {
+        for (var i = 0; i < graph.countVertex; i++) {
+            eqMat[i] = new Array(graph.countVertex);
+        }
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                if (inMat[i][j]) {
+                    eqMat[i][j] = 1;
+                } else eqMat[i][j] = 0;
+            }
+        }
+        //сначала находим транизитивность для построенного графа
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                if (eqMat[i][j]) {
+                    for (let k = 0; k < graph.countVertex; k++) {
+                        if (eqMat[j][k]) {
+                            eqMat[i][k] = 1;
+                            eqMat[k][i] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                //делаем его симметричным
+                if (eqMat[i][j]) {
+                    eqMat[j][i] = 1;
+                }
+                //делаем его рефликсивным
+                if (!eqMat[i][j] && i == j) {
+                    eqMat[i][j] = 1;
+                }
+                //и делаем его снова тразитивным ибо предыдущий поиск транзитивности
+                //а так же симметричности могли добавить ещё транзитивностей
+                //и я ебал
+                if (eqMat[i][j]) {
+                    for (let k = 0; k < graph.countVertex; k++) {
+                        if (eqMat[j][k]) {
+                            eqMat[i][k] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                if (eqMat[i][j]) {
+                    for (let k = 0; k < graph.countVertex; k++) {
+                        if (eqMat[j][k]) {
+                            eqMat[i][k] = 1;
+                            eqMat[k][i] = 1;
+                        }
+                    }
+                }
+            }
+        }
+        //я ебал указатели
+        rel = new Relation(0, 0, graph, equivMat);
+        eqRel.copy(rel);
+        console.log(eqRel.getRel());
+        console.log(eqMat);
+    }
+
+    function genPart(graph, inMat, pMat, pRel) {
+        for (var i = 0; i < graph.countVertex; i++) {
+            pMat[i] = new Array(graph.countVertex);
+        }
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                if (inMat[i][j]) {
+                    pMat[i][j] = 1;
+                } else pMat[i][j] = 0;
+            }
+        }
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                if (pMat[i][j]) {
+                    for (let k = 0; k < graph.countVertex; k++) {
+                        if (pMat[j][k]) {
+                            pMat[i][k] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                //делаем его антисимметричным
+                if (pMat[i][j]) {
+                    pMat[j][i] = 0;
+                }
+                if (!pMat[i][j] && i == j) {
+                    pMat[i][j] = 1;
+                }
+                if (pMat[i][j]) {
+                    for (let k = 0; k < graph.countVertex; k++) {
+                        if (pMat[j][k]) {
+                            pMat[i][k] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        let rel = new Relation(0, 0, graph, partMat);
+        pRel.copy(rel);
+        console.log(pRel.getRel());
+        console.log(pMat);
+    }
+
+    function genLinear(graph, inMat, lMat, lRel) {
+        for (var i = 0; i < graph.countVertex; i++) {
+            lMat[i] = new Array(graph.countVertex);
+        }
+
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                if (inMat[i][j] == 0 && inMat[j][i] != 1) {
+                    inMat[i][j] = 1;
+                }
+            }
+        }
+
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                if (inMat[i][j]) {
+                    lMat[i][j] = 1;
+                } else lMat[i][j] = 0;
+            }
+        }
+
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                if (lMat[i][j]) {
+                    for (let k = 0; k < graph.countVertex; k++) {
+                        if (lMat[j][k]) {
+                            lMat[i][k] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                //делаем его антисимметричным
+                if (lMat[i][j]) {
+                    lMat[j][i] = 0;
+                }
+                if (!lMat[i][j] && i == j) {
+                    lMat[i][j] = 1;
+                }
+                if (lMat[i][j]) {
+                    for (let k = 0; k < graph.countVertex; k++) {
+                        if (lMat[j][k]) {
+                            lMat[i][k] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        let rel = new Relation(0, 0, graph, lMat);
+        lRel.copy(rel);
+        console.log(lRel.getRel());
+        console.log(lMat);
+    }
+
+    function genStrict(graph, inMat, sMat, sRel) {
+        for (var i = 0; i < graph.countVertex; i++) {
+            sMat[i] = new Array(graph.countVertex);
+        }
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                if (inMat[i][j]) {
+                    sMat[i][j] = 1;
+                } else sMat[i][j] = 0;
+            }
+        }
+
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                if (sMat[i][j]) {
+                    for (let k = 0; k < graph.countVertex; k++) {
+                        if (sMat[j][k]) {
+                            sMat[i][k] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (let i = 0; i < graph.countVertex; i++) {
+            for (let j = 0; j < graph.countVertex; j++) {
+                //делаем его антисимметричным
+                if (sMat[i][j]) {
+                    sMat[j][i] = 0;
+                }
+                if (!sMat[i][j] && i == j) {
+                    sMat[i][j] = 0;
+                }
+                if (sMat[i][j]) {
+                    for (let k = 0; k < graph.countVertex; k++) {
+                        if (sMat[j][k]) {
+                            sMat[i][k] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        let rel = new Relation(0, 0, graph, partMat);
+        sRel.copy(rel);
+        console.log(sRel.getRel());
+        console.log(sMat);
+    }
+
     $('#continue').on('click', function() {
         if (step == 0) {
             adjacCopy = new Array();
-            for (var i = 0; i < graph.countVertex; i++) {
-                adjacCopy[i] = new Array(graph.countVertex);
-            }
-            for (let i = 0; i < graph.countVertex; i++) {
-                for (let j = 0; j < graph.countVertex; j++) {
-                    if (graph.adjac[i][j]) {
-                        adjacCopy[i][j] = 1;
-                    } else adjacCopy[i][j] = 0;
-                }
-            }
+            copyAdjac(graph, adjacCopy);
         }
         step++;
         console.log("kek");
         $('#continue').hide();
         $('.result').empty();
         $('#give-desicion').show();
+
         if (step == 1) {
             document.getElementById("current-task").innerHTML = "<b>Шаг 2: Достройте до отношения эквивалентности и выпишите фактор-множество<b>";
-
             equivMat = new Array();
-            for (var i = 0; i < graph.countVertex; i++) {
-                equivMat[i] = new Array(graph.countVertex);
-            }
-            for (let i = 0; i < graph.countVertex; i++) {
-                for (let j = 0; j < graph.countVertex; j++) {
-                    if (adjacCopy[i][j]) {
-                        equivMat[i][j] = 1;
-                    } else equivMat[i][j] = 0;
-                }
-            }
-            //сначала находим транизитивность для построенного графа
-            for (let i = 0; i < graph.countVertex; i++) {
-                for (let j = 0; j < graph.countVertex; j++) {
-                    if (equivMat[i][j]) {
-                        for (let k = 0; k < graph.countVertex; k++) {
-                            if (equivMat[j][k]) {
-                                equivMat[i][k] = 1;
-                                equivMat[k][i] = 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            for (let i = 0; i < graph.countVertex; i++) {
-                for (let j = 0; j < graph.countVertex; j++) {
-                    //делаем его симметричным
-                    if (equivMat[i][j]) {
-                        equivMat[j][i] = 1;
-                    }
-                    //делаем его рефликсивным
-                    if (!equivMat[i][j] && i == j) {
-                        equivMat[i][j] = 1;
-                    }
-                    //и делаем его снова тразитивным ибо предыдущий поиск транзитивности
-                    //а так же симметричности могли добавить ещё транзитивностей
-                    //и я ебал
-                    if (equivMat[i][j]) {
-                        for (let k = 0; k < graph.countVertex; k++) {
-                            if (equivMat[j][k]) {
-                                equivMat[i][k] = 1;
-                            }
-                        }
-                    }
-                }
-            }
-            let equivRel = new Relation(0, 0, graph, equivMat);
-            console.log(equivRel.getRel());
-            console.log(equivMat);
+            equivRel = new Relation();
+            genEquiv(graph, adjacCopy, equivMat, equivRel);
 
         } else if (step == 2) {
             document.getElementById("current-task").innerHTML = "<b>Шаг 3: Достройте до отношения частичного порядка и выпишите минимальные и максимальные элементы<b>";
+            partRel = new Relation();
+            partMat = new Array();
+            genPart(graph, adjacCopy, partMat, partRel);
 
-            for (let i = 0; i < graph.countVertex; i++) {
-                for (let j = 0; j < graph.countVertex; j++) {
-                    if (partMat[i][j]) {
-                        partMat[j][i] = 1;
-                    }
-                    if (partMat[i][j] && i == j) {
-                        partMat[i][j] = 0;
-                    }
-                    if (partMat[i][j]) {
-                        for (let k = 0; k < graph.countVertex; k++) {
-                            if (partMat[j][k]) {
-                                partMat[i][k] = 1;
-                                partMat[k][i] = 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            console.log("lol");
         } else if (step == 3) {
             document.getElementById("current-task").innerHTML = "<b>Шаг 3: Достройте до отношения линейного порядка и выпишите минимальный и максимальный элемент<b>";
-            console.log("lol");
+            let adjacCopy2 = new Array();
+            copyAdjac(graph, adjacCopy2);
+            linearRel = new Relation();
+            linearMat = new Array();
+            genLinear(graph, adjacCopy2, linearMat, linearRel);
         } else if (step == 4) {
             document.getElementById("current-task").innerHTML = "<b>Шаг 4: Достройте до отношения строгого порядка<b>";
-            console.log("lol");
+            strictMat = new Array();
+            strictRel = new Relation();
+            genStrict(graph, adjacCopy, strictMat, strictRel);
         } else if (step == 5) {
             document.getElementById("current-task").innerHTML = "<b>Шаг 4: Достройте до отношения строгого линейного порядка<b>";
             console.log("lol");
