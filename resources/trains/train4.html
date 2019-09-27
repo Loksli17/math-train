@@ -68,22 +68,34 @@
         </label>
     </form>
 
+    <p id="current-task"></p>
+
     <div class="section" id="section">
         <canvas id="canvas">
         </canvas>
+    </div>
 
-        <div class="cont-button">
-            <div id='give-desicion' class="button">
-                Решить
-            </div>
-            <div class="result">
-            </div>
+    <div class="cont-button">
+        <div id='give-desicion' class="button">
+            Решить
         </div>
-
+        <div class="result">
+        </div>
+        <div id='continue' class="button">
+            Дальше
+        </div>
     </div>
 </body>
 
 <script type="text/javascript">
+    $('#continue').hide();
+    document.getElementById("current-task").innerHTML = "<b>Шаг 1: Изобразите отношение в виде графа<b>";
+
+    let equivMat, partMat, linearMat, strictMat, strictLinMat;
+    let adjacCopy;
+
+    let step = 0;
+
     const graphSize = 5;
 
     var canvas = document.getElementById("canvas");
@@ -135,24 +147,33 @@
 
     document.getElementById("A").innerHTML = "{" + A.getStr(",") + "}";
 
-    document.getElementById("rel").innerHTML = "{" + rel.getRel().map(x => "(" + x.getStr(",") + ")") + "}";
+    document.getElementById("rel").innerHTML = "{" + rel.getRel().map(x => " (" + x.getStr(",") + ")") + "}";
 
     $('#give-desicion').on('click', function() {
 
         let err = true;
 
-        for (let r of rel.relation) {
+        if (step == 0) {
+            for (let r of rel.relation) {
+                for (let i = 0; i < graph.countVertex; i++) {
+                    for (let j = 0; j < graph.countVertex; j++) {
+                        if (graph.adjac[i][j]) {
+                            if (String.fromCharCode(graph.vertex[i].name) == r.elems[0]) {
+                                if (String.fromCharCode(graph.vertex[j].name) == r.elems[1]) {
+                                    err = false;
+                                    break;
+                                } else err = true;
+                            }
+                        }
+                    }
+                }
+            }
+        } else if (step == 1) {
+            err = false;
             for (let i = 0; i < graph.countVertex; i++) {
                 for (let j = 0; j < graph.countVertex; j++) {
-                    if (graph.adjac[i][j]) {
-                        if (String.fromCharCode(graph.vertex[i].name) == r.elems[0]) {
-                            if (String.fromCharCode(graph.vertex[j].name) == r.elems[1]) {
-                                console.log(String.fromCharCode(graph.vertex[i].name), r.elems[0]);
-                                console.log(String.fromCharCode(graph.vertex[j].name), r.elems[1]);
-                                console.log("kek");
-                                err = false;
-                            } else err = true;
-                        }
+                    if (equivMat[i][j] != graph.adjac[i][j]) {
+                        err = true;
                     }
                 }
             }
@@ -170,5 +191,112 @@
             'color': 'green'
         });
         $('#give-desicion').hide();
+        $('#continue').show();
+    });
+
+    $('#continue').on('click', function() {
+        if (step == 0) {
+            adjacCopy = new Array();
+            for (var i = 0; i < graph.countVertex; i++) {
+                adjacCopy[i] = new Array(graph.countVertex);
+            }
+            for (let i = 0; i < graph.countVertex; i++) {
+                for (let j = 0; j < graph.countVertex; j++) {
+                    if (graph.adjac[i][j]) {
+                        adjacCopy[i][j] = 1;
+                    } else adjacCopy[i][j] = 0;
+                }
+            }
+        }
+        step++;
+        console.log("kek");
+        $('#continue').hide();
+        $('.result').empty();
+        $('#give-desicion').show();
+        if (step == 1) {
+            document.getElementById("current-task").innerHTML = "<b>Шаг 2: Достройте до отношения эквивалентности и выпишите фактор-множество<b>";
+
+            equivMat = new Array();
+            for (var i = 0; i < graph.countVertex; i++) {
+                equivMat[i] = new Array(graph.countVertex);
+            }
+            for (let i = 0; i < graph.countVertex; i++) {
+                for (let j = 0; j < graph.countVertex; j++) {
+                    if (adjacCopy[i][j]) {
+                        equivMat[i][j] = 1;
+                    } else equivMat[i][j] = 0;
+                }
+            }
+            //сначала находим транизитивность для построенного графа
+            for (let i = 0; i < graph.countVertex; i++) {
+                for (let j = 0; j < graph.countVertex; j++) {
+                    if (equivMat[i][j]) {
+                        for (let k = 0; k < graph.countVertex; k++) {
+                            if (equivMat[j][k]) {
+                                equivMat[i][k] = 1;
+                                equivMat[k][i] = 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (let i = 0; i < graph.countVertex; i++) {
+                for (let j = 0; j < graph.countVertex; j++) {
+                    //делаем его симметричным
+                    if (equivMat[i][j]) {
+                        equivMat[j][i] = 1;
+                    }
+                    //делаем его рефликсивным
+                    if (!equivMat[i][j] && i == j) {
+                        equivMat[i][j] = 1;
+                    }
+                    //и делаем его снова тразитивным ибо предыдущий поиск транзитивности
+                    //а так же симметричности могли добавить ещё транзитивностей
+                    //и я ебал
+                    if (equivMat[i][j]) {
+                        for (let k = 0; k < graph.countVertex; k++) {
+                            if (equivMat[j][k]) {
+                                equivMat[i][k] = 1;
+                            }
+                        }
+                    }
+                }
+            }
+            console.log(equivMat);
+
+        } else if (step == 2) {
+            document.getElementById("current-task").innerHTML = "<b>Шаг 3: Достройте до отношения частичного порядка и выпишите минимальные и максимальные элементы<b>";
+
+            for (let i = 0; i < graph.countVertex; i++) {
+                for (let j = 0; j < graph.countVertex; j++) {
+                    if (partMat[i][j]) {
+                        partMat[j][i] = 1;
+                    }
+                    if (partMat[i][j] && i == j) {
+                        partMat[i][j] = 0;
+                    }
+                    if (partMat[i][j]) {
+                        for (let k = 0; k < graph.countVertex; k++) {
+                            if (partMat[j][k]) {
+                                partMat[i][k] = 1;
+                                partMat[k][i] = 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            console.log("lol");
+        } else if (step == 3) {
+            document.getElementById("current-task").innerHTML = "<b>Шаг 3: Достройте до отношения линейного порядка и выпишите минимальный и максимальный элемент<b>";
+            console.log("lol");
+        } else if (step == 4) {
+            document.getElementById("current-task").innerHTML = "<b>Шаг 4: Достройте до отношения строгого порядка<b>";
+            console.log("lol");
+        } else if (step == 5) {
+            document.getElementById("current-task").innerHTML = "<b>Шаг 4: Достройте до отношения строгого линейного порядка<b>";
+            console.log("lol");
+        }
     });
 </script>
