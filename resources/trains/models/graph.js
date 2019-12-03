@@ -15,8 +15,8 @@ class Graph {
     clicked = 0;
     reflex = 0;
 
-    constructor(maxVertex, minVertex, rGraph, rVertex, orient, clicked, reflex) {
-        this.countVertex = this.getRandomNumber(maxVertex, minVertex);
+    constructor(minVertex, maxVertex, rGraph, rVertex, orient, clicked, reflex) {
+        this.countVertex = this.getRandomNumber(minVertex, maxVertex);
         this.rGraph = rGraph;
         this.rVertex = rVertex;
         this.orient = orient;

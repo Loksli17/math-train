@@ -1,5 +1,3 @@
-
-
 function Set(n, univer, arr) {
 
     this.countElem;
@@ -35,7 +33,7 @@ function Set(n, univer, arr) {
 
 
 Set.prototype.randomInteger = function(min, max) {
-    var rand = min - 0.5 + Math.random() * (max - min + 1)
+    let rand = min - 0.5 + Math.random() * (max - min + 1)
     rand = Math.round(rand);
     return rand;
 };

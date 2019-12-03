@@ -12,7 +12,7 @@ const checkGet        = require('./../lib/checkGet');
 
 exports.index  = async function(req, res) {
 
-    let Task       =  new TaskModel();
+    let Task       = new TaskModel();
     let Catalog    = new CatalogModel();
     let Tag        = new TagModel();
     let TaskHasTag = new TaskHasTagModel();
@@ -220,7 +220,6 @@ exports.index  = async function(req, res) {
                     if(tags[k].id == tagId){
                         tasks[i].tags.push(tags[k].title);
                     }
-
                 }
             }
         }
@@ -268,7 +267,6 @@ exports.actionTask = async function(req, res){
         return;
     }
 
-    console.log(res.locals.user);
     if(!task.isReady && !req.cookies.userUdentity.isAdmin){
         res.render('tasks/notReady', {layout: null});
         return;

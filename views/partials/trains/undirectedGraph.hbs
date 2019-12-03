@@ -1,0 +1,179 @@
+<style type="text/css">
+    .section {
+        width: 600px;
+        padding: 40px;
+    }
+
+    #canvas {
+        border: 1px dashed;
+    }
+
+
+    .button {
+        padding: 10px 15px;
+        background: #ccc;
+        border-radius: 5px;
+        width: max-content;
+        margin-top: 15px;
+    }
+
+    .button:hover {
+        transition: 0.5s;
+        cursor: pointer;
+        background: #fcc;
+    }
+
+    .cont-button {
+        margin-top: 20px;
+    }
+
+    .inputCell {
+        width: 30px;
+    }
+
+    .error {
+        width: 30px;
+        background-color: #f68686;
+    }
+
+    .errorField {
+        background-color: #f68686;
+    }
+
+    .correct {
+        width: 30px;
+        background-color: #8bf783;
+    }
+
+    .correctField {
+        background-color: #8bf783;
+    }
+</style>
+
+
+
+
+
+
+
+<div class="section" id='section'>
+
+
+    <canvas id="canvas">
+    </canvas>
+
+    <label class="label">
+        <span><b>Рёбра графа</b></span>
+        <div id="list"></div>
+    </label>
+
+    <form action="" method="post">
+        <label class="label">
+            <span><b>Эксцентриситет: </b></span>
+            <span>Количество вершин: </span>
+
+            <input type="text" name="width" value="2" id="eccentWidth" class="inputCell">
+
+            <input type="button" name="resize" value="Применить" id="eccentResizeBtn">
+            <div></div>
+            <table id="eccent">
+
+            </table>
+            <div></div>
+            <span>Радиус</span>
+            <input type="text" name="rad" value="" id="rad"><br>
+            <span>Диаметр</span>
+            <input type="text" name="diam" value="" id="diam">
+            <div></div>
+        </label>
+
+        <label class="label">
+            <span><b>Матрица смежности: </b></span>
+            <span>Размер матрицы: </span>
+            <!-- <select name="width" id="adjacWidth">
+
+            </select> -->
+            <input type="text" name="width" value="2" id="adjacWidth" class="inputCell">
+            <span>x</span>
+            <!-- <select name="height" id="adjacHeight">
+
+            </select> -->
+            <input type="text" name="height" value="2" id="adjacHeight" class="inputCell">
+
+            <input type="button" name="resize" value="Применить" id="adjacResizeBtn">
+            <div></div>
+        </label>
+
+        <label class="label">
+            <table id="adjac">
+
+            </table>
+            <div></div>
+        </label>
+
+        <label class="label">
+            <span><b>Матрица расстояний: </b></span>
+            <span>Размер матрицы: </span>
+
+            <input type="text" name="width" value="2" id="distWidth" class="inputCell">
+            <span>x</span>
+
+            <input type="text" name="height" value="2" id="distHeight" class="inputCell">
+            <input type="button" name="resize" value="Применить" id="distResizeBtn">
+            <div></div>
+        </label>
+
+        <label class="label">
+            <table id="dist">
+
+            </table>
+            <div></div>
+        </label>
+
+        <label class="label">
+            <span><b>Матрица инцидентности: </b></span>
+            <span>Размер матрицы: </span>
+            <input type="text" name="width" value="2" id="incidWidth" class="inputCell">
+            <span>x</span>
+            <input type="text" name="height" value="2" id="incidHeight" class="inputCell">
+            <input type="button" name="resize" value="Применить" id="incidResizeBtn">
+            <div></div>
+        </label>
+
+        <label class="label">
+            <table id="incid">
+
+            </table>
+            <div></div>
+        </label>
+    </form>
+
+    <div class="cont-button">
+        <div id='give-desicion' class="button">
+            Решить
+        </div>
+        <div class="result">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/js/train.js"></script>
+<script type="text/javascript" src="/js/models/graphVertex.js"></script>
+<script type="text/javascript" src="/js/models/graph.js"></script>
+<script type="text/javascript">
+    window.onload = function(){
+        let canvas = document.getElementById("canvas");
+        let adjacStr = "{{data.adjac}}";
+        let countVertex = "{{data.countVertex}}";
+
+        let graph = new Graph(
+            {{data.countVertex}},
+            {{data.adjac}},
+            150,
+            10,
+            {{data.orient}},
+            0,
+            {{data.reflex}},
+        );
+    }
+</script>

@@ -275,7 +275,7 @@ exports.actionSignupPost = async function(req, res){
                     })
                     .catch(function () {
                         error = "Произошла ошибка, пожайлуста, попробуйте еще раз";
-                        res.render('auth/singup', {
+                        res.render('auth/signup', {
                             layout: null,
                             error : error,
                         })
