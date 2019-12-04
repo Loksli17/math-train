@@ -115,6 +115,14 @@ class Graph {
         return adjac;
     }
 
+    setAdjacZero() {
+        for (var i = 0; i < this.countVertex; i++) {
+            for (var j = 0; j < this.countVertex; j++) {
+                this.adjac[i][j] = 0;
+            }
+        }
+    }
+
     getIncid() {
         this.initIncid();
         for (var i = 0; i < this.countVertex; i++) {
@@ -314,6 +322,18 @@ class Graph {
         // отрисовка вершин
         for (var i = 0; i < this.countVertex; i++) {
             this.vertex[i].draw(ctx, this.rVertex, startAngle, endAngle, anticlockwise, this.firstColorVertex);
+        }
+    }
+
+    drawError(i, j, color) {
+        var ctx = canvas.getContext('2d');
+        var startAngle = 0;
+        var endAngle = 2 * Math.PI;
+        var anticlockwise = true;
+        if (i != j) {
+            this.drawVector(ctx, this.vertex[i].x, this.vertex[i].y, this.vertex[j].x, this.vertex[j].y, color);
+        } else if (i == j) {
+            this.drawCurve(canvas, this.vertex[i].x, this.vertex[i].y, 30, startAngle, endAngle, anticlockwise, color);
         }
     }
 

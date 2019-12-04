@@ -35,6 +35,7 @@ exports.sendRegHash = async function(email,url,name){
 
         }else{
             smtpTransport.close();
+
             return resolve();
         }
     });
