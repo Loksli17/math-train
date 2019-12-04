@@ -252,7 +252,6 @@ exports.actionSignupPost = async function(req, res){
                 });
             }else{
                 //сохранение пользователя
-<<<<<<< HEAD
                 let random = Math.random()+'';
                 let emailHashl = crypto.createHash('sha256', config.user.passSecret).update(random).digest('hex');
 
@@ -282,43 +281,6 @@ exports.actionSignupPost = async function(req, res){
                         })
                     });
 
-                // await  emailController.sendHash(email+'',emailHashl)
-                //     .then(function () {
-                //         res.redirect('/regSuccess');
-                //     })
-                //     .catch(function () {
-                //         error = "Произошла ошибка, пожайлуста, попробуйте еще раз";
-                //                 res.render('auth/singup', {
-                //                     layout: null,
-                //                     error : error,
-                //                 })
-                //     });
-
-
-
-                // var save = await User({
-                //     login  : login,
-                //     email  : email.toLowerCase(),
-                //     pass   : hash,
-                //     isAdmin: 0,
-                //     subNews: subNews,
-                // }).save();
-
-                // var id = await User.findOne({email: email.toLowerCase()});
-                // id = id._id;
-                //
-                // var user = {
-                //     id     : id,
-                //     login  : login,
-                //     email  : email,
-                //     isAdmin: 0,
-                // };
-                // res.cookie('userUdentity', user, {
-                //     expires :  new Date(Date.now() + 1000 * 60 * 60 * 7),
-                // });
-                // res.redirect('/');
-=======
-
                 let hash = crypto.createHash('sha256', config.user.passSecret).update(pass).digest('hex');
 
                 var save = await User({
@@ -341,9 +303,7 @@ exports.actionSignupPost = async function(req, res){
                 res.cookie('userUdentity', user, {
                     expires :  new Date(Date.now() + 1000 * 60 * 60 * 7),
                 });
-                res.redirect('/');
->>>>>>> c78e14fdd16c0ace1cf52af6c090a505431d0eca
-            }
+                res.redirect('/');            }
         }
     }
 };
