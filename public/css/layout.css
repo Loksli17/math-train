@@ -1,0 +1,102 @@
+.main-wrap{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: max-content;
+    padding: 50px 170px 0px 170px;
+    box-sizing: border-box;
+    transition: transform .4s;
+
+}
+
+.main-wrap-open{
+	transform: translate3d(150px, 0, 0);
+}
+
+
+@media screen and (max-width: 800px) {
+    .main-wrap{
+        padding: 50px 60px 0px 60px;
+    }
+}
+
+.layout-wrap{
+    width: 100%;
+    max-width: 1600px;
+}
+
+
+.footer
+{
+    width: 100%;
+	background: #dedede;
+    padding: 50px 170px 50px 170px;
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+	min-height: max-content;
+    margin-top: 50px;
+}
+
+.footer-image
+{
+	max-width: 60vw;
+}
+
+.footer-image > img
+{
+	width: 100%;
+
+}
+
+.adress
+{
+	display: flex;
+	flex-flow: column nowrap;
+	padding-left: 5px;
+	padding-bottom: 5px;
+	justify-content: flex-end;
+}
+
+.company
+{
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: flex-end;
+	text-align: right;
+	padding-right: 5px;
+	padding-bottom: 5px;
+}
+
+@media screen and (max-width: 860px)
+{
+	.footer
+	{
+		margin-top: 30px;
+		display: grid;
+		grid-template-areas:
+		"img img img"
+		"adress ... company";
+	}
+
+	.footer-image
+	{
+		grid-area: img;
+		min-width: 90%;
+		margin: 0 5%;
+		height: auto;
+		margin-bottom: 10px;
+	}
+
+	.adress
+	{
+		grid-area: adress;
+	}
+
+	.company
+	{
+		grid-area: company;
+	}
+}
