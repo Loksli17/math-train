@@ -313,6 +313,21 @@ exports.actionTask = async function(req, res){
     let train = new trainModel();
     let data = train.getData();
 
+    switch(task.ctitle){
+        case "Легко":
+            task.cltitle = "easy";
+            break;
+        case "Средне":
+            task.cltitle = "middle";
+            break;
+        case "Сложно":
+            task.cltitle = "hard";
+            break;
+        case "Очень сложно":
+            task.cltitle = "very-hard";
+            break;
+    }
+
     res.render('tasks/task', {
         id     : id,
         task   : task,

@@ -17,3 +17,66 @@
 .train-wrap{
     margin-top: 20px;
 }
+
+.easy{
+    background: rgb(0, 165, 0);
+}
+
+.middle{
+    background: rgb(202, 165, 0);
+}
+
+.hard{
+    background: rgb(202, 165, 0);
+}
+
+.very-hard{
+    background: rgb(202, 165, 0);
+}
+
+.aside{
+    background: #dedede;
+    height: max-content;
+}
+
+.aside .content{
+    padding: 20px;
+}
+
+.aside h2{
+    padding: 10px 0px 0px 20px;
+    margin-bottom: 20px;
+    border-left: 3px solid;
+    margin-top: 20px;
+}
+
+.diff{
+    width: max-content;
+    font-size: 18px;
+    padding: 5px;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.tags{
+    margin-bottom: 20px;
+}
+
+.tags h3{
+    margin-bottom: 10px;
+}
+
+.tags li{
+    font-size: 18px;
+    list-style: square;
+}
+
+.attempts h3{
+    margin-bottom: 10px;
+}
+
+.attempts div{
+    padding-left: 10px;
+    margin-top: 10px;
+    font-size: 18px;
+}
