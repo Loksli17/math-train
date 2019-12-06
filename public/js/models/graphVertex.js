@@ -65,7 +65,7 @@ class Vertex {
         ctx.fill();
         ctx.fillStyle = "#083560";
         ctx.font = 'bold 30px sans-serif';
-        ctx.fillText(String.fromCharCode(this.name), this.x, this.y);
+        ctx.fillText(String.fromCharCode(this.name), this.x - 2 * r / 3, this.y + 2 * r / 3);
     }
 
     checkAccess(x, y, r) {

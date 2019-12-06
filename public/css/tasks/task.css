@@ -1,0 +1,19 @@
+.page-wrap{
+    display: grid;
+    grid-template-columns: auto 300px;
+    grid-gap: 25px;
+}
+
+.section h2{
+    margin-bottom: 20px;
+}
+
+.section .text{
+    padding: 15px;
+    background: #dedede;
+    font-size: 21px;
+}
+
+.train-wrap{
+    margin-top: 20px;
+}

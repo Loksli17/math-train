@@ -275,7 +275,7 @@ exports.actionTask = async function(req, res){
     if(task == undefined){
         res.status(404);
         res.render('server/404', {
-            error: 'Тренажер на найден',
+            error: 'Тренажер не найден',
             layout: null,
         });
         return;
@@ -296,6 +296,7 @@ exports.actionTask = async function(req, res){
     });
 
     //проверка существования файла
+    console.log();
     const checkFile = fs.existsSync('lib/trains/' + task.codeFile + '.js');
     //подключение серверного модуля тренажера
     if(!checkFile){
