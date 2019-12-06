@@ -190,7 +190,7 @@ exports.index  = async function(req, res) {
             ['inner', 'catalog','catalog.id  = task.catalog_id'],
             ['inner', 'task_has_tag', 'task.id= task_has_tag.task_id '],
         ],
-        select   : ['task.id', 'catalog.title as ctitle', 'task.title', 'task.text', 'task.isReady', 'task.count_result'],
+        select   : ['task.id', 'catalog.title as ctitle', 'task.title', 'task.description', 'task.isReady', 'task.count_result', 'task.img'],
         where    : where,
         group    : 'task_id',
         order    : 'isReady',
@@ -222,6 +222,20 @@ exports.index  = async function(req, res) {
                     }
                 }
             }
+        }
+        switch(tasks[i].ctitle){
+            case "Легко":
+                tasks[i].cltitle = "easy";
+                break;
+            case "Средне":
+                tasks[i].cltitle = "middle";
+                break;
+            case "Сложно":
+                tasks[i].cltitle = "hard";
+                break;
+            case "Очень сложно":
+                tasks[i].cltitle = "very-hard";
+                break;
         }
     }
 

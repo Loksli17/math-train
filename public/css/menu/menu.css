@@ -20,7 +20,7 @@
 
 .menu-header
 {
-	background: #F6CE45;
+	background: rgba(0, 76, 144);
 	color: white;
 }
 
@@ -40,6 +40,16 @@
 	margin-left: 15px;
 }
 
+.user-name{
+	display: flex;
+	flex-flow: column;
+
+}
+
+.user-name span{
+	font-size: 21px;
+}
+
 .user-info
 {
 	display: flex;
@@ -52,12 +62,18 @@
 {
 	width: 46px;
 	height: 46px;
+	margin-right: 20px;
+}
+
+.user-dept > span{
+	font-size: 15px;
 }
 
 .user-photo > img
 {
 	border-radius: 23px;
 	border-color: white;
+	border: 2px solid;
 	background: white;
 }
 
@@ -65,14 +81,13 @@
 {
 	white-space: nowrap;
 	font-size: 18px;
-	margin: 0px 2px 0px 10px;
 }
 
 .user-dept
 {
 	font-size: 13px;
 	padding-bottom: 20px;
-	margin-top: 5px;
+	margin-top: 15px;
 }
 
 .menu-body

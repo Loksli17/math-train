@@ -135,7 +135,10 @@ exports.actionLoginPost = async function(req, res){
                 login  : user.login,
                 email  : user.email,
                 isAdmin: user.isAdmin,
+                img    : user.img,
             };
+
+            console.log(user);
 
             if (rememberMe == 'on'){
                 res.cookie("userUdentity", user,

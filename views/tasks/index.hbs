@@ -35,36 +35,75 @@
 
     </style>
 
-<form action = "/tasks" method="get">
-    <input type="hidden" name="_csrf" value="{{_csrfToken}}">
-    <p>Дисциплины</p>
-    {{#each disciplines}}
-        <p>{{this.name}}</p>
-            {{#each this.tags}}
-                <p><input type="checkbox" value="{{this.id}}" name = "tag[{{this.id}}]" {{this.checked}}>{{this.name}}</p>
+<link rel="stylesheet" href="/css/tasks/index.css">
+<link rel="stylesheet" href="/css/side-bar.css">
+
+<div class="page-wrapper">
+    <div class="section">
+        <div class="task-wrapper">
+            {{#each tasks}}
+            <a class="task" href="/tasks/task?id={{this.id}}">
+                <img width="230px" src="/img/tasks/{{this.img}}" alt="">
+                <div class="">
+                    <div class="title">
+                        <h3>{{this.title}}</h3>
+                    </div>
+                    <div class="diff {{this.cltitle}}">
+                        {{this.ctitle}}
+                    </div>
+                    <div class="text">
+                        {{this.description}}
+                    </div>
+                    <div class="task-tags">
+                        Направления:
+                        {{#each this.tags}}
+                            {{this}}
+                        {{/each}}
+                    </div>
+                </div>
+            </a>
             {{/each}}
-    {{/each}}
+        </div>
+    </div>
 
-    <p>Сложность</p>
-    {{#each catalogs}}
-    <p> <input type="checkbox" name="catalog[{{this.id}}]" value="{{this.id}}" {{this.checked}}>{{this.title}}<Br>
-    {{/each}}
-    <p> <input type="submit"></p>
-</form>
+    <div class="aside">
+        <div class="side-bar">
+            <form action = "/tasks" method="get">
+                <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+                <h2>Дисциплины</h2>
+                <div class="side-bar-wrap">
+                    {{#each disciplines}}
+                        <div class="discipline">
+                            <span>{{this.name}}</span>
+                            <div class="tag-wrap">
+                                {{#each this.tags}}
+                                <div class="tag">
+                                    <input type="checkbox" value="{{this.id}}" name = "tag[{{this.id}}]" {{this.checked}}>
+                                    <span>{{this.name}}</span>
+                                </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
 
-{{#each tasks}}
-    <p>
-        tags:
-        {{#each this.tags}}
-            {{this}}
-        {{/each}}
-        catalog: {{this.ctitle}}
-        <a href="/tasks/task?id={{this.id}}">{{this.title}}</a>
-        text: {{this.text}}
-        description: {{this.description}}
-        id: {{this.id}}
-    </p>
-{{/each}}
+                <h2>Сложность</h2>
+                <div class="side-bar-wrap">
+                    {{#each catalogs}}
+                        <div class="difficult">
+                            <input type="checkbox" name="catalog[{{this.id}}]" value="{{this.id}}" {{this.checked}}>
+                            <span>{{this.title}}</span>
+                        </div>
+                    {{/each}}
+                    <input type="submit" value="Найти">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
 
 
     <div class="pages">

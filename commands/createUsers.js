@@ -16,6 +16,7 @@ let query = async () => {
                     login  : 'Loksli',
                     email  : 'ami0504@mail.ru',
                     pass   : crypto.createHash('sha256', config.user.passSecret).update('123').digest('hex'),
+                    img    : 'avka.jpg',
                     isAdmin: '1',
                     subNews: '0',
                 });
@@ -32,6 +33,7 @@ let query = async () => {
                         login  : 'Uxa',
                         email  : 'ami0505@mail.ru',
                         pass   : crypto.createHash('sha256', config.user.passSecret).update('1234').digest('hex'),
+                        img    : 'avka.jpg',
                         isAdmin: '0',
                         subNews: '0',
                 });
@@ -48,6 +50,7 @@ let query = async () => {
                     login  : 'Virtus.protTop1',
                     email  : 'ami0506@mail.ru',
                     pass   : crypto.createHash('sha256', config.user.passSecret).update('123').digest('hex'),
+                    img    : 'avka.jpg',
                     isAdmin: '0',
                     subNews: '0',
                 });
@@ -65,6 +68,7 @@ let query = async () => {
                     email  : 'smh@mail.com',
                     pass   : crypto.createHash('sha256', config.user.passSecret).update('123').digest('hex'),
                     isAdmin: '1',
+                    img    : 'avka.jpg',
                     subNews: '1',
                     });
                  user.save(function(err){
@@ -80,6 +84,7 @@ let query = async () => {
                     login  : 'Uxa322',
                     email  : 'ami0508@mail.ru',
                     pass   : crypto.createHash('sha256', config.user.passSecret).update('123').digest('hex'),
+                    img    : 'avka.jpg',
                     isAdmin: '0',
                     subNews: '0',
                 });
@@ -96,6 +101,7 @@ let query = async () => {
                     login  : 'Uxa228',
                     email  : 'ami0509@mail.ru',
                     pass   : crypto.createHash('sha256', config.user.passSecret).update('123').digest('hex'),
+                    img    : 'avka.jpg',
                     isAdmin: '0',
                     subNews: '0',
                 });

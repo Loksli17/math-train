@@ -9,12 +9,13 @@
 						<img class="role-user" src="/img/user/{{user.img}}" width="100%">
 					</div>
 					<div class="user-name">
-						<span id="user-first-name">{{{user.login}}}</span>
-						<span id="user-last-name">{{{user.email}}}</span>
+						<div class="">
+							<span id="user-first-name">{{{user.login}}}</span>
+						</div>
 					</div>
 				</div>
 				<div class="user-dept">
-					<span>{{user.sub_title}}</span>
+					<span>{{user.email}}</span>
                     <a id="logout-a" href="/auth/logout">
 						<img src="/img/menu/logout_1.svg" alt="" width="20px">
 					</a>
@@ -25,19 +26,14 @@
 			<a href="/" id="menu-option">
 				<span>Главная страница</span>
 			</a>
-			<a href="/courses/" id="menu-option">
-				<span>Все курсы</span>
+			<a href="/tasks/" id="menu-option">
+				<span>Тренажеры</span>
 			</a>
-			<a href="/result/" id="menu-option">
-				<span>Результаты тестирований</span>
+			<a href="/posts/" id="menu-option">
+				<span>Теория</span>
 			</a>
-            <a href="/term" id="menu-option">
-				<span>Термины</span>
-			</a>
-		</div>
-		<div class="chat-wrap">
-			<a href="/chat/" id="menu-chat">
-				<span>Чат с администрацией</span>
+            <a href="/news/" id="menu-option">
+				<span>Новости</span>
 			</a>
 		</div>
 	</div>

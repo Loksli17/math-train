@@ -23,6 +23,9 @@ let userSchema = mongoose.Schema({
             return value != undefined
         },
     },
+    img: {
+        type: String,
+    },
     isAdmin: {
         type   : Boolean,
         default: '0',
